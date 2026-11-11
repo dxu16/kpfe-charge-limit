@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-10",
+  "image": "localhost/armada-kpfe:charge-rate-update-check",
+  "manifest_digest": "sha256:a3632294137e2b413c48e4dd77c6ccd03f103dab83b1a50111e106412a446fb2",
+  "deployment_checksum": "31e5d9e1c037bfdf31a0d081553d34cd49bb819d8d1cc6d74d33529399c90cbd",
+  "base_image_ref": "ghcr.io/armada-os/armada:stable",
+  "base_image_digest": "sha256:0f0c990818303ae621c7bcbd10979409aa1143a12e2457f3c0c0452652d35d73",
+  "updater_sha256": "2851156ac914c1887159e227e970703a79e1e24c262c1b945918448d346668f4",
+  "module_and_initramfs_match_battery_only_build": true,
+  "installed_update_check_exit": 7,
+  "installed_update_check_stdout_bytes": 0,
+  "installed_update_check_stderr_bytes": 0,
+  "operator_confirmed_old_offer_gone_in_steam": true,
+  "new_digest_and_channel_change_verified_with_fixtures": true,
+  "official_update_applied": false,
+  "hold": {
+    "seconds": 120.015,
+    "samples": 25,
+    "charger_enable_values": [0],
+    "current_range_uA": [-12817, -6103],
+    "capacity_percent": 88,
+    "end_threshold_percent": 85,
+    "start_threshold_percent": 70,
+    "status": "Full",
+    "health": "Good",
+    "reported_voltage_ceiling_uV": 4380000
+  },
+  "current_default_verified": true,
+  "battery_only_deployment_is_immediate_rollback": true,
+  "official_stock_deployment_pinned": true
+}

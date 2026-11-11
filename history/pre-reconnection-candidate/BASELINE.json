@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/armada-os/armada",
+  "checked_date": "2026-11-10",
+  "hardware_test_armada_commit": "dfed5d61e344c473c6e3c654f4090d7f618f3a5a",
+  "submission_armada_commit": "066ecdc0d26edf7ba228cec26cbd2054810e92f8",
+  "kernel_version": "7.2.6",
+  "unchanged_inputs_between_commits": [
+    "packages/kernel/BASE.env",
+    "packages/kernel/scripts/build-kernel.sh",
+    "packages/kernel/patches/0503-ROCKNIX-battery-name.patch",
+    "packages/kernel/patches/0901-power-supply-qcom-battmgr-fix-charge-unit.patch",
+    "packages/kernel/patches/0902-power-supply-qcom-battmgr-expose-charge-now.patch",
+    "packages/kernel/patches/0903-power-supply-qcom-battmgr-expose-the-charge-current-limit.patch",
+    "packages/kernel/patches/0904-power-supply-qcom-battmgr-report-charge-threshold-set-failures.patch"
+  ],
+  "tested_source_sha256": "d84cef5a94aafe4f1e2b7997f902f3b7818f8fdf8753bd200ec19d50c626a345",
+  "tested_unstripped_module_sha256": "394908e708d3c2b40072fffa867390e8022b3e1c67fdfdaa7574ea39b159d880",
+  "tested_ram_image_sha256": "1e0103fb3a6428e3307f87a2dea061deafafb8513f0d2cd7b5917fbce0152e05",
+  "binary_artifacts_included": false
+}

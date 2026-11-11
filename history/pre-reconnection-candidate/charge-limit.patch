@@ -1,0 +1,468 @@
+Subject: [RFC PATCH] power: supply: qcom_battmgr: use OEM bypass for KPFE charge limits
+
+On KONKR Pocket FIT Elite, the native partial charge limiter can lower
+the float-voltage target after charging stops and latch an Over voltage
+health indication.
+
+Use the OEM bypass control used by the vendor Android application instead.
+Preserve the existing start/end thresholds and apply their hysteresis in
+qcom_battmgr, with firmware state readback. Restrict this backend to the
+konkr,pocket-fit-elite machine compatible.
+
+Handle battery notifications during s2idle and report Full for a confirmed,
+healthy limit hold with near-zero battery current. Stop policy work and
+release healthy bypass on shutdown. Percentage limiting is unavailable
+while powered off.
+
+Tested on one KPFE: automatic stopping while awake and in s2idle,
+ten-minute holds with Good health and unchanged voltage ceiling, and
+correct UPower/Steam status. Policy and status tests passed. Charger
+transitions, recharge at the start threshold and failure recovery need
+further hardware validation.
+
+---
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index 37bcd95..abcce24 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -9,7 +9,9 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/nvmem-consumer.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/pm_wakeup.h>
+ #include <linux/power_supply.h>
+ #include <linux/property.h>
+ #include <linux/soc/qcom/pdr.h>
+@@ -74,6 +76,8 @@ enum qcom_battmgr_variant {
+ #define BATT_CHG_CTRL_EN		24
+ #define BATT_CHG_CTRL_START_THR		25
+ #define BATT_CHG_CTRL_END_THR		26
++/* KPFE firmware extension: 0 enters bypass, 1 restores normal charging. */
++#define BATT_OEM_CHARGE_ONLINE		29
+ 
+ #define BATTMGR_USB_PROPERTY_GET	0x32
+ #define BATTMGR_USB_PROPERTY_SET	0x33
+@@ -327,6 +331,13 @@ struct qcom_battmgr {
+ 	struct completion ack;
+ 
+ 	bool service_up;
++	bool host_charge_limit;
++	bool host_ready;
++	bool host_restart;
++	bool host_stopping;
++	bool native_limit_enabled;
++	bool oem_charge_online;
++	struct delayed_work host_work;
+ 
+ 	struct qcom_battmgr_info info;
+ 	struct qcom_battmgr_status status;
+@@ -457,6 +468,56 @@ static const u8 sm8350_bat_prop_map[] = {
+ 	[POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX] = BATT_CHG_CTRL_LIM_MAX,
+ };
+ 
++static int qcom_battmgr_host_get(struct qcom_battmgr *battmgr, int opcode, int property)
++{
++	int ret = qcom_battmgr_request_property(battmgr, opcode, property, 0);
++
++	return ret > 0 ? -EIO : ret;
++}
++
++/* Do not call a failed stop, a health fault, or real battery drain "Full". */
++static int qcom_battmgr_host_report_status(unsigned int raw, bool held,
++					 unsigned int soc, unsigned int end, int current_now)
++{
++	if (!held || end >= CHARGE_CTRL_END_THR_MAX || soc > 100 ||
++	    raw == POWER_SUPPLY_STATUS_UNKNOWN ||
++	    current_now < -50000 || current_now > 50000)
++		return raw;
++	return soc >= end ? POWER_SUPPLY_STATUS_FULL : POWER_SUPPLY_STATUS_NOT_CHARGING;
++}
++
++static int qcom_battmgr_host_read_status(struct qcom_battmgr *battmgr,
++				       union power_supply_propval *val)
++{
++	static const unsigned int props[] = {
++		BATT_STATUS, BATT_HEALTH, BATT_CHG_CTRL_EN,
++		BATT_OEM_CHARGE_ONLINE, BATT_CAPACITY, BATT_CURR_NOW,
++	};
++	bool held;
++	int i, ret;
++
++	mutex_lock(&battmgr->lock);
++	for (i = 0; i < ARRAY_SIZE(props); i++) {
++		ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, props[i]);
++		if (ret)
++			goto out;
++	}
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_USB_PROPERTY_GET, USB_ONLINE);
++	if (ret)
++		goto out;
++	held = battmgr->host_ready && !battmgr->native_limit_enabled &&
++		battmgr->usb.online && !battmgr->oem_charge_online &&
++		battmgr->status.health == POWER_SUPPLY_HEALTH_GOOD &&
++		battmgr->info.charge_ctrl_end < CHARGE_CTRL_END_THR_MAX;
++	val->intval = qcom_battmgr_host_report_status(battmgr->status.status, held,
++		battmgr->status.percent, battmgr->info.charge_ctrl_end,
++		battmgr->status.current_now);
++out:
++	mutex_unlock(&battmgr->lock);
++	return ret;
++}
++
++
+ static int qcom_battmgr_bat_sm8350_update(struct qcom_battmgr *battmgr,
+ 					  enum power_supply_property psp)
+ {
+@@ -524,6 +585,8 @@ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
+ 
+ 	if (!battmgr->service_up)
+ 		return -EAGAIN;
++	if (battmgr->host_charge_limit && psp == POWER_SUPPLY_PROP_STATUS)
++		return qcom_battmgr_host_read_status(battmgr, val);
+ 
+ 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
+ 	    battmgr->variant == QCOM_BATTMGR_X1E80100)
+@@ -677,7 +740,7 @@ static int qcom_battmgr_set_charge_control(struct qcom_battmgr *battmgr,
+ 		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
+ 		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
+ 		.hdr.opcode = cpu_to_le32(BATTMGR_CHG_CTRL_LIMIT_EN),
+-		.enable = cpu_to_le32(1),
++		.enable = cpu_to_le32(!battmgr->host_charge_limit),
+ 		.target_soc = cpu_to_le32(target_soc),
+ 		.delta_soc = cpu_to_le32(delta_soc),
+ 	};
+@@ -685,11 +748,215 @@ static int qcom_battmgr_set_charge_control(struct qcom_battmgr *battmgr,
+ 	return qcom_battmgr_request(battmgr, &request, sizeof(request));
+ }
+ 
++/* Preserve the standard threshold ABI; only KPFE uses host-managed charging. */
++static bool qcom_battmgr_host_should_charge(unsigned int soc, unsigned int start,
++					  unsigned int end, bool plugged, bool charging)
++{
++	if (!plugged || end == CHARGE_CTRL_END_THR_MAX)
++		return true;
++	if (soc >= end)
++		return false;
++	if (soc <= start)
++		return true;
++	return charging;
++}
++
++/* Called with the request mutex held. Firmware retains thresholds when disabled. */
++static int qcom_battmgr_host_prepare(struct qcom_battmgr *battmgr)
++{
++	u32 start, end;
++	int ret;
++
++	if (!battmgr->service_up || READ_ONCE(battmgr->host_stopping))
++		return -EAGAIN;
++	if (battmgr->host_ready)
++		return 0;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_CHG_CTRL_START_THR);
++	if (ret)
++		return ret;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_CHG_CTRL_END_THR);
++	if (ret)
++		return ret;
++	start = battmgr->info.charge_ctrl_start;
++	end = battmgr->info.charge_ctrl_end;
++	if (start < CHARGE_CTRL_START_THR_MIN || start > CHARGE_CTRL_START_THR_MAX ||
++	    end < CHARGE_CTRL_END_THR_MIN || end > CHARGE_CTRL_END_THR_MAX || start > end)
++		return -ERANGE;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_CHG_CTRL_EN);
++	if (ret)
++		return ret;
++	if (battmgr->native_limit_enabled) {
++		ret = qcom_battmgr_set_charge_control(battmgr, end, end - start);
++		if (ret)
++			return ret;
++	}
++	battmgr->host_ready = true;
++	battmgr->host_restart = true;
++	return 0;
++}
++
++static void qcom_battmgr_host_queue(struct qcom_battmgr *battmgr)
++{
++	if (!battmgr->host_charge_limit || READ_ONCE(battmgr->host_stopping))
++		return;
++	/* GLINK stays live in s2idle; process events without resuming user space. */
++	pm_wakeup_event(battmgr->dev, 5000);
++	mod_delayed_work(system_wq, &battmgr->host_work, 0);
++}
++
++static void qcom_battmgr_host_worker(struct work_struct *work)
++{
++	struct qcom_battmgr *battmgr = container_of(to_delayed_work(work),
++						struct qcom_battmgr, host_work);
++	bool charging, changed = false, retry = false;
++	int ret = 0;
++
++	pm_stay_awake(battmgr->dev);
++	mutex_lock(&battmgr->lock);
++	if (!battmgr->service_up || READ_ONCE(battmgr->host_stopping))
++		goto out;
++	retry = true;
++	ret = qcom_battmgr_host_prepare(battmgr);
++	if (ret)
++		goto out;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_CAPACITY);
++	if (ret)
++		goto out;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_USB_PROPERTY_GET, USB_ONLINE);
++	if (ret)
++		goto out;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_HEALTH);
++	if (ret)
++		goto out;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_OEM_CHARGE_ONLINE);
++	if (ret)
++		goto out;
++	if (battmgr->status.percent > 100) {
++		ret = -ERANGE;
++		goto out;
++	}
++	/* Never release inhibition into an attached charger on a health fault. */
++	if (battmgr->usb.online && battmgr->status.health != POWER_SUPPLY_HEALTH_GOOD)
++		goto out;
++	charging = qcom_battmgr_host_should_charge(battmgr->status.percent,
++		battmgr->info.charge_ctrl_start, battmgr->info.charge_ctrl_end,
++		battmgr->usb.online, battmgr->host_restart || battmgr->oem_charge_online);
++	if (charging != battmgr->oem_charge_online) {
++		ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_SET,
++						    BATT_OEM_CHARGE_ONLINE, charging);
++		if (ret)
++			goto out;
++		ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET,
++					    BATT_OEM_CHARGE_ONLINE);
++		if (ret)
++			goto out;
++		if (charging != battmgr->oem_charge_online) {
++			ret = -EIO;
++			goto out;
++		}
++		changed = true;
++	}
++	battmgr->host_restart = false;
++	retry = battmgr->usb.online &&
++		battmgr->info.charge_ctrl_end < CHARGE_CTRL_END_THR_MAX;
++out:
++	mutex_unlock(&battmgr->lock);
++	if (ret)
++		dev_err_ratelimited(battmgr->dev, "host charge limit update failed: %d\n", ret);
++	if (changed)
++		power_supply_changed(battmgr->bat_psy);
++	/* Awake-only fallback; firmware notifications request immediate updates. */
++	if (retry && !READ_ONCE(battmgr->host_stopping))
++		queue_delayed_work(system_wq, &battmgr->host_work, 60 * HZ);
++	pm_relax(battmgr->dev);
++}
++
++static int qcom_battmgr_host_set_threshold(struct qcom_battmgr *battmgr,
++					 bool set_start, int value)
++{
++	u32 start, end;
++	int ret;
++
++	mutex_lock(&battmgr->lock);
++	ret = qcom_battmgr_host_prepare(battmgr);
++	if (ret)
++		goto out;
++	start = battmgr->info.charge_ctrl_start;
++	end = battmgr->info.charge_ctrl_end;
++	if (set_start) {
++		start = clamp(value, CHARGE_CTRL_START_THR_MIN, CHARGE_CTRL_START_THR_MAX);
++		if (start > end)
++			end = min_t(u32, start + CHARGE_CTRL_DELTA_SOC, CHARGE_CTRL_END_THR_MAX);
++	} else {
++		end = clamp(value, CHARGE_CTRL_END_THR_MIN, CHARGE_CTRL_END_THR_MAX);
++		if (start >= end)
++			start = end - CHARGE_CTRL_DELTA_SOC;
++	}
++	if (start == battmgr->info.charge_ctrl_start && end == battmgr->info.charge_ctrl_end)
++		goto out;
++	ret = qcom_battmgr_set_charge_control(battmgr, end, end - start);
++	if (ret) {
++		/* A timed-out request might still have persisted: reload before retrying. */
++		battmgr->host_ready = false;
++		goto out;
++	}
++	if (end != battmgr->info.charge_ctrl_end)
++		battmgr->host_restart = true;
++	battmgr->info.charge_ctrl_start = start;
++	battmgr->info.charge_ctrl_end = end;
++out:
++	mutex_unlock(&battmgr->lock);
++	qcom_battmgr_host_queue(battmgr);
++	return ret;
++}
++
++static void qcom_battmgr_host_stop(void *data)
++{
++	struct qcom_battmgr *battmgr = data;
++
++	WRITE_ONCE(battmgr->host_stopping, true);
++	/* Also reject a late enqueue from an in-flight notification callback. */
++	disable_delayed_work_sync(&battmgr->host_work);
++	disable_work_sync(&battmgr->enable_work);
++}
++
++static void qcom_battmgr_host_disable_wakeup(void *data)
++{
++	struct qcom_battmgr *battmgr = data;
++
++	device_init_wakeup(battmgr->dev, false);
++}
++
++static void qcom_battmgr_host_shutdown(struct auxiliary_device *adev)
++{
++	struct qcom_battmgr *battmgr = auxiliary_get_drvdata(adev);
++	int ret;
++
++	if (!battmgr || !battmgr->host_charge_limit)
++		return;
++	qcom_battmgr_host_stop(battmgr);
++	mutex_lock(&battmgr->lock);
++	if (!battmgr->service_up)
++		goto out;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_HEALTH);
++	if (ret || battmgr->status.health != POWER_SUPPLY_HEALTH_GOOD)
++		goto out;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_OEM_CHARGE_ONLINE);
++	if (!ret && !battmgr->oem_charge_online)
++		qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_SET,
++					      BATT_OEM_CHARGE_ONLINE, 1);
++out:
++	mutex_unlock(&battmgr->lock);
++}
++
+ static int qcom_battmgr_set_charge_start_threshold(struct qcom_battmgr *battmgr, int start_soc)
+ {
+ 	u32 target_soc, delta_soc;
+ 	int ret;
+ 
++	if (battmgr->host_charge_limit)
++		return qcom_battmgr_host_set_threshold(battmgr, true, start_soc);
++
+ 	start_soc = clamp(start_soc, CHARGE_CTRL_START_THR_MIN, CHARGE_CTRL_START_THR_MAX);
+ 
+ 	/*
+@@ -723,6 +990,9 @@ static int qcom_battmgr_set_charge_end_threshold(struct qcom_battmgr *battmgr, i
+ 	u32 delta_soc = CHARGE_CTRL_DELTA_SOC;
+ 	int ret;
+ 
++	if (battmgr->host_charge_limit)
++		return qcom_battmgr_host_set_threshold(battmgr, false, end_soc);
++
+ 	end_soc = clamp(end_soc, CHARGE_CTRL_END_THR_MIN, CHARGE_CTRL_END_THR_MAX);
+ 
+ 	if (battmgr->info.charge_ctrl_start && end_soc > battmgr->info.charge_ctrl_start)
+@@ -1238,6 +1508,9 @@ static void qcom_battmgr_notification(struct qcom_battmgr *battmgr,
+ 
+ 	notification = le32_to_cpu(msg->notification);
+ 	notification &= 0xff;
++	if (READ_ONCE(battmgr->info.charge_ctrl_end) < CHARGE_CTRL_END_THR_MAX &&
++	    (READ_ONCE(battmgr->usb.online) || notification == NOTIF_USB_PROPERTY))
++		qcom_battmgr_host_queue(battmgr);
+ 	switch (notification) {
+ 	case NOTIF_BAT_INFO:
+ 		battmgr->info.valid = false;
+@@ -1508,6 +1781,18 @@ static void qcom_battmgr_sm8350_callback(struct qcom_battmgr *battmgr,
+ 		case BATT_POWER_NOW:
+ 			battmgr->status.power_now = le32_to_cpu(resp->intval.value);
+ 			break;
++		case BATT_OEM_CHARGE_ONLINE:
++		case BATT_CHG_CTRL_EN:
++			val = le32_to_cpu(resp->intval.value);
++			if (val > 1) {
++				battmgr->error = -EPROTO;
++				break;
++			}
++			if (property == BATT_OEM_CHARGE_ONLINE)
++				battmgr->oem_charge_online = val;
++			else
++				battmgr->native_limit_enabled = val;
++			break;
+ 		case BATT_CHG_CTRL_START_THR:
+ 			battmgr->info.charge_ctrl_start = le32_to_cpu(resp->intval.value);
+ 			break;
+@@ -1651,7 +1936,19 @@ static void qcom_battmgr_enable_worker(struct work_struct *work)
+ 	};
+ 	int ret;
+ 
++	if (battmgr->host_charge_limit) {
++		mutex_lock(&battmgr->lock);
++		if (!battmgr->service_up || READ_ONCE(battmgr->host_stopping)) {
++			mutex_unlock(&battmgr->lock);
++			return;
++		}
++		battmgr->host_ready = false;
++	}
+ 	ret = qcom_battmgr_request(battmgr, &req, sizeof(req));
++	if (battmgr->host_charge_limit) {
++		mutex_unlock(&battmgr->lock);
++		qcom_battmgr_host_queue(battmgr);
++	}
+ 	if (ret)
+ 		dev_err(battmgr->dev, "failed to request power notifications\n");
+ }
+@@ -1660,6 +1957,9 @@ static void qcom_battmgr_pdr_notify(void *priv, int state)
+ {
+ 	struct qcom_battmgr *battmgr = priv;
+ 
++	if (battmgr->host_charge_limit && READ_ONCE(battmgr->host_stopping))
++		return;
++
+ 	if (state == SERVREG_SERVICE_STATE_UP) {
+ 		battmgr->service_up = true;
+ 		schedule_work(&battmgr->enable_work);
+@@ -1697,6 +1997,7 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 		return -ENOMEM;
+ 
+ 	battmgr->dev = dev;
++	auxiliary_set_drvdata(adev, battmgr);
+ 
+ 	psy_cfg.drv_data = battmgr;
+ 	psy_cfg.fwnode = dev_fwnode(&adev->dev);
+@@ -1715,6 +2016,18 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 	else
+ 		battmgr->variant = QCOM_BATTMGR_SM8350;
+ 
++	battmgr->host_charge_limit = battmgr->variant == QCOM_BATTMGR_SM8550 &&
++		of_machine_is_compatible("konkr,pocket-fit-elite");
++	if (battmgr->host_charge_limit) {
++		INIT_DELAYED_WORK(&battmgr->host_work, qcom_battmgr_host_worker);
++		ret = device_init_wakeup(dev, true);
++		if (ret)
++			return ret;
++		ret = devm_add_action_or_reset(dev, qcom_battmgr_host_disable_wakeup, battmgr);
++		if (ret)
++			return ret;
++	}
++
+ 	ret = qcom_battmgr_charge_control_thresholds_init(battmgr);
+ 	if (ret < 0)
+ 		return dev_err_probe(dev, ret,
+@@ -1788,6 +2101,11 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 	if (IS_ERR(battmgr->client))
+ 		return PTR_ERR(battmgr->client);
+ 
++	if (battmgr->host_charge_limit) {
++		ret = devm_add_action_or_reset(dev, qcom_battmgr_host_stop, battmgr);
++		if (ret)
++			return ret;
++	}
+ 	pmic_glink_client_register(battmgr->client);
+ 
+ 	return 0;
+@@ -1802,6 +2120,8 @@ MODULE_DEVICE_TABLE(auxiliary, qcom_battmgr_id_table);
+ static struct auxiliary_driver qcom_battmgr_driver = {
+ 	.name = "pmic_glink_power_supply",
+ 	.probe = qcom_battmgr_probe,
++	.remove = qcom_battmgr_host_shutdown,
++	.shutdown = qcom_battmgr_host_shutdown,
+ 	.id_table = qcom_battmgr_id_table,
+ };
+ 

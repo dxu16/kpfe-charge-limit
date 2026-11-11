@@ -1,0 +1,2 @@
+PASS: live status getter: stale native cache, limit, hysteresis, unplug, weak supply, ongoing charge, faults, disabled/unready/native modes, bounds and all seven read failures
+

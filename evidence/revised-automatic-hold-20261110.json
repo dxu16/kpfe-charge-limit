@@ -1,0 +1,63 @@
+{
+  "date": "2026-11-10",
+  "ram_image_sha256": "8ee128fd5f4cb56868ad37357d8fa5c8c9ee5b0ee4d1ba5422294417471850a9",
+  "start_utc": "2026-11-10T18:30:32.709203+00:00",
+  "end_utc": "2026-11-10T18:40:32.708533+00:00",
+  "duration_seconds": 600.015,
+  "samples": 121,
+  "completion": {
+    "time": "2026-11-10T18:40:32.708690+00:00",
+    "elapsed": 600.015,
+    "label": "revised-automatic-reconnection-hold",
+    "event": "completed",
+    "samples": 121,
+    "charging_samples": 0
+  },
+  "health": [
+    "Good"
+  ],
+  "status": [
+    "Full"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "current_min_uA": -9155,
+  "current_max_uA": 1220,
+  "temperature_min_tenths_C": 260,
+  "temperature_max_tenths_C": 260,
+  "capacity_percent": [
+    92
+  ],
+  "charge_counter_start_uAh": 9326684,
+  "charge_counter_end_uAh": 9324665,
+  "thresholds": {
+    "start": 70,
+    "end": 85
+  },
+  "persistent_installation": false,
+  "scope": "Awake above-limit hold after automatic recovery on reconnection. Does not establish lower-threshold or sleep regression behavior of this revision.",
+  "stock_restored": true,
+  "stock_boot_sha256": "9d6d98417032f1b8768679e02c1441083825bfff8119af49605352f2e8d72544",
+  "stock_module_sha256": "e1b3d59b667e8161a312ac5b8c20b4c8f8d3a275b6c171b1249dc07449b06308",
+  "recovery_branch_demonstrated": null,
+  "captured_oem_set_requests": [
+    {
+      "boot_seconds": 106.902685,
+      "value": 1
+    },
+    {
+      "boot_seconds": 114.274126,
+      "value": 0
+    },
+    {
+      "boot_seconds": 164.598908,
+      "value": 1
+    },
+    {
+      "boot_seconds": 185.323065,
+      "value": 0
+    }
+  ],
+  "trace_interpretation": "Original function-wrapper probe misses SET requests inlined into the recovery helper. Absence of extra wrapper calls cannot establish absence of recovery. Hold measurements remain valid; subsequent expanded tracing covers helper execution and transmitted requests."
+}

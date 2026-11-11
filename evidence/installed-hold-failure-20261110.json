@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-10",
+  "result": "failed_hold_check_then_rolled_back",
+  "booted_candidate_checksum": "2243a63b0dd04822938ea164182cceed94834670d0ed8b0400032feb68a4d3c3",
+  "candidate_module_identity_matched": true,
+  "health": [
+    "Good"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "samples": 9,
+  "initial_current_uA": -70192,
+  "second_sample_current_uA": -12207,
+  "late_positive_current_min_uA": 289315,
+  "late_positive_current_max_uA": 294198,
+  "observer_end": {
+    "time": "2026-11-10T19:34:00.565564+00:00",
+    "elapsed": 40.138,
+    "label": "installed-default-charge-hold",
+    "event": "stopped",
+    "reason": "Persistent reported charging during limit hold",
+    "controls_modified": false
+  },
+  "observed_charger_enable": 1,
+  "observed_fast_current_code": 0,
+  "host_update_errors_logged": false,
+  "hypothesis": "The first near-zero gauge verification can defer the next check for 60 seconds. Later positive current may therefore persist past the hold observer deadline. No worker/request trace was collected during this installation check, so actual worker timing is not established.",
+  "stock_restored": true,
+  "restored_stock_boot_sha256": "9d6d98417032f1b8768679e02c1441083825bfff8119af49605352f2e8d72544",
+  "restored_stock_module_sha256": "e1b3d59b667e8161a312ac5b8c20b4c8f8d3a275b6c171b1249dc07449b06308",
+  "native_thresholds_restored": [
+    70,
+    85
+  ],
+  "stock_health": "Good",
+  "candidate_currently_default": false
+}

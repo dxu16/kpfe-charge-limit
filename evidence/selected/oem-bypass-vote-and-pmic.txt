@@ -1,0 +1,400 @@
+0x60046340      \       R0 = ##0x602ab464
+0x60046344      /       immext(##0x6020bc40)
+0x60046348      \       R1 = ##0x6020bc50
+0x6004634c      [   call 0x60072950
+0x60046350      [   R2 = memuh(FP+##-0x2)
+0x60046354      [   R2 = or(R2,R0)
+0x60046358      [   memh(FP+##-0x2) = R2
+0x6004635c      /       immext(##0x602abac0)
+0x60046360      \       R0 = ##0x602abad4
+0x60046364      /       immext(##0x60209800)
+0x60046368      \       R1 = ##0x60209811
+0x6004636c      [   call 0x60072950
+0x60046370      [   R2 = memuh(FP+##-0x2)
+0x60046374      [   R2 = or(R2,R0)
+0x60046378      [   memh(FP+##-0x2) = R2
+0x6004637c      /       immext(##0x602abac0)
+0x60046380      \       R0 = ##0x602abad8
+0x60046384      /       immext(##0x60209800)
+0x60046388      \       R1 = ##0x60209819
+0x6004638c      [   call 0x60072950
+0x60046390      [   R2 = memuh(FP+##-0x2)
+0x60046394      [   R2 = or(R2,R0)
+0x60046398      [   memh(FP+##-0x2) = R2
+0x6004639c      /       immext(##0x602aba80)
+0x600463a0      \       R0 = ##0x602abaa8
+0x600463a4      /       immext(##0x60209800)
+0x600463a8      \       R1 = ##0x6020981d
+0x600463ac      [   call 0x60072950
+0x600463b0      [   R2 = memuh(FP+##-0x2)
+0x600463b4      [   R2 = or(R2,R0)
+0x600463b8      [   memh(FP+##-0x2) = R2
+0x600463bc      /       immext(##0x602ab440)
+0x600463c0      \       R0 = ##0x602ab470
+0x600463c4      /       immext(##0x60209800)
+0x600463c8      \       R1 = ##0x60209821
+0x600463cc      [   call 0x60072950
+0x600463d0      [   R2 = memuh(FP+##-0x2)
+0x600463d4      [   R2 = or(R2,R0)
+0x600463d8      [   memh(FP+##-0x2) = R2
+0x600463dc      /       immext(##0x602abac0)
+0x600463e0      \       R0 = ##0x602abadc
+0x600463e4      /       immext(##0x60209800)
+0x600463e8      \       R1 = ##0x60209825
+0x600463ec      [   call 0x60072950
+0x600463f0      [   R2 = memuh(FP+##-0x2)
+0x600463f4      [   R2 = or(R2,R0)
+0x600463f8      [   memh(FP+##-0x2) = R2
+0x600463fc      [   R2 = memh(FP+##-0x2)
+0x60046400      [   P0 = cmp.eq(R2,##0x0)
+0x60046404      [   if (P0) jump:nt 0x60046510
+0x60046408      [   jump 0x6004640c
+0x6004640c      [   jump 0x60046410
+0x60046410      /       immext(##0x6027f140)
+0x60046414      \       R2 = memub(GP+##0x6027f154)
+0x60046418      [   P0 = tstbit(R2,#0x0)
+0x6004641c      [   if (P0) jump:nt 0x60046438
+0x60046420      [   jump 0x60046424
+0x60046424      /       immext(##0x60273180)
+0x60046428      \       R2 = memub(GP+##0x60273184)
+0x6004642c      [   P0 = tstbit(R2,#0x0)
+0x60046430      [   if (!P0) jump:nt 0x60046508
+0x60046434      [   jump 0x60046438
+0x60046438      [   jump 0x6004643c
+0x6004643c      /       immext(##0x60273180)
+0x60046440      \       R2 = memub(GP+##0x60273188)
+0x60046444      [   P0 = cmp.gt(R2,##0x0)
+0x60046448      [   P0 = not(P0)
+0x6004644c      [   if (P0) jump:nt 0x6004649c
+0x60046450      [   jump 0x60046454
+0x60046454      [   jump 0x60046458
+0x60046458      [   R1 = memh(FP+##-0x2)
+0x6004645c      /       immext(##0x6020bc40)
+0x60046460      \       R0 = ##0x6020bc58
+0x60046464      [   call 0x60018df0
+0x60046468      [   jump 0x6004646c
+0x6004646c      /       immext(##0x6027f100)
+0x60046470      \       R0 = memw(GP+##0x6027f12c)
+0x60046474      [   R3 = memh(FP+##-0x2)
+0x60046478      [   R2 = SP
+0x6004647c      [   memw(R2+##0x4) = R3
+0x60046480      /       immext(##0x60209840)
+0x60046484      \       memw(R2+#0x0) = ##0x60209872
+0x60046488      /       immext(##0x60209800)
+0x6004648c      \       R2 = ##0x6020982c
+0x60046490      [   R1 = ##0x2
+0x60046494      [   call 0x60017d50
+0x60046498      [   jump 0x60046500
+0x6004649c      /       immext(##0x60273140)
+0x600464a0      \       R2 = memub(GP+##0x60273178)
+0x600464a4      [   P0 = cmp.gt(R2,##0x0)
+0x600464a8      [   P0 = not(P0)
+0x600464ac      [   if (P0) jump:nt 0x600464fc
+0x600464b0      [   jump 0x600464b4
+0x600464b4      [   jump 0x600464b8
+0x600464b8      [   R1 = memh(FP+##-0x2)
+0x600464bc      /       immext(##0x6020bc40)
+0x600464c0      \       R0 = ##0x6020bc64
+0x600464c4      [   call 0x60018df0
+0x600464c8      [   jump 0x600464cc
+0x600464cc      /       immext(##0x6027f100)
+0x600bb830      [   allocframe(SP,#0x18):raw
+0x600bb834      [   R3 = R0
+0x600bb838      [   memb(FP+##-0x3) = R0
+0x600bb83c      [   memw(FP+##-0x8) = R1
+0x600bb840      [   memw(FP+##-0xc) = R2
+0x600bb844      [   R2 = add(FP,##-0xe)
+0x600bb848      /       immext(##0x200)
+0x600bb84c      \       memh(R2+#0x0) = ##0x201
+0x600bb850      [   R2 = memub(FP+##-0x3)
+0x600bb854      [   P0 = cmp.gt(R2,##0xa)
+0x600bb858      [   if (P0) jump:nt 0x600bb874
+0x600bb85c      [   jump 0x600bb860
+0x600bb860      [   R2 = memw(FP+##-0x8)
+0x600bb864      [   P0 = cmp.eq(R2,##0x0)
+0x600bb868      [   P0 = not(P0)
+0x600bb86c      [   if (P0) jump:nt 0x600bb91c
+0x600bb870      [   jump 0x600bb874
+0x600bb874      [   jump 0x600bb878
+0x600bb878      /       immext(##0x6027f140)
+0x600bb87c      \       R1:0 = memd(GP+##0x6027f150)
+0x600bb880      [   R2 = R0
+0x600bb884      [   P0 = tstbit(R2,#0x0)
+0x600bb888      [   if (P0) jump:nt 0x600bb8a8
+0x600bb88c      [   jump 0x600bb890
+0x600bb890      /       immext(##0x60273180)
+0x600bb894      \       R1:0 = memd(GP+##0x60273180)
+0x600bb898      [   R2 = R0
+0x600bb89c      [   P0 = tstbit(R2,#0x0)
+0x600bb8a0      [   if (!P0) jump:nt 0x600bb908
+0x600bb8a4      [   jump 0x600bb8a8
+0x600bb8a8      [   jump 0x600bb8ac
+0x600bb8ac      /       immext(##0x60273140)
+0x600bb8b0      \       R2 = memub(GP+##0x60273178)
+0x600bb8b4      [   P0 = cmp.gt(R2,##0x0)
+0x600bb8b8      [   P0 = not(P0)
+0x600bb8bc      [   if (P0) jump:nt 0x600bb900
+0x600bb8c0      [   jump 0x600bb8c4
+0x600bb8c4      [   jump 0x600bb8c8
+0x600bb8c8      /       immext(##0x602272c0)
+0x600bb8cc      \       R0 = ##0x602272cc
+0x600bb8d0      [   call 0x60018dc4
+0x600bb8d4      [   jump 0x600bb8d8
+0x600bb8d8      /       immext(##0x6027f100)
+0x600bb8dc      \       R0 = memw(GP+##0x6027f134)
+0x600bb8e0      [   R2 = SP
+0x600bb8e4      /       immext(##0x60227300)
+0x600bb8e8      \       memw(R2+#0x0) = ##0x6022731e
+0x600bb8ec      /       immext(##0x602272c0)
+0x600bb8f0      \       R2 = ##0x602272d8
+0x600bb8f4      [   R1 = ##0x1
+0x600bb8f8      [   call 0x60017d50
+0x600bb8fc      [   jump 0x600bb900
+0x600bb900      [   jump 0x600bb904
+0x600bb904      [   jump 0x600bb908
+0x600bb908      [   jump 0x600bb90c
+0x600bb90c      [   R2 = add(FP,##-0x2)
+0x600bb910      /       immext(##0x200)
+0x600bb914      \       memh(R2+#0x0) = ##0x202
+0x600bb918      [   jump 0x600bba48
+0x600bb91c      [   R2 = memub(FP+##-0x3)
+0x600bb920      [   R2 = +mpyi(R2,##0x24)
+0x600bb924      /       immext(##0x60350c00)
+0x600bb928      \       R2 = memw(R2+##0x60350c2c)
+0x600bb92c      [   P0 = cmp.eq(R2,##0x0)
+0x600bb930      [   if (P0) jump:nt 0x600bb984
+0x600bb934      [   jump 0x600bb938
+0x600bb938      [   R2 = memub(FP+##-0x3)
+0x600bb93c      [   R2 = +mpyi(R2,##0x24)
+0x600bb940      /       immext(##0x60350c00)
+0x600bb944      \       R2 = memw(R2+##0x60350c2c)
+0x600bb948      [   R2 = memw(R2+##0x0)
+0x600bb94c      [   P0 = cmp.eq(R2,##0x0)
+0x600bb950      [   if (P0) jump:nt 0x600bb980
+0x600bb954      [   jump 0x600bb958
+0x600bb958      [   R0 = memub(FP+##-0x3)
+0x600bb95c      [   R2 = +mpyi(R0,##0x24)
+0x600bb960      /       immext(##0x60350c00)
+0x600bb964      \       R2 = memw(R2+##0x60350c2c)
+0x600bb968      [   R3 = memw(R2+##0x0)
+0x600bb96c      [   R1 = memw(FP+##-0x8)
+0x600bb970      [   R2 = memw(FP+##-0xc)
+0x600bb974      [   callr R3
+0x600bb978      [   memh(FP+##-0xe) = R0
+0x600bb97c      [   jump 0x600bb980
+0x600bb980      [   jump 0x600bb984
+0x600bb984      [   R2 = memh(FP+##-0xe)
+0x600bb988      [   P0 = cmp.eq(R2,##0x0)
+0x600bb98c      [   if (P0) jump:nt 0x600bba3c
+0x600bb990      [   jump 0x600bb994
+0x600bb994      [   jump 0x600bb998
+0x600bb998      /       immext(##0x6027f140)
+0x600bb99c      \       R1:0 = memd(GP+##0x6027f150)
+0x600bb9a0      [   R2 = R0
+0x600bb9a4      [   P0 = tstbit(R2,#0x0)
+0x600bb9a8      [   if (P0) jump:nt 0x600bb9c8
+0x600bb9ac      [   jump 0x600bb9b0
+0x600bb9b0      /       immext(##0x60273180)
+0x600bb9b4      \       R1:0 = memd(GP+##0x60273180)
+0x600bb9b8      [   R2 = R0
+0x600bb9bc      [   P0 = tstbit(R2,#0x0)
+0x600bb9c0      [   if (!P0) jump:nt 0x600bba34
+0x600bb9c4      [   jump 0x600bb9c8
+0x600bb9c8      [   jump 0x600bb9cc
+0x600bb9cc      /       immext(##0x60273140)
+0x600bb9d0      \       R2 = memub(GP+##0x60273178)
+0x600bb9d4      [   P0 = cmp.gt(R2,##0x0)
+0x600bb9d8      [   P0 = not(P0)
+0x600bb9dc      [   if (P0) jump:nt 0x600bba2c
+0x600bb9e0      [   jump 0x600bb9e4
+0x600bb9e4      [   jump 0x600bb9e8
+0x600bb9e8      [   R1 = memuh(FP+##-0xe)
+0x600bb9ec      /       immext(##0x60228200)
+0x600bb9f0      \       R0 = ##0x60228224
+0x600bb9f4      [   call 0x60018df0
+0x600bb9f8      [   jump 0x600bb9fc
+0x600bb9fc      /       immext(##0x6027f100)
+0x600bba00      \       R0 = memw(GP+##0x6027f134)
+0x600bba04      [   R3 = memuh(FP+##-0xe)
+0x600bba08      [   R2 = SP
+0x600bba0c      [   memw(R2+##0x4) = R3
+0x600bba10      /       immext(##0x60227300)
+0x600bba14      \       memw(R2+#0x0) = ##0x6022731e
+0x600bba18      /       immext(##0x60227300)
+0x600bba1c      \       R2 = ##0x6022733a
+0x600bba20      [   R1 = ##0x2
+0x600bba24      [   call 0x60017d50
+0x600bba28      [   jump 0x600bba2c
+0x600bba2c      [   jump 0x600bba30
+0x600bba30      [   jump 0x600bba34
+0x600bba34      [   jump 0x600bba38
+0x600bba38      [   jump 0x600bba3c
+0x600bba3c      [   R2 = memuh(FP+##-0xe)
+0x600bba40      [   memh(FP+##-0x2) = R2
+0x600bba44      [   jump 0x600bba48
+0x600bba48      [   R0 = memuh(FP+##-0x2)
+0x600bba4c      [   LR:FP = dealloc_return(FP):raw
+0x600bba50      [   allocframe(SP,#0x10):raw
+0x600bba54      [   R2 = R1
+0x600bba58      [   R2 = R0
+0x600bba5c      [   memb(FP+##-0x3) = R0
+0x600bba60      [   memb(FP+##-0x4) = R1
+0x600bba64      [   R2 = add(FP,##-0x6)
+0x600bba68      /       immext(##0x200)
+0x600bba6c      \       memh(R2+#0x0) = ##0x201
+0x600bba70      [   R2 = memub(FP+##-0x3)
+0x600bba74      [   P0 = cmp.gt(R2,##0xa)
+0x600bba78      [   P0 = not(P0)
+0x600bba7c      [   if (P0) jump:nt 0x600bbb2c
+0x600bba80      [   jump 0x600bba84
+0x600bba84      [   jump 0x600bba88
+0x600bba88      /       immext(##0x6027f140)
+0x600bba8c      \       R1:0 = memd(GP+##0x6027f150)
+0x600bba90      [   R2 = R0
+0x600bba94      [   P0 = tstbit(R2,#0x0)
+0x600bba98      [   if (P0) jump:nt 0x600bbab8
+0x600bba9c      [   jump 0x600bbaa0
+0x600bbaa0      /       immext(##0x60273180)
+0x600bbaa4      \       R1:0 = memd(GP+##0x60273180)
+0x600bbaa8      [   R2 = R0
+0x600bbaac      [   P0 = tstbit(R2,#0x0)
+0x600bbab0      [   if (!P0) jump:nt 0x600bbb18
+0x600bbab4      [   jump 0x600bbab8
+0x600bbab8      [   jump 0x600bbabc
+0x600bbabc      /       immext(##0x60273140)
+0x600bbac0      \       R2 = memub(GP+##0x60273178)
+0x600bbac4      [   P0 = cmp.gt(R2,##0x0)
+0x600bbac8      [   P0 = not(P0)
+0x600bbacc      [   if (P0) jump:nt 0x600bbb10
+0x600bbad0      [   jump 0x600bbad4
+0x600bbad4      [   jump 0x600bbad8
+0x600bbad8      /       immext(##0x60228200)
+0x600bbadc      \       R0 = ##0x60228230
+0x600bbae0      [   call 0x60018dc4
+0x600bbae4      [   jump 0x600bbae8
+0x600bbae8      /       immext(##0x6027f100)
+0x600bbaec      \       R0 = memw(GP+##0x6027f134)
+0x600bbaf0      [   R2 = SP
+0x600bbaf4      /       immext(##0x60227440)
+0x600bbaf8      \       memw(R2+#0x0) = ##0x60227440
+0x600bbafc      /       immext(##0x602273c0)
+0x600db2e0      [   allocframe(SP,#0x10):raw
+0x600db2e4      [   R2 = R0
+0x600db2e8      [   memb(FP+##-0x1) = R0
+0x600db2ec      [   memw(FP+##-0x8) = R1
+0x600db2f0      [   R2 = add(FP,##-0xa)
+0x600db2f4      [   memh(R2+#0x0) = ##0x0
+0x600db2f8      [   R2 = memub(FP+##-0x1)
+0x600db2fc      [   R2 = +mpyi(R2,##0x24)
+0x600db300      /       immext(##0x60350c00)
+0x600db304      \       R1 = memub(R2+##0x60350c29)
+0x600db308      [   R4 = memw(FP+##-0x8)
+0x600db30c      [   R0 = ##0x0
+0x600db310      [   R2 = ##0x2654
+0x600db314      [   R3 = ##0xff
+0x600db318      [   call 0x600967f0
+0x600db31c      [   memh(FP+##-0xa) = R0
+0x600db320      [   R0 = memuh(FP+##-0xa)
+0x600db324      [   LR:FP = dealloc_return(FP):raw
+0x600db328      [   nop
+0x600db32c      [   nop
+0x600db330      [   allocframe(SP,#0x10):raw
+0x600db334      [   R3 = R0
+0x600db338      [   memb(FP+##-0x3) = R0
+0x600db33c      [   memw(FP+##-0x8) = R1
+0x600db340      [   memw(FP+##-0xc) = R2
+0x600db344      [   R2 = memw(FP+##-0x8)
+0x600db348      [   P0 = cmp.eq(R2,##0x0)
+0x600db34c      [   if (P0) jump:nt 0x600db378
+0x600db350      [   jump 0x600db354
+0x600db354      [   R2 = memw(FP+##-0xc)
+0x600db358      [   P0 = cmp.eq(R2,##0x0)
+0x600db35c      [   if (P0) jump:nt 0x600db378
+0x600db360      [   jump 0x600db364
+0x600db364      [   R2 = memub(FP+##-0x3)
+0x600db368      [   P0 = cmp.gt(R2,##0xa)
+0x600db36c      [   P0 = not(P0)
+0x600db370      [   if (P0) jump:nt 0x600db388
+0x600db374      [   jump 0x600db378
+0x600db378      [   R2 = add(FP,##-0x2)
+0x600db37c      /       immext(##0x200)
+0x600db380      \       memh(R2+#0x0) = ##0x202
+0x600db384      [   jump 0x600db3c4
+0x600db388      [   R2 = memub(FP+##-0x3)
+0x600db38c      [   R2 = +mpyi(R2,##0x24)
+0x600db390      /       immext(##0x60350c00)
+0x600db394      \       R3 = memw(R2+##0x60350c38)
+0x600db398      [   R2 = memw(FP+##-0x8)
+0x600db39c      [   memw(R2+##0x0) = R3
+0x600db3a0      [   R2 = memub(FP+##-0x3)
+0x600db3a4      [   R2 = +mpyi(R2,##0x24)
+0x600db3a8      /       immext(##0x60350c00)
+0x600db3ac      \       R3 = memw(R2+##0x60350c3c)
+0x600db3b0      [   R2 = memw(FP+##-0xc)
+0x600db3b4      [   memw(R2+##0x0) = R3
+0x600db3b8      [   R2 = add(FP,##-0x2)
+0x600db3bc      [   memh(R2+#0x0) = ##0x0
+0x600db3c0      [   jump 0x600db3c4
+0x600db3c4      [   R0 = memuh(FP+##-0x2)
+0x600db3c8      [   LR:FP = dealloc_return(FP):raw
+0x600db3cc      [   nop
+0x600db3d0      [   allocframe(SP,#0x10):raw
+0x600db3d4      [   R3 = R0
+0x600db3d8      [   memb(FP+##-0x3) = R0
+0x600db3dc      [   memw(FP+##-0x8) = R1
+0x600db3e0      [   memw(FP+##-0xc) = R2
+0x600db3e4      [   R2 = memw(FP+##-0x8)
+0x600db3e8      [   P0 = cmp.eq(R2,##0x0)
+0x600db3ec      [   if (P0) jump:nt 0x600db418
+0x600db3f0      [   jump 0x600db3f4
+0x600db3f4      [   R2 = memw(FP+##-0xc)
+0x600db3f8      [   P0 = cmp.eq(R2,##0x0)
+0x600db3fc      [   if (P0) jump:nt 0x600db418
+0x600db400      [   jump 0x600db404
+0x600db404      [   R2 = memub(FP+##-0x3)
+0x600db408      [   P0 = cmp.gt(R2,##0xa)
+0x600db40c      [   P0 = not(P0)
+0x600db410      [   if (P0) jump:nt 0x600db428
+0x600db414      [   jump 0x600db418
+0x600db418      [   R2 = add(FP,##-0x2)
+0x600db41c      /       immext(##0x200)
+0x600db420      \       memh(R2+#0x0) = ##0x202
+0x600db424      [   jump 0x600db464
+0x600db428      [   R2 = memub(FP+##-0x3)
+0x600db42c      [   R2 = +mpyi(R2,##0x24)
+0x600db430      /       immext(##0x60350c40)
+0x600db434      \       R3 = memw(R2+##0x60350c40)
+0x600db438      [   R2 = memw(FP+##-0x8)
+0x600db43c      [   memw(R2+##0x0) = R3
+0x600db440      [   R2 = memub(FP+##-0x3)
+0x600db444      [   R2 = +mpyi(R2,##0x24)
+0x600db448      /       immext(##0x60350c40)
+0x600db44c      \       R3 = memw(R2+##0x60350c44)
+0x600db450      [   R2 = memw(FP+##-0xc)
+0x600db454      [   memw(R2+##0x0) = R3
+0x600db458      [   R2 = add(FP,##-0x2)
+0x600db45c      [   memh(R2+#0x0) = ##0x0
+0x600db460      [   jump 0x600db464
+0x600db464      [   R0 = memuh(FP+##-0x2)
+0x600db468      [   LR:FP = dealloc_return(FP):raw
+0x600db46c      [   nop
+0x600db470      [   allocframe(SP,#0x18):raw
+0x600db474      [   R4 = R2
+0x600db478      [   R4 = R1
+0x600db47c      [   R4 = R0
+0x600db480      [   memb(FP+##-0x3) = R0
+0x600db484      [   memb(FP+##-0x4) = R1
+0x600db488      [   memb(FP+##-0x5) = R2
+0x600db48c      [   memw(FP+##-0xc) = R3
+0x600db490      [   R2 = add(FP,##-0xe)
+0x600db494      [   memh(R2+#0x0) = ##0x0
+0x600db498      [   R2 = add(FP,##-0xf)
+0x600db49c      [   memb(R2+#0x0) = ##0x0
+0x600db4a0      [   R2 = memub(FP+##-0x3)
+0x600db4a4      [   P0 = cmp.gt(R2,##0xa)
+0x600db4a8      [   if (P0) jump:nt 0x600db4e4
+0x600db4ac      [   jump 0x600db4b0
+0x600db4b0      [   R2 = memw(FP+##-0xc)
+0x600db4b4      [   P0 = cmp.eq(R2,##0x0)
+0x600db4b8      [   if (P0) jump:nt 0x600db4e4
+0x600db4bc      [   jump 0x600db4c0

@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-10",
+  "scope": "Attended RAM diagnostic with manual firmware stop selected before unplugging and entering s2idle",
+  "source_sha256": "6a9022aeadffc656b01035330f5fb6cf18507be38cff0f8c8bf979f72be83e75",
+  "operator_report": "Charger attached with the device asleep. The display stayed off until the operator pressed power after about 30 seconds.",
+  "trace_boot_seconds": {
+    "rate_zero_request": 330.723323,
+    "machine_suspend_begin": 394.471998,
+    "machine_suspend_end": 451.594728,
+    "firmware_attach_log_delivery": 453.243693,
+    "first_post_resume_sample": 453.33
+  },
+  "power_button_irq_delta": 1,
+  "rtc_alarm_irq_delta": 0,
+  "firmware_reported_cc_attach": true,
+  "additional_charge_rate_requests_after_stop": 0,
+  "charger_enable_during_suspend_sampled": false,
+  "post_resume_samples": 55,
+  "post_resume_charger_enable_values": [0],
+  "post_resume_current_range_uA": [-42115, -6714],
+  "post_resume_health": "Good",
+  "stock_restored": true,
+  "original_boot_and_module_hashes_match": true,
+  "restored_end_threshold": 85,
+  "restored_start_threshold": 70,
+  "limitations": [
+    "Firmware log delivery time follows wake. The operator report places the cable insertion during s2idle.",
+    "Host register sampling stopped during suspend. The available log and first post-resume reading cannot exclude a brief enable pulse during sleep.",
+    "The stop was selected before suspend. Automatic threshold crossing during sleep remains untested."
+  ]
+}

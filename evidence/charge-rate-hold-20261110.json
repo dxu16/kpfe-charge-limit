@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-10",
+  "scope": "Attended RAM-only ten-minute awake hold with USB power continuously connected",
+  "source_sha256": "6a9022aeadffc656b01035330f5fb6cf18507be38cff0f8c8bf979f72be83e75",
+  "observation_completed": true,
+  "samples": 2272,
+  "first_to_last_sample_seconds": 599.901,
+  "charger_enable_values": [0],
+  "battery_current_range_uA": [-8545, 3051],
+  "reported_voltage_ceiling_uV": 4380000,
+  "capacity_percent": 88,
+  "temperature_range_deci_C": [270, 290],
+  "health": "Good",
+  "reported_status": "Discharging",
+  "stop_requests": 1,
+  "charge_rate_requests_during_hold": 0,
+  "stock_restored": true,
+  "original_boot_and_module_hashes_match": true,
+  "restored_end_threshold": 85,
+  "restored_start_threshold": 70
+}

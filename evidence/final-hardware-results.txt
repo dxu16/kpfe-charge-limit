@@ -1,0 +1,99 @@
+KPFE sleep/status fixes: final bounded validation
+2026-11-10, America/New_York (UTC-5)
+
+Result
+------
+Both requested gaps were fixed and observed on the tested KPFE:
+1. Existing GLINK notification handled by a normal kernel worker while the
+   user session remained in s2idle; no full user-space resume or RTC needed.
+2. Confirmed, healthy, nearzero-current limit hold reported as Full. UPower
+   reported fully charged and user confirmed Steam's full check mark.
+The candidate remains local, not permanently installed or upstreamed.
+
+Implementation
+--------------
+One qcom_battmgr.c patch,321 insertions/1 deletion. Exact KPFE model/protocol
+gate retained; other models retain their existing backend and status path.
+Existing start/end threshold ABI and firmware preference storage retained.
+Uses system_wq instead of a freezable worker and removes the explicit hard
+wake request. CPU handles GLINK activity then returns to idle while user
+space stays suspended. No re-suspend daemon and no overriding a user wake.
+Only partial-limit/USB-related notifications schedule private policy work.
+Healthy live state is checked before synthesizing Full at the selected end;
+the hysteresis band reports Not charging. Actual charging/drain, unknown
+status, health faults, disabled/native modes or read failures are not masked.
+The first version's cached native-enable flag was stale after disabling the
+native backend. Final getter reads native-enable directly with other fields.
+Teardown disables work synchronously, preventing a late callback requeue.
+
+Checks and artifacts
+--------------------
+All523584 policy cases passed. Actual getter fixtures cover stale cache,
+healthy holds, hysteresis, unplug, weak supply/real drain, ongoing charging,
+faults, invalid SOC, unknown status, current boundaries, native/disabled/
+unready states, each of seven read failures and positive firmware errors.
+Exact runtime config and vermagic match; all imports exported; all14 audited
+external type layouts match. Checkpatch0 errors/0 warnings; optional spelling
+and const-struct tables absent. Source unchanged after hardware testing;
+only patch description was updated to record observed results.
+Source SHA256d84cef5a94aafe4f1e2b7997f902f3b7818f8fdf8753bd200ec19d50c626a345
+Module SHA256394908e708d3c2b40072fffa867390e8022b3e1c67fdfdaa7574ea39b159d880
+RAM image SHA2561e0103fb3a6428e3307f87a2dea061deafafb8513f0d2cd7b5917fbce0152e05
+Build artifacts:build-status-v3/. Final captures:hardware-v3/.
+
+Final test:11:13:25-11:30:06
+---------------------------
+Usual charger, start94, selected target95; charging verified after2.797s.
+User intentionally woke late, at11:19:58; actual suspend378.199s. User
+confirmed it stayed asleep until manual wake. Power-button IRQ1, RTC IRQ0.
+No RTC alarm or keepalive/probe network requests during intended sleep.
+Temporary standard kernel entry/return tracing captured the firmware write:
+
+  machine_suspend begin     138.119848 (boot-clock seconds)
+  SET opcode49/prop29/value0 423.273194, worker PID1524
+  same request returns0     423.273525
+  manual power IRQ wake     516.353816
+  machine_suspend end       516.356014
+
+Successful inhibition request completed93.082489s BEFORE full resume.
+No controller-requested pm_system_wakeup occurred during the sleep interval.
+First resumed sample:95%, Full, current-6103uA, healthGood, ceiling4380000uV.
+UPower State4 verified11:20:04. User confirmed Steam full check mark.
+Ten-minute hold: all sampled healthGood, ceiling4380000, statusFull,95%.
+Hold current range-9155..1831uA. Restored original85/70 at11:30:05.
+Firmware command acceptance is directly traced; physical battery current
+was sampled after manual resume, not continuously inside suspend.
+
+Earlier iteration
+-----------------
+hardware-v2/ proves the same background mechanism at target94: actual
+suspend286.874s, successful stop about32s after entering suspend, then
+another255s asleep until manual wake. Status still Discharging; runner
+stopped on that assertion and restored85/70. No health/voltage fault.
+This exposed the stale native-enable cache; the final readback corrected it.
+An initial trace setup failed before controls due Python append-mode seek on
+tracefs. Fixed using raw non-seeking writes that preserve existing probes.
+No driver change was needed for that diagnostic issue.
+
+Cleanup verified
+----------------
+User unplugged charger. Verified USB offline, Good health and removed test
+probes/instance. Normal reboot returned to installed stock driver; confirmed
+no host-worker symbol. Reapplied native85/70 plus8400000uA while unplugged.
+Original boot/module hashes verified. No firmware logger/test probes left;
+existing steamos-log-submitter trace instance preserved. User told reconnect
+was safe. See stock-restoration-final-20261110.txt.
+No flash/erase/unlock, installed-file modification, voltage/protection change,
+or firmware image replacement was performed.
+
+Remaining release validation
+----------------------------
+These are bounded single-device tests, not a complete release matrix.
+Actual discharge-to-start70 recharge, repeated boots, charger reconnection,
+failure recovery and suspend-entry races still need validation. Host code
+does not enforce a percentage while powered off; deep sleep was not tested.
+Earlier PC-to-charger handoffs showed about+0.29A reported current with
+setting0/rawCharging and little/no counter change before the controlled
+release/re-inhibit trajectory. The cause and physical meaning are unresolved;
+do not claim all cable-transition behavior is validated or physical overcharge
+is established from those readings. Final target95 hold itself was stable.

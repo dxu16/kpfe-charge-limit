@@ -1,0 +1,23 @@
+     kworker/0:1-12171   [000] d....  1222.831194: get: (qcom_battmgr_request_property.constprop.0+0x0/0xb8 [qcom_battmgr]) property=29
+     kworker/0:1-12171   [000] d....  1222.831195: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=48 property=29 value=0
+     kworker/0:1-12171   [000] d..1.  1222.831632: get_result: (qcom_battmgr_host_set_online+0x3c/0x150 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d....  1222.831632: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=49 property=29 value=1
+     kworker/0:1-12171   [000] d....  1222.882260: get: (qcom_battmgr_request_property.constprop.0+0x0/0xb8 [qcom_battmgr]) property=29
+     kworker/0:1-12171   [000] d....  1222.882261: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=48 property=29 value=0
+     kworker/0:1-12171   [000] d..1.  1222.882305: get_result: (qcom_battmgr_host_set_online+0xb0/0x150 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d....  1222.882306: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=48 property=10 value=0
+     kworker/0:1-12171   [000] d....  1222.882351: get: (qcom_battmgr_request_property.constprop.0+0x0/0xb8 [qcom_battmgr]) property=29
+     kworker/0:1-12171   [000] d....  1222.882352: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=48 property=29 value=0
+     kworker/0:1-12171   [000] d..1.  1222.882394: get_result: (qcom_battmgr_host_set_online+0x3c/0x150 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d....  1222.882395: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=49 property=29 value=0
+     kworker/0:1-12171   [000] d....  1222.882510: get: (qcom_battmgr_request_property.constprop.0+0x0/0xb8 [qcom_battmgr]) property=29
+     kworker/0:1-12171   [000] d....  1222.882510: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=48 property=29 value=0
+     kworker/0:1-12171   [000] d..1.  1222.882555: get_result: (qcom_battmgr_host_set_online+0xb0/0x150 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d..1.  1222.882620: get_result: (qcom_battmgr_bat_get_property+0x128/0x4a8 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d..1.  1222.882680: get_result: (qcom_battmgr_bat_get_property+0x128/0x4a8 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d..1.  1222.882741: get_result: (qcom_battmgr_bat_get_property+0x128/0x4a8 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d....  1222.882742: get: (qcom_battmgr_request_property.constprop.0+0x0/0xb8 [qcom_battmgr]) property=29
+     kworker/0:1-12171   [000] d....  1222.882742: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=48 property=29 value=0
+     kworker/0:1-12171   [000] d..1.  1222.882802: get_result: (qcom_battmgr_bat_get_property+0x128/0x4a8 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d..1.  1222.882847: get_result: (qcom_battmgr_bat_get_property+0x128/0x4a8 [qcom_battmgr] <- qcom_battmgr_request_property.constprop.0) result=0
+     kworker/0:1-12171   [000] d....  1222.882847: get: (qcom_battmgr_request_property.constprop.0+0x0/0xb8 [qcom_battmgr]) property=9

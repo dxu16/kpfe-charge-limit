@@ -1,0 +1,7 @@
+     kworker/0:5-1283    [000] d....    82.565481: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=1
+     kworker/0:0-9       [000] d....    88.150274: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=0
+         python3-6730    [006] ...1.   163.129404: tracing_mark_write: KPFE_DIAG release: end=100 for at most 15 seconds
+     kworker/6:0-48      [006] d....   163.130178: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=1
+         python3-6730    [001] ...1.   178.401714: tracing_mark_write: KPFE_DIAG restored end=85; observe fresh inhibition
+     kworker/1:1-86      [001] d....   178.402735: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=0
+     kworker/0:6-2035    [000] d....   318.738007: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=1

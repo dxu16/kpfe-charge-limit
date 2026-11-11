@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-10",
+  "source_sha256": "f40bcb900577fa8ab17dea38e580654bf79aae4ca9d0bd6dfb685164083fe643",
+  "s2idle_attachment": {
+    "scope": "Automatic policy at 88% battery with an 85% limit. Operator attached the charger during s2idle and woke the handheld about five minutes later.",
+    "machine_suspend_begin_boot_seconds": 96.935962,
+    "machine_suspend_end_boot_seconds": 448.838234,
+    "power_button_irq_delta": 1,
+    "rtc_alarm_irq_delta": 0,
+    "additional_charge_rate_requests": 0,
+    "first_post_resume_sample_boot_seconds": 450.58,
+    "post_resume_samples": 56,
+    "post_resume_usb_online": true,
+    "post_resume_charger_enable_values": [0],
+    "post_resume_current_range_uA": [-10986, -6103],
+    "post_resume_capacity_percent": 88,
+    "post_resume_status": "Full",
+    "post_resume_health": "Good",
+    "post_resume_reported_voltage_ceiling_uV": 4380000,
+    "limitation": "Host register sampling paused during sleep. This verifies the post-wake hold and absence of a new host command. A brief in-suspend pulse remains unmeasured."
+  },
+  "battery_service_recovery": {
+    "charger_domain": "msm/adsp/charger_pd",
+    "charger_domain_restart_request": "Rejected by firmware with QMI_ERR_DISABLED (0x45)",
+    "adsp_stop_start_attempts": 1,
+    "adsp_attempt_result": "Screen and SSH became unresponsive. Operator power-cycled to stock.",
+    "adsp_trace_persisted": false,
+    "recovery_verified": false,
+    "limitation": "The previous journal and pstore did not preserve the failure point. The attempt does not establish whether the battery driver's service-up handler ran."
+  },
+  "stock_restored": true,
+  "original_boot_and_module_hashes_match": true,
+  "restored_end_threshold": 85,
+  "restored_start_threshold": 70,
+  "stock_health": "Good",
+  "stock_adsp_state": "running"
+}

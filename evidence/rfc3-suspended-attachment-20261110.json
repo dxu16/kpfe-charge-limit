@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-10",
+  "revision": "rfc3",
+  "result": "failed",
+  "case": "charger attached while already in s2idle above 85% limit",
+  "source_sha256": "2d382b01f26b8f865243e996e597001484af1bb045bb3476315293134d7ed5e7",
+  "trace_boot_seconds": {
+    "suspend_begin": 1860.202139,
+    "first_usb_online_reply": 1897.784254,
+    "inhibit_set_29_0": 1897.78465,
+    "last_pre_resume_worker": 1898.334338,
+    "full_resume": 2218.932239
+  },
+  "last_pre_resume_worker_to_resume_seconds": 320.597901,
+  "early_current_uA": [
+    -21973,
+    -11597
+  ],
+  "first_resume_current_uA": 291146,
+  "first_resume_status": "Charging",
+  "first_resume_capacity_percent": 88,
+  "health": "Good",
+  "voltage_max_uV": 4380000,
+  "physical_enable_during_suspend_sampled": false,
+  "conclusion": "Initial inhibit and early gauge readings did not establish a sustained stop; awake polling did not run through the suspended interval.",
+  "restoration": {
+    "default": "pinned stock deployment",
+    "end_threshold_percent": 85,
+    "start_threshold_percent": 70,
+    "health": "Good",
+    "stock_boot_and_module_hashes_verified": true,
+    "temporary_probes_removed": true
+  },
+  "limitations": [
+    "The first resume current cannot timestamp the internal firmware enable write.",
+    "No Over voltage flag was observed in this case."
+  ]
+}

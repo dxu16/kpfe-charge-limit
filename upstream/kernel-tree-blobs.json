@@ -1,0 +1,1462 @@
+[
+  {
+    "path": "packages/kernel/BASE.env",
+    "sha": "99dad29b3e959ff56bacafe42c659a0552318c56"
+  },
+  {
+    "path": "packages/kernel/PATCHES.md",
+    "sha": "b67fde3bff3176038821bbcec920e157ecf062f3"
+  },
+  {
+    "path": "packages/kernel/build.sh",
+    "sha": "468b51909a4ee2b17de9ebee33249f22adf1b8d3"
+  },
+  {
+    "path": "packages/kernel/config/armada-kernel.config.overrides",
+    "sha": "ef6a9e56c5cf9aeb1a824248a653a2614b1104db"
+  },
+  {
+    "path": "packages/kernel/dts/cq8725s-ayn-common.dtsi",
+    "sha": "49071f8b45b4f81b218648533ea90aea7c3f287d"
+  },
+  {
+    "path": "packages/kernel/dts/cq8725s-ayn-odin3.dts",
+    "sha": "7090eb668dbb9551fee717882388d2f1a973e43f"
+  },
+  {
+    "path": "packages/kernel/dts/cq8725s-ayn-odin3portal.dts",
+    "sha": "bd116215b9ace58741c878ab3934142d7d1374c6"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocket-common.dtsi",
+    "sha": "4d95922ecb4eb1db4d2fc1ee38615070397a22db"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocket-common.dtsi.patch",
+    "sha": "d26f5cdc288d1678ffa1376c75d9ba138be09752"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketace.dts",
+    "sha": "5b6db5849de755a67c625fd34c6537e46e3d0170"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketace.dts.patch",
+    "sha": "5da53b7f0208eeeb0119ffdc1ba7ce0d0ce5ed1d"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketdmg.dts",
+    "sha": "5850ef93d6bd2da6506a2d760b1734f4e1eb912f"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketdmg.dts.patch",
+    "sha": "aaf42440f4ae82b3868a619d2b72d1fd880781e3"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketds.dts",
+    "sha": "f86cfa2820ed0769c18c90ab56eafab0fe3d0ea5"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketds.dts.patch",
+    "sha": "f20c1c8905e18d28415454f1f5ad258eda383796"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketevo.dts",
+    "sha": "1d83ad88279ebafefdb1a3172197316b1192fe72"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pocketevo.dts.patch",
+    "sha": "6eb9a1f19ab04b3624e09d2b41eac0abddc61438"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pockets1k.dts",
+    "sha": "c25da0eec544671041ccb1a47fd39f4abe5216b4"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pockets1k.dts.patch",
+    "sha": "d5a83f0c3a082f437a8e4aa66d1bca2752f1d92d"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pockets2k.dts",
+    "sha": "935d3c0e4b97c44fd7df2760002bb1b59115c0dd"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayaneo-pockets2k.dts.patch",
+    "sha": "a050dc55bb032f1ecb55785aa09f8915ee9da6a4"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-common.dtsi",
+    "sha": "156dff38b7f92ff00590d22372e325ec48a6aee2"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-common.dtsi.patch",
+    "sha": "8e33506bb7de3eaf836ed52cc65cc47af5e46a67"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-odin2.dts",
+    "sha": "a152b01f61d4658ede210020b0acc25dd69ae54b"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-odin2.dts.patch",
+    "sha": "3b0ea0aad03503a92e4dde47d5280cb95c528a92"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-odin2mini.dts",
+    "sha": "c3f0219cdb3d373c84196a0e51bfe7c7a863e4a6"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-odin2portal.dts",
+    "sha": "70e7e64dc879824e7d00c0edc610ee0fe036efde"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-odin2portal.dts.patch",
+    "sha": "c1446fc49da311b34b77c08be92bacb0766efda2"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-thor.dts",
+    "sha": "f89acee65888e120314fa0a5c63e7911631f6cc7"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-ayn-thor.dts.patch",
+    "sha": "57dd1c09c509322553e102aed935fa2536e77263"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-retroidpocket-rp6-top-dpad.dts",
+    "sha": "529c5734a1ff8c366f462df9889104d3bf5b0844"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-retroidpocket-rp6.dts",
+    "sha": "77ae3661a0afb3ccbf7fdbaf20b0de8254165925"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-retroidpocket-rp6.dts.patch",
+    "sha": "305d061e555ec58d93407c1dd7580b0fdc894404"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-retroidpocket-rpnova.dts",
+    "sha": "b21c84b14e9304cc692886b2bb91889c928dd1d4"
+  },
+  {
+    "path": "packages/kernel/dts/qcs8550-retroidpocket-rpnova.dts.patch",
+    "sha": "f29a2640b94471d273e0b05ec28868e13b14e44c"
+  },
+  {
+    "path": "packages/kernel/dts/sm7750-retroidpocket-duo.dts",
+    "sha": "687909f28c290f65f66fac543f30979166fc5f48"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-ayaneo-pocket-micro2.dts",
+    "sha": "54edfb69826352bd8351c82263b92f861c580aac"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-ayn-thorlite.dts",
+    "sha": "32edbcbd9899ddff8943d4e8714a07af864c76fa"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-ayn-thorlite.dts.patch",
+    "sha": "85faa1db478646919e24e04e37ef3914d887d8b7"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-mangmi-air-y-pro.dts",
+    "sha": "1d3f59c7c23ac3d74daee8cdb32810187c21501a"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-mangmi-air-y-pro.dts.patch",
+    "sha": "e282ec01960b96244a21a44f05989698d77500d7"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-mangmi-pocket-max.dts",
+    "sha": "4cd8157c42dc8b93384ea6a26f8364468b5edbf0"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-mangmi-pocket-max.dts.patch",
+    "sha": "c2a20841906070a1c1b5e8b21d28815306ddfb97"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-common.dtsi",
+    "sha": "b0d3742abb898a76ab8b94e4d531d24d503a50c2"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-flip2-visionox.dts",
+    "sha": "9e3a734b27137465aefdcefdfb4ed9cd55783d7c"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-flip2.dts",
+    "sha": "209b3351b1749a37e8b09a91e0c52cf4d6f5e022"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-rp5-visionox.dts",
+    "sha": "cfe22337533acafc9df986e307fb020e7d8fdf5b"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-rp5.dts",
+    "sha": "a059378fcbea702d2b4063d74c8945b3393749f7"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-rpmini.dts",
+    "sha": "9f572e87b84e7b8f6169add421c78b22d4b13a55"
+  },
+  {
+    "path": "packages/kernel/dts/sm8250-retroidpocket-rpminiv2.dts",
+    "sha": "e5f4ac022826fbd73700ed61b4c5cce2ae7c6ffa"
+  },
+  {
+    "path": "packages/kernel/dts/sm8650-ayaneo-common.dtsi",
+    "sha": "cea1ad46b4817464b3b76526a15bf6a3b2586d89"
+  },
+  {
+    "path": "packages/kernel/dts/sm8650-ayaneo-common.dtsi.patch",
+    "sha": "59f0c23bfcd36817cf50504929f6b8e55f32b8f6"
+  },
+  {
+    "path": "packages/kernel/dts/sm8650-ayaneo-ps2.dts",
+    "sha": "9f9de0cf97e8a863375e4df8a44319fd98e26622"
+  },
+  {
+    "path": "packages/kernel/dts/sm8650-ayaneo-ps2.dts.patch",
+    "sha": "883efbd48aa8d79e7d9fa20504bb99f50dcf6a37"
+  },
+  {
+    "path": "packages/kernel/dts/sm8650-konkr-pf.dts",
+    "sha": "74b9b507cad1987d82eba17ead17f6100d39d236"
+  },
+  {
+    "path": "packages/kernel/dts/sm8650-konkr-pf.dts.patch",
+    "sha": "a16ec158671c5691a3b5b9ed99893cb5a22eba67"
+  },
+  {
+    "path": "packages/kernel/dts/sm8750-konkr-pf-elite.dts",
+    "sha": "eba9f434318f7375e9c42ef2c94562933b8f1536"
+  },
+  {
+    "path": "packages/kernel/dts/sm8750-konkr-pf-elite.dts.patch",
+    "sha": "9ea64177c49d96662c3ec9a62e74c7b705db5f53"
+  },
+  {
+    "path": "packages/kernel/patches/0001-msm-dsi-restore-wide_bus-bpp-calculation.patch",
+    "sha": "3436bb22e31f3decbb607d7649e972164080c9fe"
+  },
+  {
+    "path": "packages/kernel/patches/0001-pcie-update-sm8550-dtsi.patch",
+    "sha": "c30b4323a8c32adcf74ab44bfd138ebe614e6ccc"
+  },
+  {
+    "path": "packages/kernel/patches/0001-pcie-update-sm8650-dtsi.patch",
+    "sha": "4d4718e4d21782ef1349702b4220885d5df332d2"
+  },
+  {
+    "path": "packages/kernel/patches/0002-qcom-dispcc-sm8550-Fix-disp_cc_mdss_mdp_clk_src.patch",
+    "sha": "5d3fd30141544f503d8eb357f6b3be27860ff188"
+  },
+  {
+    "path": "packages/kernel/patches/0004-drm-msm-a6xx-Enable-IFPC-on-Adreno-740.patch",
+    "sha": "7743f91d63be05a43d74a4d3f401174b33749f8d"
+  },
+  {
+    "path": "packages/kernel/patches/0004-pm8150b.patch",
+    "sha": "f0962e9aaa36001e4b77fbda0fe5fc22613e7c10"
+  },
+  {
+    "path": "packages/kernel/patches/0005-sm8250-uart.patch",
+    "sha": "0094db8b6c9d8ead8e4efa6819be3f94589bea58"
+  },
+  {
+    "path": "packages/kernel/patches/0006-add-hw_params-callback-function-to-drm_connector_hdmi_audio_ops.patch",
+    "sha": "a87ccd1bccf2cd09e0aa1be0a1ac853776bf8be2"
+  },
+  {
+    "path": "packages/kernel/patches/0007-ASoC-qcom-audioreach-compute-active-channel-maps.patch",
+    "sha": "3ee8c8a1b1e6b941cfc9846376f5934dbc60b47d"
+  },
+  {
+    "path": "packages/kernel/patches/0008-ASoC-dt-bindings-qcom-sm8250-Add-Ayaneo-Pocket-S2.patch",
+    "sha": "ed1a37af40658aa4aa358a661782e1b0a75604e2"
+  },
+  {
+    "path": "packages/kernel/patches/0008-retroid-gamepad.patch",
+    "sha": "00897636425848d7757497eca1ca57679816b380"
+  },
+  {
+    "path": "packages/kernel/patches/0008a-input-retroid-keep-trigger-conversion-independent-of-calibration.patch",
+    "sha": "fc823c412a210a33d00ea2e733da13442f8eccad"
+  },
+  {
+    "path": "packages/kernel/patches/0009-ASoC-qcom-sc8280xp-add-Ayaneo-Pocket-S2-card.patch",
+    "sha": "2582ed762ed4462ef21379fa5240f2122cf54681"
+  },
+  {
+    "path": "packages/kernel/patches/0009-qcom-spmi-haptics.patch",
+    "sha": "6080464c6f9d1516f957533fc4c6923617a568a9"
+  },
+  {
+    "path": "packages/kernel/patches/0010-ASoC-qcom-add-KONKR-Pocket-FIT-WSA2-card.patch",
+    "sha": "22e068a9da692b0fb3593a39c51ac6a6fd6cfca4"
+  },
+  {
+    "path": "packages/kernel/patches/0010-msm-resource-cleanup.patch",
+    "sha": "56cb51a6415e4ae07b493d0e8144292baa3d9376"
+  },
+  {
+    "path": "packages/kernel/patches/0011-ASoC-qcom-audioreach-use-wsa-interface-for-sm8650-wsa2.patch",
+    "sha": "d4f62dadcad798c28fcf6bc5983ca2583173f953"
+  },
+  {
+    "path": "packages/kernel/patches/0011-qcom-pm8150b-charger.patch",
+    "sha": "671fdee7df686e5636778ea5af6a979ab876373a"
+  },
+  {
+    "path": "packages/kernel/patches/0012-ASoC-qcom-q6asm-dai-Change-some-default-periods.patch",
+    "sha": "2fde2ea08daff663161e5351b567634941d15bbb"
+  },
+  {
+    "path": "packages/kernel/patches/0013-add-force-feedback.patch",
+    "sha": "d3e90661f1ea74380880018a704d598b4a79799e"
+  },
+  {
+    "path": "packages/kernel/patches/0014-sm8250-ath11k-fix-wifi-mac.patch",
+    "sha": "4b17a955445ee3bf01a86b00bae1b13031eed3e4"
+  },
+  {
+    "path": "packages/kernel/patches/0015-touchscreen-edt-ft5x06-allow-to-override-input-name.patch",
+    "sha": "80e4032466459fb1bde4bb01e41fdd711ef05bbf"
+  },
+  {
+    "path": "packages/kernel/patches/0016-rp5-smooth-brightness-adjustment.patch",
+    "sha": "8deeb5a2cddcc90baa371a39713f3085d0228abb"
+  },
+  {
+    "path": "packages/kernel/patches/0026-dt-bindings-arm-qcom-ids-Add-SoC-ID-for-CQ8725S.patch",
+    "sha": "685c37af5086369329c19b01ec15344439004553"
+  },
+  {
+    "path": "packages/kernel/patches/0027-soc-qcom-socinfo-Add-CQ8725S-SoC-ID.patch",
+    "sha": "b49f5858ee79fc75b98eab25836d87baa32abf78"
+  },
+  {
+    "path": "packages/kernel/patches/0028-drm-panel-Add-panel-driver-for-Chipone-ICNA35XX-base.patch",
+    "sha": "3246c8e9cbaafed48fbb5b6d995f8972b1235497"
+  },
+  {
+    "path": "packages/kernel/patches/0029-Input-edt-ft5x06-add-no_regmap_bulk_read-option.patch",
+    "sha": "96e3609c05d4bd306c4c8f3e20ee56e5d55542a1"
+  },
+  {
+    "path": "packages/kernel/patches/0030-input-rmi4-add-reset-gpio.patch",
+    "sha": "658d66214d7869d529bad2eaf763c862ae13abe0"
+  },
+  {
+    "path": "packages/kernel/patches/0030-leds-Add-driver-for-HEROIC-HTR3212.patch",
+    "sha": "a546ccfd6e12956a46d614f4cfe65d2cdbca4e83"
+  },
+  {
+    "path": "packages/kernel/patches/0031_input--Add-driver-for-RSInput-Gamepad.patch",
+    "sha": "d0f6baefd6af350026b630d186f8b683c4f6d9a6"
+  },
+  {
+    "path": "packages/kernel/patches/0032-ASoC-codecs-aw88166-AYN-Products-Specific-modificati.patch",
+    "sha": "bbcbec2cf9ee3be856c3480856e5cbde6317a9d5"
+  },
+  {
+    "path": "packages/kernel/patches/0032-rmi4-silence-spam-irq-errors.patch",
+    "sha": "dda95661172673d863dbf5e3a8e3aa09cecd00d8"
+  },
+  {
+    "path": "packages/kernel/patches/0033-arm64-dts-qcom-sm8750-gpu-clock-controllers.patch",
+    "sha": "b9eb3c5261c566dce14a2a1a18fd91d203e2c708"
+  },
+  {
+    "path": "packages/kernel/patches/0034-arm64-dts-qcom-sm8750-Add-UART15.patch",
+    "sha": "6df92d972e3d1ede22f070a9b72e88376473d6c5"
+  },
+  {
+    "path": "packages/kernel/patches/0035-arm64-dts-qcom-sm8750-set-CPU-capacity-dmips-mhz.patch",
+    "sha": "aedb450759058d56e9336cf6e9fd2af56a641cb4"
+  },
+  {
+    "path": "packages/kernel/patches/0036_ASoC--qcom--sc8280xp-Add-support-for-Primary-I2S.patch",
+    "sha": "289c05cc7e2bbe5af82c78c03c0a30034565910b"
+  },
+  {
+    "path": "packages/kernel/patches/0037-arm64-dts-qcom-sm8750-add-CPU-thermal-cooling.patch",
+    "sha": "9a441234a869def84c9cc78934cd8890d876fcef"
+  },
+  {
+    "path": "packages/kernel/patches/0038-arm64-dts-qcom-sm8750-add-GPU-nodes.patch",
+    "sha": "a349f715270148673b7b4f2f551e7ebb315761f8"
+  },
+  {
+    "path": "packages/kernel/patches/0038a-arm64-dts-qcom-sm8750-map-A8xx-RSCC-registers.patch",
+    "sha": "c99417c1fd2b73dffe4dbeee6015adf73bb5bb04"
+  },
+  {
+    "path": "packages/kernel/patches/0039-wifi-ath12k-add-initial-hardware-definition-for-WCN7.patch",
+    "sha": "a9293ff7549eb430d05b0ef43a355758126aa760"
+  },
+  {
+    "path": "packages/kernel/patches/0040-wifi-ath12k-send-QDSS-config-when-CNSS_QDSS_CFG_MISS.patch",
+    "sha": "cee5f9ee0b5d4de0a08a9f2ac5ce10f9b2dedef3"
+  },
+  {
+    "path": "packages/kernel/patches/0041-wifi-ath12k-disable-CNSS_QDSS_CFG_MISS_V01-for-the-W.patch",
+    "sha": "f25295c8f29b0a39db570aebb487568fe32d19b8"
+  },
+  {
+    "path": "packages/kernel/patches/0042-PCI-pwrctrl-pwrseq-add-support-for-WCN7860.patch",
+    "sha": "837a8a9077a865593049d4d57cd8ba011052266d"
+  },
+  {
+    "path": "packages/kernel/patches/0043-power-sequencing-qcom-wcn-add-support-for-WCN7860.patch",
+    "sha": "f13c093258523196281fa9ab795ced5b377edb5e"
+  },
+  {
+    "path": "packages/kernel/patches/0045-Bluetooth-qca-add-WCN7860-support.patch",
+    "sha": "634fca6b4fc084252452c786e51e8be315625c13"
+  },
+  {
+    "path": "packages/kernel/patches/0048-drm-msm-dsi-reparent-byte-pixel-src-to-xo-on-disable.patch",
+    "sha": "844172185d8a10f7c268a676f26b0752306c84ae"
+  },
+  {
+    "path": "packages/kernel/patches/0048a-drm-msm-dsi-round-byte-clock-rate-after-reparenting-to-PLL.patch",
+    "sha": "4dda478cbb48235a685671fe918a091754ddb424"
+  },
+  {
+    "path": "packages/kernel/patches/0048b-drm-msm-dsi-fix-pll-init-in-bonded-mode.patch",
+    "sha": "9dacd1035abd8001c44a5563a967b0e3bf936d9d"
+  },
+  {
+    "path": "packages/kernel/patches/0049-drm-msm-a8xx-add-adreno-830-catalog.patch",
+    "sha": "36adfdecbbe224ec99a398772859e255674d835b"
+  },
+  {
+    "path": "packages/kernel/patches/0049-drm-msm-dpu-panel-opt-in-8bpc-dither.patch",
+    "sha": "eeebc810aeba44e5b68f9de429bf6cb46535a563"
+  },
+  {
+    "path": "packages/kernel/patches/0051-gpu-panel-add-Pocket-ACE-panel-driver.patch",
+    "sha": "51bda22ad1a590115d1d505c6d320e6b9093eb5a"
+  },
+  {
+    "path": "packages/kernel/patches/0052-gpu-panel-add-Pocket-DMG-panel-driver.patch",
+    "sha": "c64de9f671d943c46c9c0652af35d676427e0675"
+  },
+  {
+    "path": "packages/kernel/patches/0053-add-hynitron-touchscreen.patch",
+    "sha": "f5f344128b873608c357a3c01e43d0bccafd7959"
+  },
+  {
+    "path": "packages/kernel/patches/0053-gpu-panel-st7703-add-Pocket-DS-lower-panel.patch",
+    "sha": "b3d925290d7b87823915f9d8b0a0e22f14566ebf"
+  },
+  {
+    "path": "packages/kernel/patches/0053a-input-hynitron-port-to-gpiod.patch",
+    "sha": "c469f2c284ddfd3ddad7674280657ffd034e3844"
+  },
+  {
+    "path": "packages/kernel/patches/0053b-input-hynitron-restore-gpio-init-order.patch",
+    "sha": "2ea3845969db7d1252674d1fe10681aecf864317"
+  },
+  {
+    "path": "packages/kernel/patches/0054-input-goodix-override-resolution-from-dt.patch",
+    "sha": "a979c6451374dbb6be15e91de938d4f7206d637d"
+  },
+  {
+    "path": "packages/kernel/patches/0054-regulator-add-sgm3804-i2c-regulator-for-panel-power-.patch",
+    "sha": "6820e57c7f1b10b3ef827191ab3c6c228e908ab8"
+  },
+  {
+    "path": "packages/kernel/patches/0054_sn3112-pwm-driver.patch",
+    "sha": "41f1fb22ae73fe02c87833374f58c23105258684"
+  },
+  {
+    "path": "packages/kernel/patches/0054a-dt-bindings-input-goodix-document-input-device-label.patch",
+    "sha": "d44f5c70aad3404d3e5968213311d5faea1d1e11"
+  },
+  {
+    "path": "packages/kernel/patches/0054b-input-goodix-allow-overriding-input-device-name.patch",
+    "sha": "f8ac4dff8674b9472ff0eb1f1b565fab12304d91"
+  },
+  {
+    "path": "packages/kernel/patches/0054c-pwm-sn3112-power-down-across-system-suspend.patch",
+    "sha": "f359ebf5a5a98debe18ac9d3625e9b8d08114adf"
+  },
+  {
+    "path": "packages/kernel/patches/0055_Synaptics-TD4328-LCD-panel.patch",
+    "sha": "92f1fc0a5f57be3f1696bf2c20de55f3f2de032f"
+  },
+  {
+    "path": "packages/kernel/patches/0056-backlight-aw99706-enable-hwen-before-chip-id-read.patch",
+    "sha": "555cc41ed03bd2776ef5e138d5b2e9e2a03c9435"
+  },
+  {
+    "path": "packages/kernel/patches/0056_Xm-Plus-XM91080G-panel.patch",
+    "sha": "1efa265612d3ba8dfd45f95564e568044742b7e1"
+  },
+  {
+    "path": "packages/kernel/patches/0057-backlight-aw99706-konkr-cfg7.patch",
+    "sha": "6fe8fbca2a427e7573e9f5f64302bd43ef1e7557"
+  },
+  {
+    "path": "packages/kernel/patches/0057_DDIC-CH13726A-panel.patch",
+    "sha": "b0f5f98d73c982d238e02764b66a5ef93aac745c"
+  },
+  {
+    "path": "packages/kernel/patches/0058-input-joystick-add-ayaneo-mcu-joystick.patch",
+    "sha": "035a91358961dcd25a764fe081f0d48ebbcfe301"
+  },
+  {
+    "path": "packages/kernel/patches/0058_AYN-Odin2-Mini--backlight.patch",
+    "sha": "14a96cb33623de55ed03edf67e7344de3b0ec58c"
+  },
+  {
+    "path": "packages/kernel/patches/0059-ASoC-aw88395-lib-skip-monitor-sections-in-V1-ACF-parse.patch",
+    "sha": "245ed6d139a97c4b639378cc8da3873b1229a601"
+  },
+  {
+    "path": "packages/kernel/patches/0059-drm-panel-add-brightness-levels-helper.patch",
+    "sha": "87b7d03c216ccd64d7a02161130a1ce2b27b3de2"
+  },
+  {
+    "path": "packages/kernel/patches/0059_AYN-Odin2-Mini--hynitron--cstxxx.patch",
+    "sha": "5ebafdfc883d67951c2c6e5f2909a8d477bc0297"
+  },
+  {
+    "path": "packages/kernel/patches/0060-ASoC-qcom-sc8280xp-enable-MI2S-bit-clock-on-BE-startup.patch",
+    "sha": "921e10d0a0f1eb854b3f6ffba0eec3b14231b918"
+  },
+  {
+    "path": "packages/kernel/patches/0060-backlight-Add-SY7758-LED-driver.patch",
+    "sha": "aa413718a3a26987ce1a942865c577de0c71e261"
+  },
+  {
+    "path": "packages/kernel/patches/0060-drm-panel-icna35xx-luminance-linear-backlight-scale.patch",
+    "sha": "bece93024f9401c0d7b8cf7517e80153de36fdc5"
+  },
+  {
+    "path": "packages/kernel/patches/0060-dt-bindings-silergy-sy7758.patch",
+    "sha": "da5ccb789d09ea40c9bb09a5919da8a49d1376d4"
+  },
+  {
+    "path": "packages/kernel/patches/0060-input-touchscreen-add-synaptics-dsx-driver.patch",
+    "sha": "a4a1de5546268d2dc40a00c8868e551394153e88"
+  },
+  {
+    "path": "packages/kernel/patches/0060-input-touchscreen-add-synaptics-dsx-kconfig.patch",
+    "sha": "99dea6738a209ead0d0b5dd7e069caeefbcb5de6"
+  },
+  {
+    "path": "packages/kernel/patches/0060_Mangmi-Pocket-Max-SPI-joypad.patch",
+    "sha": "a7d466849d11bf701e08dc7d54a965a977300c72"
+  },
+  {
+    "path": "packages/kernel/patches/0060a-drm-panel-icna35xx-add-mangmi-pocket-max.patch",
+    "sha": "1a6cd0ec55d91ac39dd137bea0052044a5dd1af7"
+  },
+  {
+    "path": "packages/kernel/patches/0060b-input-mangmi-pocket-max-keep-trigger-conversion-independent-of-calibration.patch",
+    "sha": "34a4b472add9ef33b3685c270011b2dcf15e8f88"
+  },
+  {
+    "path": "packages/kernel/patches/0061_leds-aw200xx-vdd-supply.patch",
+    "sha": "97b56bb60fa48c540554e5ef933581390f57b95d"
+  },
+  {
+    "path": "packages/kernel/patches/0062-gpu-drm-panel-add-wt0630-panel.patch",
+    "sha": "d7739b328073dd63a9aa983c3d853225ac107501"
+  },
+  {
+    "path": "packages/kernel/patches/0062_wsa881x-shared-powerdown-gpio.patch",
+    "sha": "ac0a41a2d04266d3b4df59aa925ad46ae9bcadbc"
+  },
+  {
+    "path": "packages/kernel/patches/0063-ASoC-wcd939x-route-usbss-on-integrated-jack-insert.patch",
+    "sha": "b218e8be175ce857147d6b35ece0a55baf7c2e55"
+  },
+  {
+    "path": "packages/kernel/patches/0063-gpu-drm-panel-add-pocket-fit-panel.patch",
+    "sha": "4c246c309a0585a16baac612db584ac83064c2f8"
+  },
+  {
+    "path": "packages/kernel/patches/0063-gpu-drm-panel-add-wt0600-1k-panel.patch",
+    "sha": "90b226ddba64347cdf9ade245c36c986a51db626"
+  },
+  {
+    "path": "packages/kernel/patches/0063_Mangmi-Pocket-Max-HL7139-charge-pump.patch",
+    "sha": "847490b39580fc4154dca0b165351f8270e135b4"
+  },
+  {
+    "path": "packages/kernel/patches/0064-ASoC-wcd-mbhc-clear-stale-jack-report-on-mechanical-removal.patch",
+    "sha": "0c7074fd5f8abd434cf21c84662295ae33bd32e8"
+  },
+  {
+    "path": "packages/kernel/patches/0064-input-touchscreen-add-rocknix-chipone-tddi.patch",
+    "sha": "d3c943b3365140fd31aa01c76f9e3c79f354a013"
+  },
+  {
+    "path": "packages/kernel/patches/0064_Mangmi-Air-Y-Pro-panel.patch",
+    "sha": "a9071348ff5efea0119a06fd6cca70440a8e60c2"
+  },
+  {
+    "path": "packages/kernel/patches/0065-input-touchscreen-add-hynitron-cst66xx.patch",
+    "sha": "7f496f4341899a519ad64cce6b6c390436897c71"
+  },
+  {
+    "path": "packages/kernel/patches/0066-drm-msm-dpu-enable-inline-rotation.patch",
+    "sha": "21767889813c7ad090aaefdefaf0366ebfd4e345"
+  },
+  {
+    "path": "packages/kernel/patches/0066-regulator-add-qcom-pm8150l-lcdb.patch",
+    "sha": "3365d1c8beef3d831a912e77aecae49297d86d15"
+  },
+  {
+    "path": "packages/kernel/patches/0066-scsi-ufs-ufs-qcom-add-sm8750-compatible.patch",
+    "sha": "b6a546b8bae116fd74cef0099606afab79b09a24"
+  },
+  {
+    "path": "packages/kernel/patches/0067-arm64-dts-qcom-pm8150l-add-lcdb-node.patch",
+    "sha": "6ce86de7c4804abf6bf10e89c64a2073400bbb6e"
+  },
+  {
+    "path": "packages/kernel/patches/0068-drm-msm-dpu-lutdma-dspp-igc-gamut.patch",
+    "sha": "638cb56dcc811d08c0e699dcac2b56b945d46b48"
+  },
+  {
+    "path": "packages/kernel/patches/0069-dt-bindings-display-msm-dpu-lutdma-reg.patch",
+    "sha": "059dd421ecbfb1acc38a59e36614ab4a6e1ca9ea"
+  },
+  {
+    "path": "packages/kernel/patches/0069-input-misc-add-konkr-sysbtn-MCU-system-buttons.patch",
+    "sha": "0e39c05941a9daaff21fe7f3a5127b9edf051f04"
+  },
+  {
+    "path": "packages/kernel/patches/0069a-input-konkr-sysbtn-add-pocket-fit-mcu.patch",
+    "sha": "a002795a744f3d277ef8a843f8320e6846c48e8a"
+  },
+  {
+    "path": "packages/kernel/patches/0070-arm64-dts-qcom-dpu-lutdma-reg.patch",
+    "sha": "334e808ff07b03693c4f902a58fa31e6c534d38c"
+  },
+  {
+    "path": "packages/kernel/patches/0071-HACK-fix-usb-boot-hang.patch",
+    "sha": "ffca3eb8b0da924925a39aeed367ce583ab31b2a"
+  },
+  {
+    "path": "packages/kernel/patches/0072-ASoC-lpass-rx-macro-add-HPH-PCM-mode.patch",
+    "sha": "1894731a3a1cb599b851331ac443663f7d702193"
+  },
+  {
+    "path": "packages/kernel/patches/0073-ASoC-wcd939x-add-HPH-PCM-HiFi-mode.patch",
+    "sha": "06457d0b7059b4388f197f804fd2c7f0fc05c78c"
+  },
+  {
+    "path": "packages/kernel/patches/0074-soundwire-qcom-PCM-data-port-format-enable.patch",
+    "sha": "2a24aefebdb5b8c05510dfb4a0a9a16fcda99e53"
+  },
+  {
+    "path": "packages/kernel/patches/0075-ASoC-wsa884x-preserve-Pocket-S2-compander-gain.patch",
+    "sha": "ffb6fc26cdde1de673776c7265cd22febf754d19"
+  },
+  {
+    "path": "packages/kernel/patches/0076-drm-msm-dpu-expose-abgr-xbgr-2101010-on-planes.patch",
+    "sha": "2c30aedcadf4641b5fb3c417f74d144fd04113ec"
+  },
+  {
+    "path": "packages/kernel/patches/0077-drm-msm-dpu-plane-igc-3d-lut-color-pipelines.patch",
+    "sha": "07250240bdb1ac645660eeaa2348598b65d11653"
+  },
+  {
+    "path": "packages/kernel/patches/0077a-drm-atomic-duplicate-state-of-all-colorops.patch",
+    "sha": "aafefb2920542f7844b2aa037f40093ae0a70447"
+  },
+  {
+    "path": "packages/kernel/patches/0077b-drm-msm-dpu-return-einval-when-no-sspp-is-free.patch",
+    "sha": "0b22eaacceb85937510945808c7cec28b8924c59"
+  },
+  {
+    "path": "packages/kernel/patches/0078-drm-msm-dpu-fix-vblank-timestamps-on-command-mode-panels.patch",
+    "sha": "c07c535fea66c08e02cb06dee53f7420537b6a5c"
+  },
+  {
+    "path": "packages/kernel/patches/0078a-drm-msm-dpu-program-merge3d-for-command-mode.patch",
+    "sha": "a1423c036b55db6ac5525180dfea837a3d25d8f4"
+  },
+  {
+    "path": "packages/kernel/patches/0080-ASoC-codecs-lpass-tx-macro-track-every-active-decimator.patch",
+    "sha": "35684b6ffaab22ca1af4c70edfd731cd471764cf"
+  },
+  {
+    "path": "packages/kernel/patches/0081-ASoC-wcd939x-fix-headphone-analog-volume-controls.patch",
+    "sha": "1764cc9ad088ba307d70001b277ff597c568846c"
+  },
+  {
+    "path": "packages/kernel/patches/0100-revert-force-16bit-audio.patch",
+    "sha": "da4b7ec7570f03eba18439ca52a5eb2c6a9c6fde"
+  },
+  {
+    "path": "packages/kernel/patches/0102-arm64-dts-qcom-pm8150-Add-nvmem-support-for-PM8150-R.patch",
+    "sha": "791e0c2cafd7e0636100802d8c40d74bbff9b000"
+  },
+  {
+    "path": "packages/kernel/patches/0104-drm-panel-Add-Retroid-Pocket-6-panel.patch",
+    "sha": "afc5bd1086be5fbb5e57fad3bf49b091aa58c61c"
+  },
+  {
+    "path": "packages/kernel/patches/0104a-drm-panel-visionox-vtdr6130-add-sm8250.patch",
+    "sha": "628edfbb61f4a56db8e7fc5569e768e528563aba"
+  },
+  {
+    "path": "packages/kernel/patches/0105-dt-bindings-display-panel-retroid-il97680a.patch",
+    "sha": "fee28c8fd149afb132e99fcc2268131cd5e3b09f"
+  },
+  {
+    "path": "packages/kernel/patches/0105a-drm-panel-retroid-il97680a.patch",
+    "sha": "f47a77cfeb9d68e570fe72e5e7c6686be62e63ae"
+  },
+  {
+    "path": "packages/kernel/patches/0105b-drm-panel-il97680a-backport-orientation-helper.patch",
+    "sha": "bc735f8e05567fc94c25361f35af21302dcd1b96"
+  },
+  {
+    "path": "packages/kernel/patches/0108-drm-msm-dpu-send-the-flip-event-after-the-vblank-irq.patch",
+    "sha": "c247d7ae99953266366c34547ffd75b916e5827b"
+  },
+  {
+    "path": "packages/kernel/patches/0120-20250728_konradybcio_gpu_cc_power_requirements_reality_check.patch",
+    "sha": "2d34203cd4b2c231cf803a1666a189582094b90b"
+  },
+  {
+    "path": "packages/kernel/patches/0121-pmdomain-qcom-rpmhpd-presync-floor-gmu-rails.patch",
+    "sha": "e9772e92433742df371d872880f1e184a0717eab"
+  },
+  {
+    "path": "packages/kernel/patches/0122-interconnect__qcom__sm8550__Enable_QoS_configuration.patch",
+    "sha": "2f37fd238e91b897edfd4e0a0fdc9649d2e3aada"
+  },
+  {
+    "path": "packages/kernel/patches/0200-ASoC-wcd938x-add-DMIC-DAPM-inputs.patch",
+    "sha": "7e211f8ff4ef36da7370b44163d938ce93d69e84"
+  },
+  {
+    "path": "packages/kernel/patches/0204-thermal-qcom-tsens-mask-lower-threshold-irqs-across-suspend.patch",
+    "sha": "6736fbdb111b80935145dc48a816289f02481217"
+  },
+  {
+    "path": "packages/kernel/patches/0300-batocera-fix-headphone-jack-detection.patch",
+    "sha": "9ddeb04773445402c21871b506314513ae69712e"
+  },
+  {
+    "path": "packages/kernel/patches/0301-drm-panel-add-ayaneo-ar18-panel.patch",
+    "sha": "b349adabf19724bae893863ea8140ddd64a30406"
+  },
+  {
+    "path": "packages/kernel/patches/0302-input-touchscreen-add-sitronix-st7123.patch",
+    "sha": "ab5266475b051eafb5c70aff728a6c40348e531d"
+  },
+  {
+    "path": "packages/kernel/patches/0303-hid-add-ayaneo-pocket-micro2-force-feedback.patch",
+    "sha": "19f87c66030648ad16fe40d78c1e6c513128d120"
+  },
+  {
+    "path": "packages/kernel/patches/0304-ASoC-wcd938x-treat-failed-zdet-ramp-as-floating.patch",
+    "sha": "857dc56d8361b920f08aa1c51450f3eada3db083"
+  },
+  {
+    "path": "packages/kernel/patches/0305-backlight-qcom-wled-always-disable-ovp-irq-at-probe.patch",
+    "sha": "1136a71a5065d2a2b18e4da3feeb72036afdc89b"
+  },
+  {
+    "path": "packages/kernel/patches/0500-ROCKNIX-set-boot-fanspeed.patch",
+    "sha": "8abc9dca03eb4be787b2c7dfa7e94b31d325ba22"
+  },
+  {
+    "path": "packages/kernel/patches/0501-ROCKNIX-fix-wifi-and-bt-mac.patch",
+    "sha": "248a61fee34873c9772b489e0a16fb40e955a504"
+  },
+  {
+    "path": "packages/kernel/patches/0503-ROCKNIX-battery-name.patch",
+    "sha": "730d7565dee920b5f691aa7c6bfd576f61050ef9"
+  },
+  {
+    "path": "packages/kernel/patches/0504-Enable-64-bit-processes-to-use-compat-input-syscalls.patch",
+    "sha": "db9cfb6f88700e596a55538da5a51108ea803a23"
+  },
+  {
+    "path": "packages/kernel/patches/0504-mailbox-qcom-ipcc-mask-summary-irq-for-suspend-to-ram.patch",
+    "sha": "37f8f75f79f8d13eee08243e50d09a9b2efd743f"
+  },
+  {
+    "path": "packages/kernel/patches/0505-arm64-emulate-unaligned-atomics.patch",
+    "sha": "69ff9680489e9713f78f50e2cb4bb62564d6577b"
+  },
+  {
+    "path": "packages/kernel/patches/0505-msm_gem-lock-before-put_iova_spaces.patch",
+    "sha": "88b1cdc644b54e7b7d650bf17416b1cc873c0283"
+  },
+  {
+    "path": "packages/kernel/patches/0505a-arm64-unaligned-atomics-cover-the-load128-store-exclusive.patch",
+    "sha": "361daba2cbeb7d901acaa0e49dc1c3b6f5e0bdd0"
+  },
+  {
+    "path": "packages/kernel/patches/0506-usbcore-add-interrupt-interval-override.patch",
+    "sha": "eb99eb816befd4e429acce701b7fae490e0a0a7f"
+  },
+  {
+    "path": "packages/kernel/patches/0508-input-rsinput-add-pm-resume-to-reinit-mcu-after-suspend.patch",
+    "sha": "6a14afd8cb421ba71cda9624b8774acc4135201d"
+  },
+  {
+    "path": "packages/kernel/patches/0509-soc-qcom-pmic_glink_altmode-defer-until-mux-switch-ready.patch",
+    "sha": "ad73acdb22c7aaef65bd87d12aa30999d72f7891"
+  },
+  {
+    "path": "packages/kernel/patches/0510-soc-qcom-ice-unwind-clocks-on-resume-failure.patch",
+    "sha": "d90507ecfa4d4fa98755840b362b2fe88c41679d"
+  },
+  {
+    "path": "packages/kernel/patches/0511-scsi-ufs-qcom-reenable-irq-on-host-reset-failure.patch",
+    "sha": "0ad915a8c4858700c902a097650f88628443500e"
+  },
+  {
+    "path": "packages/kernel/patches/0512-PCI-qcom-skip-L23-ready-poll-on-SM8550.patch",
+    "sha": "a6e25d644b1dafebd83e9096ab02486db25bcffc"
+  },
+  {
+    "path": "packages/kernel/patches/0513-PCI-qcom-honour-an-opp-suspend-opp-as-the-non-s2ram-memory-floor.patch",
+    "sha": "cd0ca8b9f04ac9b5fd8b976796eb45246fe70d03"
+  },
+  {
+    "path": "packages/kernel/patches/0514-PCI-qcom-honor-iommu-map-cell-count.patch",
+    "sha": "429ffc00d74f4b8c9d176e785b2184e37237b775"
+  },
+  {
+    "path": "packages/kernel/patches/0514a-of-property-honor-iommu-cells-in-iommu-map-devlinks.patch",
+    "sha": "42989155f4f0351ff3adf8c01a3d2cfded07d37e"
+  },
+  {
+    "path": "packages/kernel/patches/0515-input-rsinput-reassemble-uart-frames-instead-of-dropping-them.patch",
+    "sha": "39281661697bb3b0683e98cfee2f20acee73ddf3"
+  },
+  {
+    "path": "packages/kernel/patches/0515a-input-rsinput-accept-large-uart-batches.patch",
+    "sha": "e0dc98023323ed8b69c711ce2bb6d7a0558e4a5d"
+  },
+  {
+    "path": "packages/kernel/patches/0517-usb-typec-mux-dont-swallow-EPROBE_DEFER.patch",
+    "sha": "619f4dea7e6af538368e8aba7a96cf73d9b3f9e6"
+  },
+  {
+    "path": "packages/kernel/patches/0518-ROCKNIX-odin3-panel-frame-length-calibration.patch",
+    "sha": "cf45c694e61a8121eb81aacf9d5dbdde434065b4"
+  },
+  {
+    "path": "packages/kernel/patches/0518a-drm-panel-icna35xx-serialise-live-frame-length-writes.patch",
+    "sha": "33b70a30951fb1738552f5e0a3a71deba4d99183"
+  },
+  {
+    "path": "packages/kernel/patches/0518b-drm-panel-icna35xx-calibrate-the-ICNA3512-frame-length.patch",
+    "sha": "404109c2d9591bd411833e9531b614832be510c7"
+  },
+  {
+    "path": "packages/kernel/patches/0519-usb-typec-ucsi-clear-USB-role.patch",
+    "sha": "ba52de19a720d54a53592a8a9a9da98dabc5b82f"
+  },
+  {
+    "path": "packages/kernel/patches/0522-PCI-host-common-let-only-endpoints-veto-d3cold.patch",
+    "sha": "13a8e313ccb1d531f6853573580d16b45010133b"
+  },
+  {
+    "path": "packages/kernel/patches/0523-regulator-qcom-rpmh-add-suspend-state-support.patch",
+    "sha": "c832cbe5d04d3d21e33bd7769bdd761f8c311960"
+  },
+  {
+    "path": "packages/kernel/patches/0524-regulator-core-apply-mem-state-for-s2idle.patch",
+    "sha": "5564da192ed5f9933ecd9fd30e6ef6dcd7df8f10"
+  },
+  {
+    "path": "packages/kernel/patches/0525-regulator-core-log-missing-suspend-configuration-at-debug.patch",
+    "sha": "75b17eb8a41688b8b3aa34ffcb5969ed7556eeb2"
+  },
+  {
+    "path": "packages/kernel/patches/0526-regulator-apply-state-mem-in-s2idle-only-for-opted-in-drivers.patch",
+    "sha": "8e26be4684ddfe785fcfa4c1ccf73e12506ed856"
+  },
+  {
+    "path": "packages/kernel/patches/0528-ASoC-qcom-sc8280xp-suspend-the-card-and-its-streams.patch",
+    "sha": "bcc0b90fa985cd02a51e775d92cbacc67a3ff09a"
+  },
+  {
+    "path": "packages/kernel/patches/0529-ASoC-qdsp6-q6apm-fail-the-graph-open-when-the-DSP-rejects-it.patch",
+    "sha": "85aaf8dc1ee68c848c633ed927da8d6d4d8cb82d"
+  },
+  {
+    "path": "packages/kernel/patches/0530-ASoC-qdsp6-release-AudioReach-graphs-across-system-suspend.patch",
+    "sha": "9f2c27ea09fbfbdd8abe149809cb59d820340c7f"
+  },
+  {
+    "path": "packages/kernel/patches/0531-ASoC-qcom-sc8280xp-release-the-board-i2s-clock-across-system-suspend.patch",
+    "sha": "e2577ac594553fc468280c75c1fcf034458dd827"
+  },
+  {
+    "path": "packages/kernel/patches/0532-hwmon-pwm-fan-optionally-run-the-fan-while-charging-in-s2idle.patch",
+    "sha": "b9f721772b6b1aecac01435934b677aeade4164a"
+  },
+  {
+    "path": "packages/kernel/patches/0533-scsi-ufs-ufs-qcom-enable-only-lane-clocks-in-lane-clock-apis.patch",
+    "sha": "9c43880c34f6779ed32d8f4b0d857d8aaeff8ba2"
+  },
+  {
+    "path": "packages/kernel/patches/0534-serial-qcom-geni-add-force-suspend-resume-to-system-sleep-callbacks.patch",
+    "sha": "3d57be2937596becd7e41d84c668da6bef13ebc2"
+  },
+  {
+    "path": "packages/kernel/patches/0535-scsi-ufs-core-fast-abort-unsupported-query-idns.patch",
+    "sha": "09e1f0151a342bf415cc488de3aef2f561eaf343"
+  },
+  {
+    "path": "packages/kernel/patches/0536-scsi-ufs-core-dynamically-disable-timestamp-on-unsupported-devices.patch",
+    "sha": "43826634b1393aad75b82300b52be464ab297599"
+  },
+  {
+    "path": "packages/kernel/patches/0537-usb-xhci-pci-renesas-let-the-controller-power-off-in-suspend.patch",
+    "sha": "62f1941b0f626217582f54c768f75e8ffb287cc1"
+  },
+  {
+    "path": "packages/kernel/patches/0540-arm64-signal-reapply-the-ssbs-policy-on-sigreturn.patch",
+    "sha": "7ca77792b996371b0c1fc1f4ec2e7e85427b1466"
+  },
+  {
+    "path": "packages/kernel/patches/0541-input-joystick-mcu-joystick-power-the-mcu-off-in-suspend.patch",
+    "sha": "e6d2b5fd3f1040f2a9ad21a1f92fdb4fbeae6f1a"
+  },
+  {
+    "path": "packages/kernel/patches/0556-remoteproc-qcom-pas-manage-the-sm8750-soccp.patch",
+    "sha": "39a007849d160c6813d91a019f768f034acb5eab"
+  },
+  {
+    "path": "packages/kernel/patches/0556a-arm64-dts-qcom-sm8750-add-the-soccp.patch",
+    "sha": "b13d5e4df3194a4040b5eb08c02f94142dfbd53c"
+  },
+  {
+    "path": "packages/kernel/patches/0557-ASoC-codecs-lpass-wsa-macro-switch-to-pm-clock-framework.patch",
+    "sha": "7a57deb6fc0ebbea292fcbf38ae6fb379286e2f8"
+  },
+  {
+    "path": "packages/kernel/patches/0558-ASoC-codecs-lpass-va-macro-switch-to-pm-clock-framework.patch",
+    "sha": "0ae08474c2e6d9760be743cc2af2c3cf9ad8c841"
+  },
+  {
+    "path": "packages/kernel/patches/0559-ASoC-codecs-lpass-wsa-macro-use-devm-clk-hw-register-for-mclk.patch",
+    "sha": "3b962252094027ce7534c3c3010ecc587422774d"
+  },
+  {
+    "path": "packages/kernel/patches/0560-ASoC-codecs-lpass-tx-macro-switch-to-pm-clock-framework.patch",
+    "sha": "0051a86b30cd8216d400f6331930da14ec1b0ae6"
+  },
+  {
+    "path": "packages/kernel/patches/0561-ASoC-codecs-lpass-rx-macro-switch-to-pm-clock-framework.patch",
+    "sha": "2477ee298a7fa13c2e9eee0dcaccf4c91bbdad20"
+  },
+  {
+    "path": "packages/kernel/patches/0562-ASoC-codecs-lpass-tx-rx-macro-check-clk-set-rate-return-value.patch",
+    "sha": "d002d35c019fc627c1cecfefa4bb6ed07b05fb66"
+  },
+  {
+    "path": "packages/kernel/patches/0563-ASoC-codecs-lpass-macro-force-runtime-suspend-across-system-sleep.patch",
+    "sha": "d3d9fc05ef51c8cc8fd8a847a7aef9e9243a63c7"
+  },
+  {
+    "path": "packages/kernel/patches/0564-soundwire-qcom-force-runtime-suspend-across-system-sleep.patch",
+    "sha": "1d2f89a2d3ddbe60cb9e7b461481bd1dc63b0c84"
+  },
+  {
+    "path": "packages/kernel/patches/0565-pinctrl-qcom-sm8650-lpass-lpi-force-runtime-suspend-across-system-sleep.patch",
+    "sha": "63ec4dc01a15551b9dca60d6eb94d195c8d79b69"
+  },
+  {
+    "path": "packages/kernel/patches/0566-clk-qcom-gcc-sm8550-let-the-pcie-gdscs-collapse-in-suspend.patch",
+    "sha": "afa6643558b36c4444ad6327f670f8c91c720d90"
+  },
+  {
+    "path": "packages/kernel/patches/0567-clk-qcom-gcc-sm8650-let-the-pcie-gdscs-collapse-in-suspend.patch",
+    "sha": "42d97be6c39be8d1947c25e68b8a47390f8e644c"
+  },
+  {
+    "path": "packages/kernel/patches/0568-arm64-dts-qcom-sm8250-cpu-ddr-votes-active-only.patch",
+    "sha": "a42d5a898e596cbbe1b1b72237285bfc990b129f"
+  },
+  {
+    "path": "packages/kernel/patches/0569-soc-qcom-smp2p-reset-inbound-state-only-on-restart.patch",
+    "sha": "ca38948838da8923e12d96357d13b673626bfa3c"
+  },
+  {
+    "path": "packages/kernel/patches/0570-soundwire-qcom-skip-the-clock-stop-handshake-for-the-pmic-haptics-port.patch",
+    "sha": "f6110acc017dabf12c05e48015bf6fab9b4ff702"
+  },
+  {
+    "path": "packages/kernel/patches/0603-ASoC-codecs-wcd939x-keep-the-codec-resumed-while-a-ja.patch",
+    "sha": "dde80bd1390aa3c01b5c413dd558b81ea67c9c76"
+  },
+  {
+    "path": "packages/kernel/patches/0612-ROCKNIX-odin3-q6apm-start-mi2s-port-at-prepare.patch",
+    "sha": "57087b0fbc0459efe63962ee7d7397ea5c823443"
+  },
+  {
+    "path": "packages/kernel/patches/0613-ASoC-q6apm-scope-prepare-start-to-MI2S.patch",
+    "sha": "ffbe8adbe6d349591b5c41bc79865cfeccb5107c"
+  },
+  {
+    "path": "packages/kernel/patches/0618-drm-msm-dp-dont-fail-audio-prepare-when-display-off.patch",
+    "sha": "5806b6cba2b1c837462b1692a24abebe7d32526c"
+  },
+  {
+    "path": "packages/kernel/patches/0619-drm-msm-map-submitqueue-priority-onto-high-low.patch",
+    "sha": "3a7256560cce9056d3b33b67ed8b8d8526724fd6"
+  },
+  {
+    "path": "packages/kernel/patches/0620-drm-msm-a6xx-hfi-irq-clears-only-the-cm3-fault.patch",
+    "sha": "f0e2efddc985d451000d4cee4e93181742f49eec"
+  },
+  {
+    "path": "packages/kernel/patches/0621-drm-msm-a6xx-bound-the-gmu-wait-for-a-fault-devcoredump.patch",
+    "sha": "c198f88b37fd05e588e1e99ffd51f39e124d7acb"
+  },
+  {
+    "path": "packages/kernel/patches/0622-drm-msm-a6xx-mask-the-hfi-interrupt-before-booting-the-gmu.patch",
+    "sha": "db41212b1e90ff31694a664112f63635fa9643d2"
+  },
+  {
+    "path": "packages/kernel/patches/0623-arm64-dts-qcom-sm8550-sm8650-add-the-ADSP-FastRPC-remote-heap.patch",
+    "sha": "cf58498275ebb8c786cf1341d60c117bfc49dad3"
+  },
+  {
+    "path": "packages/kernel/patches/0624-drm-msm-a6xx-increase-gmu-fw-init-timeout.patch",
+    "sha": "c1b11dc89c3ad85ebeacaaa3dfcd689041d1296e"
+  },
+  {
+    "path": "packages/kernel/patches/0901-power-supply-qcom-battmgr-fix-charge-unit.patch",
+    "sha": "e6937ee4c505418dbfd48a39bfc9b7bc94160590"
+  },
+  {
+    "path": "packages/kernel/patches/0902-power-supply-qcom-battmgr-expose-charge-now.patch",
+    "sha": "7086cdba2f8f1569f016be875fc16fa38fd72822"
+  },
+  {
+    "path": "packages/kernel/patches/0903-power-supply-qcom-battmgr-expose-the-charge-current-limit.patch",
+    "sha": "3a581c73026d28c9707c1e9b1b60ed3be8087e02"
+  },
+  {
+    "path": "packages/kernel/patches/0904-power-supply-qcom-battmgr-report-charge-threshold-set-failures.patch",
+    "sha": "76632e10a112ca752ed1ceb9e048996265f65c26"
+  },
+  {
+    "path": "packages/kernel/patches/0910-firmware-qcom-scm-allow-QSEECOM-on-OpenABL-s-platforms.patch",
+    "sha": "a112e1e46d25b352b3e98278e337c037ec7e0f93"
+  },
+  {
+    "path": "packages/kernel/patches/1000-input-misc-qcom-hv-haptics-sm8750.patch",
+    "sha": "5c6fadbea8a033ad75e0b4fb0258b411cb227f0c"
+  },
+  {
+    "path": "packages/kernel/patches/1001-haptics-driver-support-periodic-sine-and-fixes.patch",
+    "sha": "779a8edd625bf0ce4b219708faa1ee809621168f"
+  },
+  {
+    "path": "packages/kernel/patches/1001-input-qcom-haptics-update-assign-str.patch",
+    "sha": "f3dddf400559d434e7eac48f66dd2c01361856fc"
+  },
+  {
+    "path": "packages/kernel/patches/1002-input-rsinput-sm8750-ff.patch",
+    "sha": "231c0d864ff54de60255c07d7cadc9b16a340d6f"
+  },
+  {
+    "path": "packages/kernel/patches/1003-input-haptics-fix-rumble-bridge-atomic-sleep.patch",
+    "sha": "9eb8fb1d1d9245933dd42699866a40c4271ecb62"
+  },
+  {
+    "path": "packages/kernel/patches/1004-input-haptics-stop-zero-amplitude-immediately.patch",
+    "sha": "3234a8dfb9167fe8eafac357a909108384df242c"
+  },
+  {
+    "path": "packages/kernel/patches/1005-input-rsinput-quiesce-the-mcu-across-system-sleep.patch",
+    "sha": "99ff5c075e738565b871d4f471734d6c37114cc1"
+  },
+  {
+    "path": "packages/kernel/patches/1006-tty-serial-qcom-geni-mask-non-console-irq-on-suspend.patch",
+    "sha": "6738c87c8db2dc213cc5a6a2b9c65dfee2b64ed1"
+  },
+  {
+    "path": "packages/kernel/patches/1007-input-rsinput-drop-the-mcu-supply-across-system-sleep.patch",
+    "sha": "3fed4e578c5e10775cf81fe6c2985ad0472fba78"
+  },
+  {
+    "path": "packages/kernel/patches/1008-HID-uhid-read-the-output-queue-under-qlock.patch",
+    "sha": "b1f842f1715feb4a68a910d52c3d567dd3e4b505"
+  },
+  {
+    "path": "packages/kernel/patches/1020-wifi-ath12k-send-the-computed-scan-priority-to-the-f.patch",
+    "sha": "e30358d0e5ffb9d61f8d109479e9337a7bea1151"
+  },
+  {
+    "path": "packages/kernel/patches/1021-wifi-ath12k-convert-scan-timeout-to-wiphy-delayed-work.patch",
+    "sha": "33a8deb82dac18df5557ad4fe7a830f67e0472e0"
+  },
+  {
+    "path": "packages/kernel/patches/1021-wifi-ath12k-fix-single-pdev-frequency-ranges.patch",
+    "sha": "ecc0aa14975ef6ce64015288ef788e8c57070c80"
+  },
+  {
+    "path": "packages/kernel/patches/1022-wifi-ath12k-split-WCN7860-scans-by-firmware-ranges.patch",
+    "sha": "d4f76f70da9bd428ac243acc3e72c361672fa407"
+  },
+  {
+    "path": "packages/kernel/patches/1023-wifi-ath12k-protect-TX-during-associated-range-scans.patch",
+    "sha": "0b11bf49f773554237fbe897e98ff1d086dabfd0"
+  },
+  {
+    "path": "packages/kernel/patches/1030-media-iris-send-the-stream-POC-type.patch",
+    "sha": "d1abce8e06881ad5f6a2a113b6dd2e534dcc95f1"
+  },
+  {
+    "path": "packages/kernel/patches/1031-media-iris-stop-AV1-tier-overwriting-HEVC-tier.patch",
+    "sha": "9e16ffd5e0dbee088df3f94e25983e71c60edd91"
+  },
+  {
+    "path": "packages/kernel/patches/1032-media-iris-count-CABAC-cost-in-the-decoder-VSP-clock.patch",
+    "sha": "62809adf94621c537367eb3a8cb4fc83162b87af"
+  },
+  {
+    "path": "packages/kernel/patches/1033-media-iris-add-decoder-display-delay-controls.patch",
+    "sha": "79d2ccddb67abe50ea65a8875b51a9872f410278"
+  },
+  {
+    "path": "packages/kernel/patches/1034-media-iris-decode-in-stage-1-for-decode-order.patch",
+    "sha": "cff2c89c30ba3e38d905778d2a6aad860e84b260"
+  },
+  {
+    "path": "packages/kernel/patches/1035-media-iris-run-decode-order-sessions-at-the-highest-clock.patch",
+    "sha": "7205f731c3203861de7ff282d655acbbb3a8c1c1"
+  },
+  {
+    "path": "packages/kernel/patches/1036-media-iris-only-rescale-decoder-power-on-bitstream-queue.patch",
+    "sha": "48926d18309679f11899cf3dceabf84d98fbcbf6"
+  },
+  {
+    "path": "packages/kernel/patches/1037-media-iris-decode-in-stage-1-at-the-top-clock-by-default.patch",
+    "sha": "5f7997c602598bbe9c1cd9b7e029b54adcc96831"
+  },
+  {
+    "path": "packages/kernel/patches/1087-media-iris-release-gen1-input-internal-buffers-when-stopping-before-decode.patch",
+    "sha": "4a499d670190374219bca53a7a2655f2eb045e58"
+  },
+  {
+    "path": "packages/kernel/patches/1088-media-iris-defer-gen1-capture-setup-until-the-sequence-is-known.patch",
+    "sha": "2ac27aef40c65de73946bd876f5e053b99bfa406"
+  },
+  {
+    "path": "packages/kernel/patches/1089-media-iris-never-return-a-gen1-decoded-frame-stamped-zero.patch",
+    "sha": "ab1615b6e84f095ea6e246866cc1db80b1e9b345"
+  },
+  {
+    "path": "packages/kernel/patches/1100-drm-msm-a6xx-fix-a730-hwcg.patch",
+    "sha": "fc5688a2202feacdb9d19100db719090bd4eebae"
+  },
+  {
+    "path": "packages/kernel/patches/1101-drm-msm-a6xx-rename-gbif-cx-config.patch",
+    "sha": "b7f6b59ffe3837732997dd32e2d919d956f51fa4"
+  },
+  {
+    "path": "packages/kernel/patches/1102-drm-msm-a6xx-add-adreno-722.patch",
+    "sha": "211057b363bcb707ccbd278c0025eaae667f4387"
+  },
+  {
+    "path": "packages/kernel/patches/1103-dt-bindings-arm-smmu-eliza-gpu.patch",
+    "sha": "5a59187fe4d7f3caf93cef014c5b8d3700e8a5f3"
+  },
+  {
+    "path": "packages/kernel/patches/1104-dt-bindings-display-msm-adreno-722.patch",
+    "sha": "9d0efd99e356fb0edf82ab8e544a3cc2e835cec9"
+  },
+  {
+    "path": "packages/kernel/patches/1105-dt-bindings-clock-eliza-gpucc.patch",
+    "sha": "5e0a37de45b50b644853c100054e945a998efc61"
+  },
+  {
+    "path": "packages/kernel/patches/1106-clk-qcom-add-eliza-gpucc.patch",
+    "sha": "599a28ba03fd8fa542f4b246736a48872be714de"
+  },
+  {
+    "path": "packages/kernel/patches/1107-arm64-dts-qcom-eliza-gpu-clock.patch",
+    "sha": "d37318892886002ab37139088d006005d5f8c38e"
+  },
+  {
+    "path": "packages/kernel/patches/1108-arm64-dts-qcom-eliza-gpu-smmu.patch",
+    "sha": "708397f89dee79543285429eb8dea567c83a7a11"
+  },
+  {
+    "path": "packages/kernel/patches/1109-arm64-dts-qcom-eliza-gpu.patch",
+    "sha": "e0ea14d2b9f034b9ba5aa62b2d8b3ea3e07435d4"
+  },
+  {
+    "path": "packages/kernel/patches/1110-arm64-dts-qcom-eliza-gpu-cooling.patch",
+    "sha": "c70b7067ab196a83e0b13376cf6a1e00b6ebde2f"
+  },
+  {
+    "path": "packages/kernel/patches/1111-drm-panel-vtdr6130-add-pocket-duo.patch",
+    "sha": "9153230b9154a41fb0a1e4f0585282601043550f"
+  },
+  {
+    "path": "packages/kernel/patches/1114-remoteproc-qcom-add-eliza-wpss.patch",
+    "sha": "4a42959a1bdea0c2d61916b05be18a012f02f475"
+  },
+  {
+    "path": "packages/kernel/patches/1115-drm-msm-a6xx-mask-unhandled-rbbm-interrupts.patch",
+    "sha": "ec7179c5752ccb11d67724c757da0a0ca3b08a0d"
+  },
+  {
+    "path": "packages/kernel/patches/1116-drm-msm-a6xx-set-up-a722-without-a-bv-pipe.patch",
+    "sha": "985f9ae87b86a49bd07e96a0736fa018038f2345"
+  },
+  {
+    "path": "packages/kernel/patches/1140-wifi-ath12k-move-MSI-state-from-ath12k-pci-to-ath12k-base.patch",
+    "sha": "022fb0eb5526208be6f2cdebb57cf652f9695061"
+  },
+  {
+    "path": "packages/kernel/patches/1141-wifi-ath12k-share-the-register-window-geometry-with-the-core.patch",
+    "sha": "253e4cd3f5a1c9697702072fff41d3c8e9f5a8ab"
+  },
+  {
+    "path": "packages/kernel/patches/1142-wifi-ath12k-let-the-MSI-CE-DP-IRQ-setup-serve-platform-devices.patch",
+    "sha": "41c51dba7ef97b11e639793cc771f03e03ffd48f"
+  },
+  {
+    "path": "packages/kernel/patches/1143-wifi-ath12k-allow-receive-only-services-in-map-service-to-pipe.patch",
+    "sha": "d13ffc158edf20924d9f40c06a75608054ec141a"
+  },
+  {
+    "path": "packages/kernel/patches/1144-wifi-ath12k-keep-the-CE-interrupt-mask-balanced-across-restarts.patch",
+    "sha": "742d70c25d6e9812cd66eae62154d3d2e5e772f2"
+  },
+  {
+    "path": "packages/kernel/patches/1145-wifi-ath12k-add-an-optional-cfg-static-window-hif-op.patch",
+    "sha": "fa8dc630e51dacdb42adb2df07e8d11b72d612f3"
+  },
+  {
+    "path": "packages/kernel/patches/1146-wifi-ath12k-take-the-shadow-register-base-from-hw-params.patch",
+    "sha": "af942f257041e238990a780bb902d7eb40cbecef"
+  },
+  {
+    "path": "packages/kernel/patches/1147-wifi-ath12k-support-targets-with-fixed-firmware-memory.patch",
+    "sha": "494442f67128f239521f59a0b6e67062408c1263"
+  },
+  {
+    "path": "packages/kernel/patches/1148-wifi-ath12k-cap-the-shadow-register-configuration-at-38-entries.patch",
+    "sha": "f2ab782d24afdf1a8f5925d92e96eb4abcbc9487"
+  },
+  {
+    "path": "packages/kernel/patches/1149-wifi-ath12k-add-the-QMI-device-info-request.patch",
+    "sha": "f44719a2e78ae36f090e0620bda8cab93977d25f"
+  },
+  {
+    "path": "packages/kernel/patches/1150-wifi-ath12k-send-ddr-range-and-gpio-info-in-host-cap.patch",
+    "sha": "802e678f46ceeadb8111a8c9f539a3de9dc1f726"
+  },
+  {
+    "path": "packages/kernel/patches/1151-wifi-ath12k-support-cold-boot-calibration.patch",
+    "sha": "a596e38c0e16c61f9f27343547a23847820e0d14"
+  },
+  {
+    "path": "packages/kernel/patches/1152-wifi-ath12k-track-the-firmware-generation-across-recovery.patch",
+    "sha": "69b5d3f2abbaf368057ec9c22e0c7851ae35098f"
+  },
+  {
+    "path": "packages/kernel/patches/1153-wifi-ath12k-add-ath12k-core-firmware-crashed.patch",
+    "sha": "4f295df3434cb0a817876617c4d8d8a0cded8989"
+  },
+  {
+    "path": "packages/kernel/patches/1154-wifi-ath12k-stop-touching-srngs-after-the-HAL-is-torn-down.patch",
+    "sha": "7d4ddf1a06dcf37300208301aded1be2f3642468"
+  },
+  {
+    "path": "packages/kernel/patches/1155-wifi-ath12k-tolerate-a-missing-hwmon-device-on-thermal-cleanup.patch",
+    "sha": "9e717f7153ff8d2835225364d64e498a04d3fb93"
+  },
+  {
+    "path": "packages/kernel/patches/1156-wifi-ath12k-guard-the-link-peer-table-against-concurrent-teardown.patch",
+    "sha": "a95a36d9b67ffdfbb90e76da43d34b1044ab0340"
+  },
+  {
+    "path": "packages/kernel/patches/1157-wifi-ath12k-add-the-WCN7750-copy-engine-configuration.patch",
+    "sha": "6effff27850ea6bc3ce867b5afeaed6bd441dda3"
+  },
+  {
+    "path": "packages/kernel/patches/1158-wifi-ath12k-add-WCN7750-hw1-0.patch",
+    "sha": "b8f9663a6897429ace588c64858375b71c345275"
+  },
+  {
+    "path": "packages/kernel/patches/1159-wifi-ath12k-ahb-add-the-WCN7750-hybrid-bus-transport.patch",
+    "sha": "76af2c940d44d89928d407aa9d9f66a6b1d8015b"
+  },
+  {
+    "path": "packages/kernel/patches/1160-wifi-ath12k-unwind-WCN7750-probe-failures.patch",
+    "sha": "b4437883686f057e75bac3ff5f78da8894439afc"
+  },
+  {
+    "path": "packages/kernel/patches/1161-dt-bindings-net-wireless-describe-WCN7750-resources.patch",
+    "sha": "ab8684f878240b6daf637b5587c727be4315f2f8"
+  },
+  {
+    "path": "packages/kernel/patches/1162-scsi-ufs-ufs-qcom-add-Eliza-match-data.patch",
+    "sha": "e72f41bf5239edc33bde914b913254e374eda0c6"
+  },
+  {
+    "path": "packages/kernel/patches/1163-dt-bindings-ufs-allow-Eliza-legacy-doorbell-mode.patch",
+    "sha": "186555625e5e86b1d1478ef4b514b5ab7a2f67b8"
+  },
+  {
+    "path": "packages/kernel/patches/1164-arm64-dts-qcom-eliza-add-i2c6.patch",
+    "sha": "3c79cb106efa5edd54e195103b7784fea885817d"
+  },
+  {
+    "path": "packages/kernel/patches/1166-Bluetooth-qca-add-WCN7750-support.patch",
+    "sha": "ecc5f8cb8544068db0495225a2d15ef5f04a33b3"
+  },
+  {
+    "path": "packages/kernel/patches/1167-drm-msm-dpu-enable-eliza-inline-rotation.patch",
+    "sha": "fb03ae288210f5e76c44c3506961cdec887abdc8"
+  },
+  {
+    "path": "packages/kernel/patches/1168-drm-msm-dpu-enable-eliza-lutdma.patch",
+    "sha": "59f5775cd4938175a025332ee22cb5d0e559f31b"
+  },
+  {
+    "path": "packages/kernel/patches/1169-arm64-dts-qcom-eliza-dpu-lutdma.patch",
+    "sha": "04b59508c648ce2b3c46898f8c2e58667a9c8663"
+  },
+  {
+    "path": "packages/kernel/patches/1170-arm64-dts-qcom-eliza-add-adsp-gpr.patch",
+    "sha": "c01cc0ae518c6a1e7237e379e74c540e73f5cc94"
+  },
+  {
+    "path": "packages/kernel/patches/1171-arm64-dts-qcom-eliza-add-lpass.patch",
+    "sha": "f2c16be1a8a0f278f071ca5f2d81c3464205354a"
+  },
+  {
+    "path": "packages/kernel/patches/1172-pinctrl-qcom-add-eliza-lpass-lpi.patch",
+    "sha": "be45aefcb9ef758f3246d8ad67d04431e8ad8c9f"
+  },
+  {
+    "path": "packages/kernel/patches/1173-ASoC-qcom-q6apm-add-mi2s-clocks.patch",
+    "sha": "99f28073d70f12c4099ef180b9ab26344b0fe16a"
+  },
+  {
+    "path": "packages/kernel/patches/1174-ASoC-qcom-enable-quaternary-jack.patch",
+    "sha": "1a7bff272cdce1a1c76b4c61681dd290eaefdcd8"
+  },
+  {
+    "path": "packages/kernel/patches/1175-ASoC-qcom-configure-eliza-mi2s-clocks.patch",
+    "sha": "f59140fa3d0476f8ffe3a591f685d89a52353210"
+  },
+  {
+    "path": "packages/kernel/patches/1176-ASoC-es8326-enable-codec-supplies.patch",
+    "sha": "67af54ed8edbc5f46537692a90cc09a1183ace83"
+  },
+  {
+    "path": "packages/kernel/patches/1177-dt-bindings-describe-eliza-audio-resources.patch",
+    "sha": "16a53ca8d7d092c807f27213013651ef99354f6b"
+  },
+  {
+    "path": "packages/kernel/patches/1178-ASoC-qcom-q6prm-add-missing-mclk-ids.patch",
+    "sha": "05cf9add2f28292e73295de038cbb923a42b9d59"
+  },
+  {
+    "path": "packages/kernel/patches/1179-ASoC-qcom-fix-duo-speaker-slot-width.patch",
+    "sha": "bac3cae3a4e935dbca0731d3d1f005ab2aa347e1"
+  },
+  {
+    "path": "packages/kernel/patches/1180-ASoC-qcom-q6apm-allow-s32-playback.patch",
+    "sha": "2948a8917c64d79e4f4d08ba64bf397362c0160a"
+  },
+  {
+    "path": "packages/kernel/patches/1181-cpufreq-dt-platdev-blocklist-eliza.patch",
+    "sha": "358dad769bb7f706162e3d98fc91ecfad66833a5"
+  },
+  {
+    "path": "packages/kernel/patches/1182-arm64-dts-qcom-eliza-add-cpu-l3-scaling.patch",
+    "sha": "1c3f50e380ff10c8824372c8c12a0c73e74dd759"
+  },
+  {
+    "path": "packages/kernel/patches/1183-wifi-ath12k-associate-WCN7750-as-HE-on-6-GHz.patch",
+    "sha": "0c28dd92a29e7382029f1e7241fdc3a5fec36407"
+  },
+  {
+    "path": "packages/kernel/patches/1300-input-rsinput-axis-deadzone.patch",
+    "sha": "330c82813c2e2723eb64f73b525b5f0f4e709fb2"
+  },
+  {
+    "path": "packages/kernel/patches/1301-input-rsinput-decouple-trigger-reference-from-calibration.patch",
+    "sha": "633a02f791487a2ae927fe28b8be2101c76cd753"
+  },
+  {
+    "path": "packages/kernel/patches/1302-input-rsinput-support-retroid-pocket-duo.patch",
+    "sha": "5eea6b1df362f99e6458589ce9c9cd6034b338e2"
+  },
+  {
+    "path": "packages/kernel/patches/1303-serial-qcom-geni-allow-shorter-rx-dma-transfer.patch",
+    "sha": "7b11dd7d74270088f980ebfb8bd0cd112a550c47"
+  },
+  {
+    "path": "packages/kernel/patches/1304-drm-panel-vtdr6130-add-odin3portal.patch",
+    "sha": "64eba532d6871a5b5746563e3814971bb119f9cd"
+  },
+  {
+    "path": "packages/kernel/patches/1305-drm-panel-vtdr6130-allow-calibrating-the-odin3portal-frame-length.patch",
+    "sha": "3d76bb2cf3f71dcdb66c8259a84c8011b82446e0"
+  },
+  {
+    "path": "packages/kernel/patches/1306-input-gpio-keys-let-other-drivers-read-a-button-state.patch",
+    "sha": "de50816a938cc0739f56113786ae42e1054092a4"
+  },
+  {
+    "path": "packages/kernel/patches/1307-input-pm8941-pwrkey-ignore-presses-while-lid-is-closed.patch",
+    "sha": "2af212762db70103c725bddb95a8bdcb21fc971c"
+  },
+  {
+    "path": "packages/kernel/patches/1370-media-iris-a-resolution-change-last-buffer-is-not-an-error.patch",
+    "sha": "b2436fb8cc5ea3037c9e4198ff3f4a0c2d49a643"
+  },
+  {
+    "path": "packages/kernel/patches/20260424_neil_armstrong_arm64_dts_qcom_sm8_456_50_add_missing_cx_power_domain_to_gcc.patch",
+    "sha": "71abf08f943fdee2f00ae8c6b7d5ce6b8a3fc32c"
+  },
+  {
+    "path": "packages/kernel/patches/9998-sm8250-gpu-tuning.patch",
+    "sha": "88a0588711042462dc981778c713268bceeb3568"
+  },
+  {
+    "path": "packages/kernel/patches/9999-sm8250-disable-coresight-stm.patch",
+    "sha": "220d3a2fb1947e62fca89c25f9f5042cbb36680f"
+  },
+  {
+    "path": "packages/kernel/patches/series",
+    "sha": "827bc67582627f1ab56015a7caf305669931ce93"
+  },
+  {
+    "path": "packages/kernel/patches/v2_20260420_neil_armstrong_arm64_qcom_sm8650_misc_enhancements.patch",
+    "sha": "9338519e3975eaa064bd8ac4874951f8ea77163d"
+  },
+  {
+    "path": "packages/kernel/patches/v3_20261002_anandu_e_misc_fastrpc_fix_context_leak_and_hang_on_signal_interrupted_invoke.patch",
+    "sha": "a3be3508983aa59b55d5001458f6c21ca1a32f1f"
+  },
+  {
+    "path": "packages/kernel/patches/v9_20260729_qualcomm_crypto_qce_runtime_pm_interconnect.patch",
+    "sha": "34a494a9dc13a5786ed7227f41bc621e051d432a"
+  },
+  {
+    "path": "packages/kernel/patches/v9_20260801_sachin_garg_media_iris_cache_work_mode_in_iris_set_stage.patch",
+    "sha": "f3cacc9b535fe1cba0217d81487d9ca31d0a63f2"
+  },
+  {
+    "path": "packages/kernel/scripts/build-kernel.sh",
+    "sha": "228d5e9d127e7d5c7e0c58644825f21bd0a456bc"
+  }
+]

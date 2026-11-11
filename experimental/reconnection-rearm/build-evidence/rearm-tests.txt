@@ -1,0 +1,1 @@
+PASS: actual rearm helpers and worker: acknowledgement, timeout, request/read failures, idempotence, gauge settling, one recovery per hold, unplug reset and real drain

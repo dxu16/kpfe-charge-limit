@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.ko
+*.img
+*.mbn
+*.apk
+*.zip
+*.tar*
+*.exe
+*.key
+*.pem
+build/
+out/
+*.rej
+*.orig

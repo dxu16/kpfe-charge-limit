@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-10",
+  "source_sha256": "6556b77a7105b23acc8d437c4abb1db07db23f79cb164cdbc701b44c29ad2bc9",
+  "ram_image_sha256": "8ee128fd5f4cb56868ad37357d8fa5c8c9ee5b0ee4d1ba5422294417471850a9",
+  "target_percent": 92,
+  "initial_percent": 91,
+  "result": "completed",
+  "suspended_seconds": 295.629024834,
+  "manual_wake_irq_verified": true,
+  "hold_samples": 591,
+  "hold_duration_seconds": 599.059,
+  "health": [
+    "Good"
+  ],
+  "status": [
+    "Full"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "current_min_uA": -8545,
+  "current_max_uA": 0,
+  "temperature_tenths_C": [
+    260
+  ],
+  "upower_full_verified": true,
+  "controls_restored": true,
+  "stop_request_live_observed_boot_seconds": 284.497614,
+  "full_resume_boot_seconds": 552.498492,
+  "stop_request_preceded_full_resume_seconds": 268.000878,
+  "trace_limitation": "The request event was observed in a live read after wake. The final saved trace overwrote part of CPU0 history during the ten-minute hold (139296 retained of 149524 events); a saved pre-resume SET return is unavailable. The runner now freezes and saves tracing immediately after resume for future runs. Physical current and hardware state were not sampled continuously during suspend.",
+  "persistent_installation": false
+}

@@ -1,0 +1,7 @@
+{
+  "installed_as_default": false,
+  "ram_image_sha256": "8ee128fd5f4cb56868ad37357d8fa5c8c9ee5b0ee4d1ba5422294417471850a9",
+  "source_sha256": "6556b77a7105b23acc8d437c4abb1db07db23f79cb164cdbc701b44c29ad2bc9",
+  "loaded_for_bounded_test": true,
+  "unstripped_module_sha256": "4529f0e58972777ad82af03f1a2e7772621a6ef6e186fa99a7bc31a053518d9f"
+}

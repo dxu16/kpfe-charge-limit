@@ -1,0 +1,107 @@
+KPFE approved protection-trigger capture: results
+2026-11-09, 21:30:07-21:34:03 EST; recovery verified21:37:05 EST.
+
+Outcome
+-------
+The warning reproduced. The script stopped on first observed health fault,
+restored end threshold85 and verified readback. Start70 and current8400000uA
+remained unchanged. The user unplugged/rebooted afterward. Independent SSH
+verification showed Good health, normal4380000uV ceiling, end85/start70,
+current8400000uA and temperature25C. No diagnostic module was loaded and no
+installed component or voltage/current/protection setting was modified.
+
+Measurement sequence
+--------------------
+1178 PMIC samples at nominal0.2s intervals, with sysfs refreshed about once
+per second (the exact battery-sample time is recorded on every row).
+Times below are elapsed seconds from the temporary end92 write:
+
+  0.0: end92 selected; capacity91, healthGood; normal FV code156.
+  73.8: first sample reporting Full at92%.
+  226.8: first changed FV code130, both configured0x2658 and readback0x260b.
+         sysfs voltage_max4251000uV; contemporaneous voltage_now4246437uV;
+         healthGood; reported current-1220uA.
+  229.2: first reported discharge current exceeding100mA after target change;
+         voltage_now4218994uV, current-632953uA; health stillGood.
+  235.4: first observed Over voltage health; voltage_now4244101uV,
+         current-5493uA. Script immediately restored85.
+
+Fault arrived161.6s (2m41.6s) after first Full sample and8.6s after the first
+sample of the reduced hardware target. These are sample-relative times, not
+exact analog-event latency. Firmware property reporting may be delayed.
+
+Actual target and margin
+------------------------
+Software reported a4251mV normalized target. The PMIC programmed code130,
+which decodes as4250mV normalized in the active5mV-step path. In2S mode that
+same code represents8500mV total; in1S mode4250mV. The capture does not read
+individual cell voltages or independently establish pack topology.
+
+The configured/readback codes agreed in every sample. At the first target
+change the hardware target was3.563mV above the reported gauge voltage.
+This is NOT a measurement of comparator margin: the comparator and gauge can
+have different sensing, accuracy and timing. It establishes that the firmware
+places the voltage target extremely close to its contemporaneous gauge reading.
+
+Quantization removed1mV from the requested4251mV target in this run. Thus an
+assertion that quantization has NO effect would be wrong. However, the earlier
+4255mV request is exactly representable. This capture does not prove rounding
+is the complete cause or validate a replacement margin value.
+
+Protection/control configuration and sampled status
+--------------------------------------------------
+OV/ECC configuration0x2848 remained0x80 in all samples. The observed condition
+did not involve a sampled change to this register's configuration. The sampled
+control register0x2868 remained1; it does not expose all charger state changes.
+
+Expected battery-OV bit3 was not sampled set in either real-time0x2810 or
+latched0x2818. Latched status was0 throughout. Real-time status was either0 or
+0x10; bit4 occurred in12 samples after the FV change. No applicable definition
+for that bit on this peripheral revision has been verified. Do not label it
+as OV without decoding it.
+
+Important limitation: a0.2s sampled read can miss a brief level and a latch
+cleared promptly by firmware. Also, the live PMIH0108 interrupt mapping must
+be checked against the specific active IRQ registration, rather than assuming
+that every legacy HAL definition is sufficient. Therefore this run does NOT
+directly establish the comparator's trip threshold or conclusively identify
+the observed bit4 activity. The prior firmware trace's event512 remains an
+independent decoded battery-OV event in the battery-manager state machine;
+it is not an analog measurement.
+
+Observed voltage/current/temperature
+-----------------------------------
+Maximum reported voltage_now during the entire test was4345114uV, below the
+normal4380000uV target. Maximum reported temperature was26C. Significant
+discharge appeared after the target reduction. No captured reading establishes
+physical overcharging. Fast analog transients are outside this capture's
+resolution and cannot be excluded solely by these samples.
+
+Interpretation and next evidence needed
+---------------------------------------
+The new evidence localizes the fault to the delayed native voltage-target
+transition with a very small voltage margin. The target was actually programmed
+into hardware and the sampled protection configuration stayed unchanged.
+There is no evidence here of a factor-of-two target conversion error or a
+protection-register rewrite explaining this occurrence.
+
+Insufficient comparator margin, differing voltage measurements, a transient
+in the charger/power path, or an ordering requirement remain plausible. A
+validated root correction needs the PMIH0108 OV/ECC specification and exact
+interrupt mapping, or a faster synchronized event capture that resolves the
+hardware fault source. Any proposed replacement margin must account for those
+requirements; arbitrary5->10/50mV edits or disabling protection are not justified
+by this test. A binary firmware modification has not been prepared or tried.
+
+The approved single reproduction is complete. Do not automatically repeat it
+or modify charging controls, modules, services, kernel or firmware without the
+user's prior approval. Existing evidence can continue to be analyzed read-only.
+
+Artifacts
+---------
+protection-trigger-test-result.jsonl (raw capture)
+protection-trigger-test-summary.json (calculated summary)
+protection-trigger-transition-window.jsonl (target-change samples)
+protection-trigger-post-restoration.txt
+protection-trigger-reboot-recovery.txt
+test-protection-trigger.py (executed script; explicit--execute was authorized)

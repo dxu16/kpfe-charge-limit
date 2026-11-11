@@ -1,0 +1,4 @@
+3165:           <idle>-0       [000] d.h2.  1457.560913: pmic_pdcharger_ulog_msg: 0x00000006883B81A9: Info: battmngr_tech_aggregator_execute: battmngr_tech_aggregator_execute:: Client 8 to Aggregator 3: VoteType=2, Vote=4255
+3185:           <idle>-0       [000] d.h2.  1457.560930: pmic_pdcharger_ulog_msg: 0x00000006883B8C79: Info: battmngr_plat_scpqchg_qbg_r1_charger_config: battmngr_plat_scpqchg_qbg_r1_charger_config::Config parameters changed, FCC = 8400 mA, FV = 4255 mV, iterm = 200 mA
+3245:           <idle>-0       [000] d.h2.  1458.585686: pmic_pdcharger_ulog_msg: 0x00000006889C8CB3: Info: BattMngrStateMachine_SignalThread: BattMngrStateMachine_SignalThread::Event signalled is 512
+3255:             bash-18206   [003] ...1.  1459.854701: tracing_mark_write: FIRST_FAULT 2026-11-09T19:52:51-05:00

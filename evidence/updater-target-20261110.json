@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-10",
+  "method": "Read-only invocation of installed /usr/lib/armada/update-lib armada_update_target",
+  "input_reference": "ostree-unverified-image:containers-storage:localhost/armada-kpfe:charge-rfc2",
+  "existing_selected_channel": "stable",
+  "resolved_repository": "ghcr.io/armada-os/armada",
+  "resolved_channel": "stable",
+  "updater_or_channel_files_modified": false,
+  "actual_official_update_tested": false,
+  "inference": "Normal Steam channel selection should switch the local build to the chosen official release; verified helper logic, not an actual replacement update."
+}

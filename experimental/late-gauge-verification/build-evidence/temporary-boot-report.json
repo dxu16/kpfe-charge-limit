@@ -1,0 +1,17 @@
+{
+  "original_boot_sha256": "9d6d98417032f1b8768679e02c1441083825bfff8119af49605352f2e8d72544",
+  "temporary_boot_sha256": "85c4442caa9bb4bee01bc484ea6a6e38a78e06d0462adbeacf469a716bec720e",
+  "kernel_and_appended_dtbs_unchanged": true,
+  "command_line_unchanged": true,
+  "cpio_entry_count": 3007,
+  "changed_entries": [
+    "usr/lib/modules/7.2.6/kernel/drivers/power/supply/qcom_battmgr.ko"
+  ],
+  "original_module_sha256": "e1b3d59b667e8161a312ac5b8c20b4c8f8d3a275b6c171b1249dc07449b06308",
+  "test_module_sha256": "5db1684eb32a2613d1b33a5954d9729254647b8dba65896814360e3d96906c87",
+  "compression": "zstd",
+  "early_cpio_bytes_unchanged": 306176,
+  "original_size": 86315008,
+  "temporary_size": 92608512,
+  "installed": false
+}

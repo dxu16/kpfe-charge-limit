@@ -1,0 +1,141 @@
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -5,7 +5,9 @@
+  * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+  */
+ #include <linux/auxiliary_bus.h>
++#include <linux/delay.h>
+ #include <linux/devm-helpers.h>
++#include <linux/jiffies.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/nvmem-consumer.h>
+@@ -338,6 +340,9 @@
+ 	bool native_limit_enabled;
+ 	bool oem_charge_online;
+ 	struct delayed_work host_work;
++	bool host_holding;
++	bool host_rearmed;
++	unsigned long host_verify_after;
+ 
+ 	struct qcom_battmgr_info info;
+ 	struct qcom_battmgr_status status;
+@@ -790,6 +795,8 @@
+ 		if (ret)
+ 			return ret;
+ 	}
++	battmgr->host_holding = false;
++	battmgr->host_rearmed = false;
+ 	battmgr->host_ready = true;
+ 	battmgr->host_restart = true;
+ 	return 0;
+@@ -804,11 +811,58 @@
+ 	mod_delayed_work(system_wq, &battmgr->host_work, 0);
+ }
+ 
++
++/* The caller holds the request mutex. Avoid overwriting saved bypass current. */
++static int qcom_battmgr_host_set_online(struct qcom_battmgr *battmgr, bool online)
++{
++	int ret;
++
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET,
++				 BATT_OEM_CHARGE_ONLINE);
++	/* A failed read must not skip stopping after a confirmed release. */
++	if (ret && (online || !battmgr->oem_charge_online))
++		return ret;
++	if (!ret && battmgr->oem_charge_online == online)
++		return 0;
++	ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_SET,
++					    BATT_OEM_CHARGE_ONLINE, online);
++	if (ret)
++		return ret > 0 ? -EIO : ret;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET,
++				 BATT_OEM_CHARGE_ONLINE);
++	if (!ret && battmgr->oem_charge_online != online)
++		ret = -EIO;
++	return ret;
++}
++
++/* Reconcile a stale hold once; do not leave normal charging selected on error. */
++static int qcom_battmgr_host_rearm(struct qcom_battmgr *battmgr)
++{
++	unsigned long deadline = jiffies + msecs_to_jiffies(2000);
++	int ret, stop_ret;
++
++	ret = qcom_battmgr_host_set_online(battmgr, true);
++	while (!ret) {
++		ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET,
++					 BATT_CHG_CTRL_LIM);
++		if (ret || battmgr->info.charge_current_limit)
++			break;
++		if (time_after_eq(jiffies, deadline)) {
++			ret = -ETIMEDOUT;
++			break;
++		}
++		msleep(50);
++	}
++	stop_ret = qcom_battmgr_host_set_online(battmgr, false);
++	return ret ? ret : stop_ret;
++}
++
+ static void qcom_battmgr_host_worker(struct work_struct *work)
+ {
+ 	struct qcom_battmgr *battmgr = container_of(to_delayed_work(work),
+ 						struct qcom_battmgr, host_work);
+ 	bool charging, changed = false, retry = false;
++	unsigned long delay = 60 * HZ;
+ 	int ret = 0;
+ 
+ 	pm_stay_awake(battmgr->dev);
+@@ -855,6 +909,40 @@
+ 			goto out;
+ 		}
+ 		changed = true;
++		if (!charging)
++			battmgr->host_holding = false;
++	}
++
++	if (charging) {
++		battmgr->host_holding = false;
++		battmgr->host_rearmed = false;
++	} else {
++		if (!battmgr->host_holding) {
++			battmgr->host_holding = true;
++			battmgr->host_verify_after = jiffies + 5 * HZ;
++		}
++		if (time_before(jiffies, battmgr->host_verify_after)) {
++			delay = battmgr->host_verify_after - jiffies;
++		} else {
++			ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET,
++						 BATT_CURR_NOW);
++			if (ret)
++				goto out;
++			/* Gauge readings can lag a successful hardware stop. */
++			if (battmgr->status.current_now > 50000) {
++				if (battmgr->host_rearmed) {
++					ret = -EIO;
++					goto out;
++				}
++				battmgr->host_rearmed = true;
++				ret = qcom_battmgr_host_rearm(battmgr);
++				battmgr->host_verify_after = jiffies + 5 * HZ;
++				delay = 5 * HZ;
++				changed = true;
++				if (ret)
++					goto out;
++			}
++		}
+ 	}
+ 	battmgr->host_restart = false;
+ 	retry = battmgr->usb.online &&
+@@ -867,7 +955,7 @@
+ 		power_supply_changed(battmgr->bat_psy);
+ 	/* Awake-only fallback; firmware notifications request immediate updates. */
+ 	if (retry && !READ_ONCE(battmgr->host_stopping))
+-		queue_delayed_work(system_wq, &battmgr->host_work, 60 * HZ);
++		queue_delayed_work(system_wq, &battmgr->host_work, delay);
+ 	pm_relax(battmgr->dev);
+ }
+ 

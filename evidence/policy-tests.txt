@@ -1,0 +1,2 @@
+PASS: charge-up, hysteresis, reconnect, changed target, off and duplicate-event trajectories
+PASS: 523584 boundary/state combinations

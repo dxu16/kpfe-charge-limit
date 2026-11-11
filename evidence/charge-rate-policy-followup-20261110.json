@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-10",
+  "source_sha256": "f40bcb900577fa8ab17dea38e580654bf79aae4ca9d0bd6dfb685164083fe643",
+  "scope": "Automatic policy in RAM, above-limit awake attachment, ten-minute hold, and a fixed-threshold discharge and recharge cycle",
+  "awake_reconnect": {
+    "capacity_percent": 88,
+    "end_threshold_percent": 85,
+    "connected_samples": 129,
+    "first_to_last_connected_sample_seconds": 33.812,
+    "charger_enable_values": [0],
+    "battery_current_range_uA": [-343638, -6714],
+    "additional_charge_rate_requests": 0
+  },
+  "awake_hold": {
+    "first_observation_seconds": 328.765,
+    "first_observation_ended_on_current_uA": -186162,
+    "first_observation_end_charger_enable": 0,
+    "first_observation_end_health": "Good",
+    "repeat_observation_seconds": 600.136,
+    "repeat_samples": 2271,
+    "charger_enable_values": [0],
+    "battery_current_range_uA": [-28077, -4272],
+    "health": "Good",
+    "reported_voltage_ceiling_uV": 4380000,
+    "status": "Full",
+    "additional_charge_rate_requests": 0
+  },
+  "fixed_threshold_cycle": {
+    "start_threshold_percent": 86,
+    "end_threshold_percent": 87,
+    "discharged_to_lower_threshold": { "boot_seconds": 1789.92, "capacity_percent": 86, "usb_online": 0, "current_uA": -1151768 },
+    "rate_100_request_boot_seconds": 1817.868094,
+    "physical_resume": { "boot_seconds": 1818.47, "capacity_percent": 86, "charger_enable": 1, "current_uA": 155644 },
+    "rate_0_request_boot_seconds": 1835.103983,
+    "confirmed_hold": { "boot_seconds": 1843.71, "capacity_percent": 87, "charger_enable": 0, "current_uA": -6103, "status": "Full" },
+    "threshold_write_requests_during_recharge": 0,
+    "operator_observed_steam_full_check_mark": true
+  },
+  "stock_restored": true,
+  "original_boot_and_module_hashes_match": true,
+  "restored_end_threshold": 85,
+  "restored_start_threshold": 70,
+  "limitations": [
+    "The first hold observer used an absolute current cutoff and stopped on a discharge sample. The full repeat required charger-enable clear, no positive current above 50 mA, Good health and an unchanged ceiling.",
+    "The lower-threshold resume was tested by reconnecting after an actual discharge to 86%.",
+    "Charger attachment during s2idle and a battery service restart remain untested with the automatic candidate."
+  ]
+}

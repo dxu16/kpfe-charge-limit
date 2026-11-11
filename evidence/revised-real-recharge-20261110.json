@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-10",
+  "ram_image_sha256": "8ee128fd5f4cb56868ad37357d8fa5c8c9ee5b0ee4d1ba5422294417471850a9",
+  "result": "completed",
+  "start_threshold_percent": 91,
+  "end_threshold_percent": 92,
+  "real_discharge_verified": true,
+  "recharge_verified": true,
+  "automatic_stop_verified": true,
+  "continuous_connected_hysteresis_tested": false,
+  "scope": "Real unplugged discharge from 92% to 91%, followed by reconnection, recharge and automatic stop at 92%. Offline policy releases inhibition, so this does not test a held battery crossing start while continuously connected.",
+  "health": [
+    "Good"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "peak_reported_charge_current_uA": 3247778,
+  "final_hold_seconds": 120,
+  "final_hold_current_min_uA": -6103,
+  "final_hold_current_max_uA": -1831,
+  "controls_restored": true,
+  "persistent_installation": false
+}

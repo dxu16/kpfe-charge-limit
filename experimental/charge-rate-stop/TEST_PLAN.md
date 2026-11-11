@@ -1,0 +1,13 @@
+# First hardware test
+
+Executed once on 2026-11-10 under explicit approval; stock restored. See the [result](../../evidence/charge-rate-first-test-20261110.json). Obtain approval before any further RAM boot or module loading.
+
+1. Verify image hash against `build-evidence.json`. RAM-boot it with the unchanged stock deployment and boot command line. Verify the loaded module note using `run_diagnostic.py`; the installed module remains stock.
+2. After switching to the usual charger, load the existing read-only firmware log reader and start `tools/capture-firmware-cause.py`. Do not change firmware logging categories or write registers.
+3. Run `run_diagnostic.py --phase setup --execute`. This disables native percentage limiting at 100%, allows a five-second normal-charge observation, then sends rate 0 in a `finally` block. Observe for twenty seconds, allowing five seconds for settling. Firmware I/O timeouts can extend these polling bounds.
+4. Require physical charger-enable 0, near-zero battery current, Good health, unchanged voltage ceiling and external power present. Compare input power/current and battery discharge against the capture to establish whether external power continues supplying the system. An acknowledgement or cached `charge_behaviour` value is insufficient.
+5. If stop is confirmed, run `--phase resume --execute` once. Confirm physical charging resumes in the five-second window, then stops again. Failure to resume is a failed result, even if the script completes.
+6. With STOP still selected, capture one unplug and reconnect. Ask the operator to reconnect for ten seconds and unplug again, bounding the attachment observation without waiting for another message. Do not reassert STOP or send any recovery command during this interval. Require charger-enable to stay clear and inspect firmware commands/state transitions.
+7. Unplug on any health/temperature/voltage alert, unexpected enable or sustained positive battery current. Preserve the failed capture; do not run automatic recovery. With power absent, run `--phase restore --execute`, reboot normally, restore stock 85%/70% and verify original boot/module hashes and logger removal.
+
+The runner defaults to printing its plan. `observe` performs no control writes and requires STOP already selected. It is useful only while the charger remains connected; the passive collector records the unplug/reconnect interval. Physical register reads are limited to the audited charger-enable register. No sleep, long hold, automatic percentage policy or persistent installation is included in this first test. Those require a successful basic result and a separate test plan.

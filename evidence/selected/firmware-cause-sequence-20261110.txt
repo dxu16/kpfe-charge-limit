@@ -1,0 +1,20 @@
+Firmware decision values decoded as desired enable, then previous cached enable.
+Linux firmware-log timestamps are delivery times, not exact execution times.
+
+86.940119 transmitted length=24 owner=32778 opcode=72 word3=0 word4=100 word5=30
+102.316054 transmitted length=24 owner=32778 opcode=49 word3=0 word4=29 word5=0
+324.033353 firmware 0x000000019D8A4586: Info: battmngr_tech_aggregator_execute: battmngr_tech_aggregator_execute:: Aggregator 1: Result=0, bmActiveClients=0x00000201, hEffClient=9, hOvrClient=9
+324.033357 firmware 0x000000019D8A4761: Info: battmngr_plat_scpqchg_qbg_r1_en_charger: battmngr_plat_scpqchg_qbg_r1_en_charger:: ChargerState = 1, SetChargerState = 0
+324.033368 firmware 0x000000019D8A4D55: Info: battmngr_tech_aggregator_execute: battmngr_tech_aggregator_execute:: Aggregator 1: Result=0, bmActiveClients=0x00000201, hEffClient=9, hOvrClient=9
+332.225290 firmware 0x000000019E487CE6: Info: scp_inov_db_log: scp_inov_db - curr_sub_state=2, fcc1_ma=0, fcc2_ma=0, icl_ma=3000, vin_mv=9000
+
+Register/current samples: boot_s usb_online enable_code FCC_code current_uA
+201.47 0 0 0 -352183
+321.89 0 0 0 -424207
+322.14 1 1 0 -65919
+322.39 1 1 0 -12817
+325.76 1 1 0 -7934
+326.02 1 1 0 289925
+328.91 1 1 0 295419
+336.81 1 1 0 293587
+337.07 0 0 0 292367

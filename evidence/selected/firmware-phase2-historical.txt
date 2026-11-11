@@ -1,0 +1,145 @@
+KPFE charge-limit investigation: firmware analysis, phase 2
+2026-11-09. Read-only investigation; no firmware or system components changed.
+
+FOLLOW-UP: ANDROID_PROTOCOL_COMPARISON.txt identifies numeric event512 in the
+existing runtime capture as the battery-OV event. It closes the event-capture
+gap described below and compares the actual stock Android charging driver.
+
+Conclusion and confidence
+-------------------------
+The strongest localized suspect is the delayed BHM float-voltage override in
+battmngr_plat_scpqchg_qbg_r1_check_charging_state_change. Static disassembly
+explains its target and delay, and the runtime capture places its activation
+immediately before the first observed fault. The health latch and an event path
+into it are also identified. This is not yet proof of the electrical/comparator
+condition that raises the event, and it is not a completed or validated fix.
+
+1. Exact BHM policy, not a guessed voltage offset
+------------------------------------------------
+ADSP virtual addresses 0x600534bc-0x60053550:
+  compare current integer-mV VBATT with the saved minimum;
+  if current is lower, save it and defer the override;
+  otherwise vote current VBATT + 5 mV into aggregator 3, vote type 2;
+  set bhm_override_fv and reset the saved minimum to 0xffff.
+The enclosing branch logs that charging has been disabled for over 30 seconds
+at BHM_EOC. Repeated falling readings defer the change, explaining why an
+apparently 30-second policy can take several minutes to activate.
+
+Captured firmware sequence (firmware-key-events.txt): VBATT 4343, 4257, 4254,
+4252, 4250, 4250 mV on successive checks; the final equal reading produces
+the 4255 mV override. The effective float-voltage vote changes from 4380 to
+4255 mV and charger_config applies 4255. First sysfs fault follows within
+the capture's sampling interval. Runtime trace does not include a decoded
+BATTMNGR_DRV_BATT_OV_EVENT line; static event-path identification must not be
+presented as a directly captured IRQ.
+
+Evidence: bhm-override-disassembly.txt, firmware-key-events.txt,
+kpfe-charge-rootcause-XU4QWMuA/firmware-trace.txt and samples.txt.
+
+2. Battery-overvoltage event -> persistent health latch
+------------------------------------------------------
+0x60043160 callback signals 0x200 via 0x6006e550
+(BattMngrStateMachine_SignalThread). The callback's static descriptor at
+0x60272044 contains SID 7, peripheral base 0x2800, IRQ mask 0x08 and callback
+0x60043160. These fields are interpreted from the descriptor and its users;
+no live PMIC register read or write was performed to confirm its current state.
+
+0x6006c950 main-thread handler receives event bits; at 0x6006caec it checks
+event 0x200. Its diagnostic string at 0x60211413 explicitly names
+BATTMNGR_DRV_BATT_OV_EVENT. It stores 0x200 in primary context + 0x3b4,
+then dispatches at 0x6006cbb0.
+
+Active qbg platform stateperiodic_action at 0x6004d4e8 checks byte +0x3b5
+mask 0x02, equivalent to event word 0x200. It sets platform context +0x614
+to 1, health field +0x6ac to 4, and status to 3.
+
+set_health_status at 0x6004f820 checks that platform latch first and returns
+health 4 (Over voltage) when set. The no-charger branch that can report Good
+comes afterward. This explains why unplugging can restore voltage_max while
+health remains Over voltage. A separate conditional reset exists at
+0x60055d30-0x60055d64; this analysis does not establish a safe user action
+to force that path. Do not erase or mask the latch as a proposed fix.
+
+Evidence: charger-irq-overvoltage-disassembly.txt, irq-callback-disassembly.txt,
+batt-ov-interrupt-descriptor.txt, interrupt-registration-disassembly.txt,
+health-setter-disassembly.txt, overvoltage-latch-and-fv-constants.txt,
+ov-latch-reset-focused.txt, charger-code-disassembly.txt.
+
+3. Voltage quantization: a relevant check, not a confirmed explanation
+-------------------------------------------------------------------
+Newer-PMIC SetFloatVolt implementation 0x600d93e0 converts the requested mV
+using per-chip minimum/step constants and writes register 0x2658. Getter
+0x600d9510 reads 0x260b and reconstructs mV from the corresponding constants.
+The initializer includes both 10 mV and 5 mV variants. Chip type 0x59 uses
+minimum 3600 mV and step 5 mV (0x600db054-0x600db088); several other variants
+use 10 mV. Linux's device tree identifies PMIH0108 at SID 7, but this work
+has not independently established its selected firmware type/table at runtime.
+
+Therefore do not claim that rounding 4255 down to 4250 caused the fault.
+With a 5 mV table 4255 is exactly representable. The remaining possibilities
+include comparator reference/offset, measurement differences, cell imbalance,
+transient behavior and re-enable ordering; these remain unproven.
+
+Evidence: fv-hardware-table-initialization.txt, fv-table-initializer-full.txt,
+fv-table-variants.txt, fv-pmic-type-jump-table.json, pmic-identity-readonly.txt.
+
+4. Stock Android comparison rules out a simple payload swap
+---------------------------------------------------------
+Stock modem_a is FAT16 and contains segmented adsp.mdt/adsp.bNN plus DTB
+segments. read_android_firmware.py opens the partition read-only, copies only
+these selected firmware files through stdout, and does not mount or write it.
+adsp.bNN payloads were reconstructed at their ELF program-header offsets.
+Every populated program-header file range matches Armada's adsp.mbn exactly,
+including the charging code and data. ADSP DTB reconstructed image is identical.
+
+The whole ADSP file hashes differ, but the full audit finds only 6045 differing
+bytes, all outside program-header file ranges, at file offsets 1880..8363.
+These packaging/gap differences are not evidence of different charging code.
+This comparison is with the copy in modem_a; it does not prove current Android
+slot selection or equivalence of every Android host-side charging policy.
+
+Evidence: android-adsp-a/read-only-extraction.json,
+adsp-stock-vs-armada-segments.json, adsp_dtb-stock-vs-armada-segments.json,
+adsp-whole-image-difference-audit.json. Do not redistribute proprietary firmware
+in the small diagnostic evidence bundle; retained locally for analysis.
+
+5. What a root correction should change and how to validate it
+------------------------------------------------------------
+Primary source-level correction target: the delayed BHM_EOC override above.
+An intentional partial-charge hold should not introduce a voltage target that
+causes a battery-OV event. The design must account for the actual PMIC step,
+actual comparator reference and tolerance, both cells, measurement delay and
+transition ordering. A production design can retain the normal safe float
+ceiling while inhibiting charging through the native limit state machine, or
+use a properly characterized representable hold target if that target is
+necessary. Do not simply increase a guessed margin or alter protection limits.
+
+The 10-minute current=0 experiment already demonstrates a distinct stop path
+without the warning on this device; it supports localization to the native
+BHM transition, but is not proof that a particular firmware edit fixes it.
+The transition also contains an en_charger call after setting the override;
+an engineer with source should audit its enable/inhibit ordering alongside FV.
+
+Needed before calling this solved:
+  - establish selected PMIC variant and effective FV/comparator configuration;
+  - capture the exact battery-OV event/status at the BHM override transition;
+  - demonstrate that correcting that transition eliminates the event while
+    preserving charge stop, restart hysteresis, real OV protection and suspend;
+  - test limits 55/70/85/92%, plugging in above limit, detach/re-attach,
+    resume, charger changes, and normal full-charge termination.
+
+The defective branch is inside the proprietary ADSP payload. No editable
+source for that branch has been found in the inspected Armada integration.
+An upstream firmware/source correction or supported firmware control is the
+preferred release route. A userspace replacement limiter is a different scope
+and has been set aside at the user's request. A patched binary is not prepared
+or installed, and this report makes no claim that a modified image will load.
+
+Next device experiment requires a separate concrete proposal and user approval.
+User explicitly requires approval before system-component modifications.
+No further control changes or module loading were performed in this phase.
+
+Latest read-only device check: 2026-11-09T20:47:08-05:00
+  health Good; status Full; capacity 91%; voltage_max 4380000 uV;
+  voltage_now 4238262 uV; current_now -3662 uA; temperature 25.0 C;
+  original end/start controls 85/70; constant_charge_current 8400000 uA.

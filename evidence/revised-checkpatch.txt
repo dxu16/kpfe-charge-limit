@@ -1,0 +1,3 @@
+Command: perl scripts/checkpatch.pl --no-tree --no-signoff final-kernel.patch
+Result: total: 0 errors, 0 warnings, 517 lines checked
+The RFC has no author sign-off; supply the actual contributor identity before a signed submission if required.

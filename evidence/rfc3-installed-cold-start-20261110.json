@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-10",
+  "revision": "rfc3",
+  "source_sha256": "2d382b01f26b8f865243e996e597001484af1bb045bb3476315293134d7ed5e7",
+  "result": "passed",
+  "startup_external_power_absent_verified": true,
+  "samples": 121,
+  "duration_seconds": 600.013,
+  "health": [
+    "Good"
+  ],
+  "status": [
+    "Full"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "current_min_uA": -8545,
+  "current_max_uA": 0,
+  "temperature_tenths_C": [
+    260,
+    270
+  ],
+  "capacity_percent": [
+    87
+  ],
+  "transmitted_set_requests": [
+    {
+      "boot_seconds": 86.838815,
+      "value": 0
+    },
+    {
+      "boot_seconds": 91.874678,
+      "value": 1
+    },
+    {
+      "boot_seconds": 91.925549,
+      "value": 0
+    }
+  ],
+  "recovery_release_to_inhibit_ms": 50.871,
+  "worker_runs": 144,
+  "post_recovery_worker_gap_max_seconds": 5.124113,
+  "observer_completed": {
+    "time": "2026-11-10T19:57:53.853375+00:00",
+    "elapsed": 600.013,
+    "label": "rfc3-installed-cold-start-hold",
+    "event": "completed",
+    "samples": 121,
+    "charging_samples": 0
+  },
+  "observed_healthy_charger_status_code": 135,
+  "observed_healthy_charger_enable": 0,
+  "observed_healthy_fast_current_code": 0,
+  "upower_state": 4,
+  "hardware_mode": "installed deployment"
+}

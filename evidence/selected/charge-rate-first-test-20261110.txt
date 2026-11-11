@@ -1,0 +1,12 @@
+Selected host requests and markers; times are boot seconds.
+         python3-6028    [007] ...1.    74.458231: tracing_mark_write: CHARGE_RATE phase=setup
+         python3-6028    [007] d....    74.458422: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=6 word3=0 word4=100 word5=0
+         python3-6028    [001] d....    79.542354: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=6 word3=0 word4=0 word5=0
+         python3-6028    [001] ...1.    79.542905: tracing_mark_write: CHARGE_RATE stop-acknowledged
+         python3-6403    [007] ...1.   121.880614: tracing_mark_write: CHARGE_RATE phase=resume
+         python3-6403    [007] d....   121.880655: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=6 word3=0 word4=100 word5=0
+         python3-6403    [002] d....   127.131315: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=6 word3=0 word4=0 word5=0
+         python3-6403    [002] ...1.   127.131879: tracing_mark_write: CHARGE_RATE stop-acknowledged
+           <...>-7050    [007] ...1.   188.663694: tracing_mark_write: CHARGE_RATE offline-before-reconnect
+         python3-7640    [007] d....   244.517656: wire: (pmic_glink_send+0x0/0xe0) length=24 owner=32778 opcode=6 word3=0 word4=100 word5=0
+           <...>-7637    [002] ...1.   244.525610: tracing_mark_write: CHARGE_RATE restored-offline

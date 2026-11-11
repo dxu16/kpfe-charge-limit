@@ -1,0 +1,13 @@
+{
+  "source_sha256": "2d382b01f26b8f865243e996e597001484af1bb045bb3476315293134d7ed5e7",
+  "unstripped_module_sha256": "a509073cf9143d4a603dcdfdafb8a494a52711d9ef11f629250164b5fd13870b",
+  "stripped_module_sha256": "5db1684eb32a2613d1b33a5954d9729254647b8dba65896814360e3d96906c87",
+  "prepared_ram_image_sha256": "85c4442caa9bb4bee01bc484ea6a6e38a78e06d0462adbeacf469a716bec720e",
+  "prepared_ram_image_booted": false,
+  "installation_image_id": "4549411a15f217408542e2f4da2c602c629b363f677dbeca30069912093938a9",
+  "installation_image_digest": "sha256:cd828e03f514cd20856b7b7a6f53db67d0a1090703c4b003509ac80d5a3f84d7",
+  "module_note_sha256": "a476b8c6bac047663b2da88d26e6e41bbc9078975aa64e3bdfeadf59c2482543",
+  "test_deployment_checksum": "d975dde156025bc757cd7aa4af4a9bf4925bb97f47e08903bac107a74a1a81c8",
+  "cold_start_hold_passed": true,
+  "sleep_regression": "in_progress"
+}

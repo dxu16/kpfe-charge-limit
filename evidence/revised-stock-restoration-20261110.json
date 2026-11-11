@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-10",
+  "stock_boot_sha256": "9d6d98417032f1b8768679e02c1441083825bfff8119af49605352f2e8d72544",
+  "stock_module_sha256": "e1b3d59b667e8161a312ac5b8c20b4c8f8d3a275b6c171b1249dc07449b06308",
+  "host_worker_absent": true,
+  "manual_charge_behaviour_absent": true,
+  "temporary_probes_absent": true,
+  "firmware_logger_absent": true,
+  "health": "Good",
+  "voltage_max_uV": 4380000,
+  "usb_online": false,
+  "end_threshold": 85,
+  "start_threshold": 70,
+  "constant_charge_current_uA": 8400000,
+  "bootc_staged_deployment": null,
+  "official_update_source_unchanged": true,
+  "persistent_installation": false
+}

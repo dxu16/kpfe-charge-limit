@@ -1,0 +1,38 @@
+[
+  {
+    "path": "Justfile",
+    "git_blob_sha1": "f9909232194545a8e2a4ff9df477c805240ee03d"
+  },
+  {
+    "path": "LICENSE.md",
+    "git_blob_sha1": "c193e507ed72fbc329dd2cd39044a097331248f8"
+  },
+  {
+    "path": "README.md",
+    "git_blob_sha1": "577adb9cee63f3bc888b14a05a9a3284b4830f04"
+  },
+  {
+    "path": "packages/package-hash.sh",
+    "git_blob_sha1": "47732f453dfeba5c523c62338df59a7e89c7986c"
+  },
+  {
+    "path": "packages/README.md",
+    "git_blob_sha1": "b50bef46eda168b7abcd9f75937ea1f5f6b7afea"
+  },
+  {
+    "path": "packages/kernel/BASE.env",
+    "git_blob_sha1": "99dad29b3e959ff56bacafe42c659a0552318c56"
+  },
+  {
+    "path": "packages/kernel/PATCHES.md",
+    "git_blob_sha1": "b67fde3bff3176038821bbcec920e157ecf062f3"
+  },
+  {
+    "path": "packages/kernel/patches/series",
+    "git_blob_sha1": "827bc67582627f1ab56015a7caf305669931ce93"
+  },
+  {
+    "path": "packages/kernel/scripts/build-kernel.sh",
+    "git_blob_sha1": "228d5e9d127e7d5c7e0c58644825f21bd0a456bc"
+  }
+]

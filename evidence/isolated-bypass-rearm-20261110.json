@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-10",
+  "timezone": "America/New_York",
+  "manual_test_image_sha256": "abd8cba40045a6a65a4adddbfce82937465b1372939a8da1b09713f19a7a6516",
+  "sample_count": 524,
+  "duration_seconds": 268.381,
+  "health": [
+    "Good"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "native_end_during_rearm": 100,
+  "end_changed_during_rearm": false,
+  "persistent_installation": false,
+  "phases": {
+    "initial_hold": {
+      "samples": 142,
+      "current_min_uA": -7324,
+      "current_max_uA": -1220,
+      "charger_enable": [
+        0
+      ],
+      "fast_current_code": [
+        0
+      ],
+      "status_codes": [
+        135
+      ]
+    },
+    "failed_reconnection": {
+      "samples": 27,
+      "current_min_uA": 289315,
+      "current_max_uA": 296639,
+      "charger_enable": [
+        1
+      ],
+      "fast_current_code": [
+        0
+      ],
+      "status_codes": [
+        132
+      ]
+    },
+    "repaired_hold": {
+      "samples": 99,
+      "current_min_uA": -6714,
+      "current_max_uA": -610,
+      "charger_enable": [
+        0
+      ],
+      "fast_current_code": [
+        0
+      ],
+      "status_codes": [
+        135
+      ]
+    }
+  }
+}

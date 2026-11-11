@@ -1,0 +1,8 @@
+         python3-6215    [007] ...1.   107.139772: tracing_mark_write: ISOLATED_OEM phase=setup
+         python3-6215    [001] d....   122.502108: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=0
+         python3-6215    [001] ...1.   122.502986: tracing_mark_write: ISOLATED_OEM phase=setup inhibit-restored
+         python3-7445    [006] ...1.   246.956901: tracing_mark_write: ISOLATED_OEM phase=rearm
+         python3-7445    [006] d....   246.957700: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=1
+         python3-7445    [007] d....   247.010270: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=0
+         python3-7445    [007] ...1.   247.010793: tracing_mark_write: ISOLATED_OEM phase=rearm inhibit-restored
+         python3-8110    [007] d....   331.832483: property: (qcom_battmgr_request_property+0x0/0xb0 [qcom_battmgr]) opcode=49 property=29 value=1

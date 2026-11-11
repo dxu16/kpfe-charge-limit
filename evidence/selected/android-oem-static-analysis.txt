@@ -1,0 +1,80 @@
+KPFE OEM Android charge control: static-code findings
+2026-11-09. Device operations were read-only; no controls or system files changed.
+
+Result and correction to earlier comparison
+------------------------------------------
+The OEM Android UI does NOT use the native threshold command in the path
+identified here. It implements AYANEO percentage policy in AYAWindow and
+switches a separate battery/online control. The previous report correctly
+compared the two kernel drivers' native threshold implementations, but that
+comparison did not establish which interface the OEM application uses.
+Android's OEM charge limit cannot be treated as a test of Armada's native
+firmware limiter.
+
+Evidence chain from stock APKs
+-----------------------------
+AYAWindow.apk was copied from stock system partition at
+/system/app/AYAWindow/AYAWindow.apk without mounting or changing Android.
+Portable JADX 1.5.6 was used offline. Decompiled source is analysis output,
+not original vendor source; class/method names may be renamed by JADX.
+
+1. AYAShareSettingObserver.java, lines 53-90:
+   Registers bypass control for supporting devices, loads
+   bypass_power_supply_mode and bypass_power_supply_battery, clamps the
+   threshold to 50..100, watches setting changes, and registers a receiver
+   for android.intent.action.BATTERY_CHANGED.
+2. BypassPowerSupplyObserverKt$checkBypassPowerSupply$1.java:
+   Reads BatteryManager property 4 (capacity percent). Decision:
+     capacity <= 20: bypass false
+     explicit bypass mode true and capacity > 20: bypass true
+     otherwise capacity >= 95 or capacity < clamp(threshold,50,100): false
+     otherwise: true
+   The >=95 exception is present in this stock code; do not silently infer
+   ordinary limit behavior above 95 or assume this policy is ideal.
+3. Device selection uses KR02, inheriting AR14 -> AR10 -> AR03.
+   KR02 does not override T(boolean); AR03's final T delegates to
+   IAyaDevices.DefaultImpls.h. AR14 enables bypass support (field S=true;
+   original getter x, renamed getS by JADX). The app tests support before
+   registering the policy.
+4. IAyaDevices.java lines 151-165:
+   bypass true:  echo 0 > /sys/class/power_supply/battery/online
+   bypass false: echo 1 > /sys/class/power_supply/battery/online
+   It also publishes bypass_power_supply_status for the UI.
+   AR03's command executor delegates to TcRootShell.
+
+Stock kernel driver and shared firmware
+--------------------------------------
+android-battery-set-prop.txt at 0x08004290..0x080042dc explicitly logs
+battery_psy_set_online and builds a 24-byte battery property SET request:
+  owner 0x800a, type 1, opcode loaded from battery state +0x188,
+  battery-id 0, property 0x1d (29), requested online value.
+This is distinct from the native 0x48 enable/target/delta command and
+property 24 (native charge_control_en).
+
+firmware-oem-online-property.txt at 0x601bed64..0x601beeb8 handles property29:
+  value0 calls 0x600db2e0, saves a scaled result, calls 0x60040fb0(1),
+    then calls 0x600bb830 with SID7 and additional state;
+  nonzero calls 0x60040fb0(0), conditionally restores additional controls;
+  stores normalized online state at primary context +0x71c and a separate
+    global byte 0x60275698, then signals the state machine.
+It does not call battmngr_set_charging_limit in this branch.
+0x60040fb0 dispatches through a registered function pointer at 0x602ab408.
+The complete hardware behavior of that callback remains to be traced.
+Do not describe property29 as merely constant_charge_current=0: the code
+clearly performs additional operations.
+
+Implications and limits
+----------------------
+There is a real stock OEM path to investigate for a firmware-unchanged Armada
+implementation. Reusing the vendor's supported mechanism can be a proper
+device-specific integration, but it would avoid the native-limiter defect,
+not repair its delayed FV override inside firmware. A firmware correction
+remains the direct fix for that native feature.
+
+Static code establishes the intended app path and distinct firmware branch.
+It does not prove Android ran this exact configuration, that bypass is free
+of the warning, or that host policy can be ported unchanged. Further work
+must trace the callback and its power-path restoration, then design kernel
+and policy integration with correct lifecycle and resume behavior. No
+module/driver/service change or active charging test is authorized by these
+findings alone; ask user before such work on the handheld.

@@ -1,0 +1,1 @@
+The new late-current worker regression fails against source 6556b77a7105b23acc8d437c4abb1db07db23f79cb164cdbc701b44c29ad2bc9 at the recovery deadline assertion. The same regression and existing helper/worker cases pass against source 2d382b01f26b8f865243e996e597001484af1bb045bb3476315293134d7ed5e7. This reproduces a software timing gap, not the untraced installed worker schedule.

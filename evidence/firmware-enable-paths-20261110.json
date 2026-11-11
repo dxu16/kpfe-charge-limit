@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-10",
+  "firmware_sha256": "03db3d3f68258b23c8026b02c2a77590cb29f4a0152abd95a8f454e3dd0aad3a",
+  "method": "offline Hexagon disassembly and ELF callback/jump-table resolution",
+  "static_anchors": {
+    "zero_vote_callback_registered": "0x6004621c",
+    "zero_vote_disables_charger": "0x60058f6c",
+    "unchanged_result_skips_callback": "0x60073668",
+    "enable_callback_registered": "0x6017a6d0",
+    "enable_register_write": "0x6017b164",
+    "enable_register_address": "0x6017b15c",
+    "enable_register_mask": "0x6017b160",
+    "stateinit_calls_enable_policy": "0x6004a950",
+    "enable_policy_calls_hardware": "0x6004cdfc",
+    "state4_no_bhm_enables": "0x6004caf8",
+    "oem_entry_zero_programming": "0x601bedf0"
+  },
+  "anchors_checked": 11,
+  "runtime_responsible_writer_identified": false,
+  "no_device_changes": true,
+  "additional_static_anchors": {
+    "icm_suspend_exit": "0x60195480",
+    "icm_exit_calls_main_driver_wrapper": "0x60195644",
+    "main_driver_callback_registration": "0x601af554",
+    "main_driver_unconditional_enable": "0x601b1bc4",
+    "logging_setter": "0x600a8894",
+    "logging_level_to_sdam": "0x60041a70",
+    "logging_categories_to_sdam": "0x60041b60"
+  },
+  "logging_setter_executed": false,
+  "new_hardware_capture_executed": true,
+  "runtime_enable_decision_observed": true,
+  "runtime_exact_spmi_instruction_traced": false,
+  "completed_capture": "firmware-reconnect-cause-20261110.json"
+}

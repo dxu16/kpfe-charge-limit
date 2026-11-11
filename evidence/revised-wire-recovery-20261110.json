@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-10",
+  "ram_image_sha256": "8ee128fd5f4cb56868ad37357d8fa5c8c9ee5b0ee4d1ba5422294417471850a9",
+  "loaded_module_build_id": "8d76650fa5d618889bbc85b82542e35709fe4b13",
+  "loaded_module_note_sha256": "6bfaf462f7771d4cfdf3ef26f71b183c9b99be83f9cef1587d217f9c76b9f19f",
+  "samples": 1070,
+  "health": [
+    "Good"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "transmitted_oem_set_requests": [
+    {
+      "boot_seconds": 1176.685579,
+      "value": 1
+    },
+    {
+      "boot_seconds": 1217.618764,
+      "value": 0
+    },
+    {
+      "boot_seconds": 1222.831632,
+      "value": 1
+    },
+    {
+      "boot_seconds": 1222.882395,
+      "value": 0
+    }
+  ],
+  "recovery_branch_demonstrated": true,
+  "recovery_release_to_inhibit_ms": 50.763,
+  "final_registers": {
+    "0x2606": 135,
+    "0x2646": 0,
+    "0x2650": 4,
+    "0x2654": 0,
+    "0x2658": 156
+  },
+  "final_current_uA": -3051,
+  "persistent_installation": false,
+  "trace_method": "pmic_glink_send 24-byte battery property request; covers compiler-inlined control writes",
+  "attachment_utc": "2026-11-10T19:06:09.843897+00:00",
+  "first_observed_hardware_disable_utc": "2026-11-10T19:06:14.962264+00:00",
+  "attachment_to_observed_disable_seconds": 5.118,
+  "before_recovery_peak_reported_current_uA": 296029,
+  "before_recovery_enable_bit": [
+    1
+  ],
+  "before_recovery_fast_current_code": [
+    0
+  ]
+}

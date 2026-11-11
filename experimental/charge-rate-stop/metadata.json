@@ -1,0 +1,15 @@
+{
+  "kind": "manual diagnostic only; no automatic percentage policy",
+  "base_source_sha256": "059b313b89d06a542c25b2491143406b3abd7cd0ae4bf71041cab1ca7d9adf82",
+  "source_sha256": "6a9022aeadffc656b01035330f5fb6cf18507be38cff0f8c8bf979f72be83e75",
+  "hardware_tested": false,
+  "installed_or_loaded": false,
+  "firmware_opcode": 6,
+  "request_bytes": 24,
+  "response_bytes": 16,
+  "stop_rate": 0,
+  "resume_rate": 100,
+  "charging_path": 0,
+  "kernel_patch_additions": 148,
+  "kernel_patch_deletions": 2
+}

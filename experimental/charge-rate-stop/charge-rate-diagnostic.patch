@@ -1,0 +1,280 @@
+Subject: [DIAGNOSTIC] power: supply: qcom_battmgr: test KPFE charge-rate stop
+
+Exercise the firmware charge-rate command through a KPFE-only manual
+charge_behaviour interface. Rate zero enters the firmware stop-state path;
+rate 100 releases it. Reject mixing with native percentage limiting and
+validate the command's distinct acknowledgment payload.
+
+This is an untested diagnostic backend, not the automatic charge-limit fix.
+
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/nvmem-consumer.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/property.h>
+@@ -26,6 +27,8 @@
+ 	QCOM_BATTMGR_SM8550,
+ 	QCOM_BATTMGR_X1E80100,
+ };
++
++#define BATTMGR_SET_CHARGE_RATE		0x6
+ 
+ #define BATTMGR_BAT_STATUS		0x1
+ 
+@@ -74,6 +77,7 @@
+ #define BATT_CHG_CTRL_EN		24
+ #define BATT_CHG_CTRL_START_THR		25
+ #define BATT_CHG_CTRL_END_THR		26
++/* AYANEO/KONKR extension: 0 enables bypass, 1 restores normal charging. */
+ 
+ #define BATTMGR_USB_PROPERTY_GET	0x32
+ #define BATTMGR_USB_PROPERTY_SET	0x33
+@@ -137,6 +141,13 @@
+ 	__le32 battery_id;
+ 	__le32 rate; /* 0 for current rate */
+ 	__le32 reserved;
++};
++
++struct qcom_battmgr_charge_rate_request {
++	struct pmic_glink_hdr hdr;
++	__le32 battery_id;
++	__le32 charge_rate;
++	__le32 charging_path;
+ };
+ 
+ struct qcom_battmgr_charge_ctrl_request {
+@@ -327,6 +338,9 @@
+ 	struct completion ack;
+ 
+ 	bool service_up;
++	bool charge_rate_supported;
++	bool charge_rate_inhibited;
++	bool native_charge_limit_enabled;
+ 
+ 	struct qcom_battmgr_info info;
+ 	struct qcom_battmgr_status status;
+@@ -514,6 +528,19 @@
+ 	return ret;
+ }
+ 
++/* Diagnostic readback is the last acknowledged request, not hardware state. */
++static int qcom_battmgr_get_charge_rate_behaviour(struct qcom_battmgr *battmgr,
++					       union power_supply_propval *val)
++{
++	if (!battmgr->charge_rate_supported)
++		return -EOPNOTSUPP;
++
++	val->intval = battmgr->charge_rate_inhibited ?
++		POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE :
++		POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
++	return 0;
++}
++
+ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
+ 					 enum power_supply_property psp,
+ 					 union power_supply_propval *val)
+@@ -524,6 +551,13 @@
+ 
+ 	if (!battmgr->service_up)
+ 		return -EAGAIN;
++
++	if (psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR) {
++		mutex_lock(&battmgr->lock);
++		ret = qcom_battmgr_get_charge_rate_behaviour(battmgr, val);
++		mutex_unlock(&battmgr->lock);
++		return ret;
++	}
+ 
+ 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
+ 	    battmgr->variant == QCOM_BATTMGR_X1E80100)
+@@ -677,10 +711,15 @@
+ 		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
+ 		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
+ 		.hdr.opcode = cpu_to_le32(BATTMGR_CHG_CTRL_LIMIT_EN),
+-		.enable = cpu_to_le32(1),
++		/* On KPFE, 100 must disable the native limiter, not retarget it. */
++		.enable = cpu_to_le32(!battmgr->charge_rate_supported ||
++				     target_soc < CHARGE_CTRL_END_THR_MAX),
+ 		.target_soc = cpu_to_le32(target_soc),
+ 		.delta_soc = cpu_to_le32(delta_soc),
+ 	};
++	if (battmgr->charge_rate_supported && battmgr->charge_rate_inhibited &&
++	    target_soc < CHARGE_CTRL_END_THR_MAX)
++		return -EBUSY;
+ 
+ 	return qcom_battmgr_request(battmgr, &request, sizeof(request));
+ }
+@@ -786,10 +825,57 @@
+ 	return ret;
+ }
+ 
++static int qcom_battmgr_set_charge_rate_behaviour(struct qcom_battmgr *battmgr,
++					       int behaviour)
++{
++	struct qcom_battmgr_charge_rate_request request = {
++		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
++		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
++		.hdr.opcode = cpu_to_le32(BATTMGR_SET_CHARGE_RATE),
++		.battery_id = cpu_to_le32(0),
++		.charging_path = cpu_to_le32(0),
++	};
++	int ret;
++
++	if (!battmgr->charge_rate_supported)
++		return -EOPNOTSUPP;
++	if (behaviour != POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO &&
++	    behaviour != POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
++		return -EINVAL;
++
++	request.charge_rate = cpu_to_le32(behaviour ==
++		POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO ? 100 : 0);
++	mutex_lock(&battmgr->lock);
++	/* The diagnostic must not mix this command with native percentage limiting. */
++	if (behaviour == POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE) {
++		ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_GET,
++						    BATT_CHG_CTRL_EN, 0);
++		if (ret)
++			goto out;
++		if (battmgr->native_charge_limit_enabled) {
++			ret = -EBUSY;
++			goto out;
++		}
++	}
++	ret = qcom_battmgr_request(battmgr, &request, sizeof(request));
++	if (!ret)
++		battmgr->charge_rate_inhibited =
++			behaviour == POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
++out:
++	mutex_unlock(&battmgr->lock);
++	if (!ret)
++		power_supply_changed(battmgr->bat_psy);
++	return ret > 0 ? -EIO : ret;
++}
++
+ static int qcom_battmgr_bat_is_writeable(struct power_supply *psy,
+ 					 enum power_supply_property psp)
+ {
++	struct qcom_battmgr *battmgr = power_supply_get_drvdata(psy);
++
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		return battmgr->charge_rate_supported;
+ 	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
+ 	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+@@ -817,6 +903,8 @@
+ 		return qcom_battmgr_set_charge_end_threshold(battmgr, pval->intval);
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+ 		return qcom_battmgr_set_charge_current_limit(battmgr, pval->intval);
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		return qcom_battmgr_set_charge_rate_behaviour(battmgr, pval->intval);
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -1508,6 +1596,14 @@
+ 		case BATT_POWER_NOW:
+ 			battmgr->status.power_now = le32_to_cpu(resp->intval.value);
+ 			break;
++		case BATT_CHG_CTRL_EN:
++			val = le32_to_cpu(resp->intval.value);
++			if (val > 1) {
++				battmgr->error = -EPROTO;
++				break;
++			}
++			battmgr->native_charge_limit_enabled = val;
++			break;
+ 		case BATT_CHG_CTRL_START_THR:
+ 			battmgr->info.charge_ctrl_start = le32_to_cpu(resp->intval.value);
+ 			break;
+@@ -1626,13 +1722,30 @@
+ 	complete(&battmgr->ack);
+ }
+ 
++static void qcom_battmgr_charge_rate_ack(struct qcom_battmgr *battmgr,
++					const void *data, size_t len)
++{
++	const struct {
++		struct pmic_glink_hdr hdr;
++		__le32 result;
++	} *response = data;
++
++	if (len != sizeof(*response))
++		battmgr->error = -ENODATA;
++	else
++		battmgr->error = le32_to_cpu(response->result) ? -EIO : 0;
++	complete(&battmgr->ack);
++}
++
+ static void qcom_battmgr_callback(const void *data, size_t len, void *priv)
+ {
+ 	const struct pmic_glink_hdr *hdr = data;
+ 	struct qcom_battmgr *battmgr = priv;
+ 	unsigned int opcode = le32_to_cpu(hdr->opcode);
+ 
+-	if (opcode == BATTMGR_NOTIFICATION)
++	if (opcode == BATTMGR_SET_CHARGE_RATE && battmgr->charge_rate_supported)
++		qcom_battmgr_charge_rate_ack(battmgr, data, len);
++	else if (opcode == BATTMGR_NOTIFICATION)
+ 		qcom_battmgr_notification(battmgr, data, len);
+ 	else if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
+ 		 battmgr->variant == QCOM_BATTMGR_X1E80100)
+@@ -1681,6 +1794,29 @@
+ 
+ static char *qcom_battmgr_battery[] = { "battery" };
+ 
++static const struct power_supply_desc *
++qcom_battmgr_charge_rate_battery_desc(struct qcom_battmgr *battmgr,
++			     const struct power_supply_desc *base)
++{
++	struct power_supply_desc *desc;
++	enum power_supply_property *props;
++
++	desc = devm_kmemdup(battmgr->dev, base, sizeof(*base), GFP_KERNEL);
++	if (!desc)
++		return ERR_PTR(-ENOMEM);
++	props = devm_kcalloc(battmgr->dev, base->num_properties + 1,
++			     sizeof(*props), GFP_KERNEL);
++	if (!props)
++		return ERR_PTR(-ENOMEM);
++	memcpy(props, base->properties, base->num_properties * sizeof(*props));
++	props[base->num_properties] = POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
++	desc->properties = props;
++	desc->num_properties++;
++	desc->charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO) |
++		BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
++	return desc;
++}
++
+ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 			      const struct auxiliary_device_id *id)
+ {
+@@ -1714,6 +1850,10 @@
+ 		battmgr->variant = (unsigned long)match->data;
+ 	else
+ 		battmgr->variant = QCOM_BATTMGR_SM8350;
++
++	/* OEM property numbers are not a portable Qualcomm firmware ABI. */
++	battmgr->charge_rate_supported = battmgr->variant == QCOM_BATTMGR_SM8550 &&
++		of_machine_is_compatible("konkr,pocket-fit-elite");
+ 
+ 	ret = qcom_battmgr_charge_control_thresholds_init(battmgr);
+ 	if (ret < 0)
+@@ -1760,6 +1900,12 @@
+ 		else
+ 			psy_desc = &sm8350_bat_psy_desc;
+ 
++		if (battmgr->charge_rate_supported) {
++			psy_desc = qcom_battmgr_charge_rate_battery_desc(battmgr, psy_desc);
++			if (IS_ERR(psy_desc))
++				return PTR_ERR(psy_desc);
++		}
++
+ 		battmgr->bat_psy = devm_power_supply_register(dev, psy_desc, &psy_cfg);
+ 		if (IS_ERR(battmgr->bat_psy))
+ 			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),

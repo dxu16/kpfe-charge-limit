@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-10",
+  "case": "manual OEM bypass, awake unplug/reconnect with native limit disabled",
+  "result": "firmware enable/current-policy disagreement reproduced",
+  "manual_ram_image_sha256": "abd8cba40045a6a65a4adddbfce82937465b1372939a8da1b09713f19a7a6516",
+  "firmware_sha256": "03db3d3f68258b23c8026b02c2a77590cb29f4a0152abd95a8f454e3dd0aad3a",
+  "controls_written_in_capture": [
+    {
+      "boot_seconds": 86.940119,
+      "opcode": 72,
+      "word3": 0,
+      "word4": 100,
+      "word5": 30
+    },
+    {
+      "boot_seconds": 102.316054,
+      "opcode": 49,
+      "word3": 0,
+      "word4": 29,
+      "word5": 0
+    }
+  ],
+  "enable_decisions": [
+    {
+      "received_boot_seconds": 65.981452,
+      "firmware_raw_timestamp": "0x0000000075BE4128",
+      "desired_enable": 0,
+      "previous_cached_enable": 1
+    },
+    {
+      "received_boot_seconds": 88.509308,
+      "firmware_raw_timestamp": "0x0000000090869F1C",
+      "desired_enable": 1,
+      "previous_cached_enable": 0
+    },
+    {
+      "received_boot_seconds": 206.273388,
+      "firmware_raw_timestamp": "0x000000011355EE66",
+      "desired_enable": 0,
+      "previous_cached_enable": 1
+    },
+    {
+      "received_boot_seconds": 324.033357,
+      "firmware_raw_timestamp": "0x000000019D8A4761",
+      "desired_enable": 1,
+      "previous_cached_enable": 0
+    }
+  ],
+  "reconnection": {
+    "first_online_boot_seconds": 322.14,
+    "first_offline_boot_seconds": 337.07,
+    "observed_online_interval_seconds": 14.93,
+    "sample_count": 57,
+    "all_connected_enable_values": [
+      1
+    ],
+    "all_connected_fcc_codes": [
+      0
+    ],
+    "first_current_uA": -65919,
+    "first_positive_current_boot_seconds": 326.02,
+    "first_positive_current_uA": 289925,
+    "positive_reading_lag_seconds": 3.88,
+    "current_max_uA": 295419
+  },
+  "health": [
+    "Good"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "linux_trace_overruns": 0,
+  "linux_trace_dropped_events": 0,
+  "host_bypass_release_in_capture": false,
+  "persistent_logging_changed": false,
+  "no_instruction_level_spmi_writer_trace": true,
+  "raw_capture_sha256": {
+    "samples.jsonl": "c3eb935a805b211da7f48565eae12e005cc8ebd3d7c8ef1a6c1fb968b6d98788",
+    "firmware-and-requests.txt": "18f50c1de21e07441846418a8988f2f349fe67ee3231058a71215c2f926fb208",
+    "trace-stats.json": "b022c03252c22c851acfd588904d0d76ec6de68033a7ca6f5e6bf1ba0a84c154"
+  },
+  "restoration": {
+    "stock_boot_sha256": "9d6d98417032f1b8768679e02c1441083825bfff8119af49605352f2e8d72544",
+    "stock_module_sha256": "e1b3d59b667e8161a312ac5b8c20b4c8f8d3a275b6c171b1249dc07449b06308",
+    "end_percent": 85,
+    "start_percent": 70,
+    "health": "Good",
+    "charger_absent": true,
+    "logger_unloaded_by_reboot": true,
+    "temporary_probes_removed": true
+  }
+}

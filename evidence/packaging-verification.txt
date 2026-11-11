@@ -1,0 +1,26 @@
+Local repository packaging verification, 2026-11-10
+
+PASS: exact hardware-tested C source SHA256 unchanged.
+PASS: Linux patch applies fully and reconstructs source byte for byte;
+      one driver file, 321 additions / 1 deletion.
+PASS: Armada patch applies fully to pinned current source snapshots;
+      exactly patch payload, explicit series entry and provenance entry.
+PASS: overlay matches applied output, with exactly one 0905 series entry.
+PASS: public snapshot Git blob identities match recorded current tree.
+PASS: included-artifact manifest verified after final staging.
+PASS: Python syntax checked; portable fixture CLI help checked.
+PASS: checkpatch 0 errors, 0 warnings, 425 lines checked.
+      Optional spelling and const-struct tables were unavailable.
+PASS: selected bundle scanned for known device serial, network address,
+      account path and private-key markers; none found.
+
+Original C fixture results are preserved in policy-tests.txt/status-tests.txt.
+The C fixtures were not recompiled during this Windows packaging task:
+no local C compiler is available. The production C has not changed.
+The adapted portable fixtures only change source/output path handling and
+compiler selection. Full Armada just check / just package kernel remain
+pending in its supported Linux build environment.
+
+No device contacted/modified, no deployment, remote, public upload or PR.
+Git initialized on main, files staged, no attributed commit created because
+no contributor Git identity is configured. No legal sign-off invented.

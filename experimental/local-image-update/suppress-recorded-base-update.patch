@@ -1,0 +1,33 @@
+diff --git a/usr/libexec/armada/armada-update b/usr/libexec/armada/armada-update
+--- a/usr/libexec/armada/armada-update
++++ b/usr/libexec/armada/armada-update
+@@ -46,6 +46,29 @@
+         armada_update_log "update target ${repository}:${desired} returned incomplete metadata"
+         fail "The update target returned incomplete metadata"
+     fi
++    # A derived local image can record the exact official base it contains.
++    if [ -z "${s_digest}" ] &&
++       [[ "${booted_ref}" == ostree-unverified-image:containers-storage:* ]] &&
++       python3 - "${repository}:${desired}" "${r_digest}" <<'PYTHON'
++import json
++import re
++import sys
++from pathlib import Path
++
++try:
++    record = json.loads(Path("/usr/share/armada/kpfe-charge-limit-build.json").read_text())
++except (OSError, ValueError):
++    sys.exit(1)
++
++ref, digest = sys.argv[1:]
++same_base = (isinstance(record, dict) and re.fullmatch(r"sha256:[0-9a-f]{64}", digest)
++             and record.get("base_image_ref") == ref
++             and record.get("base_image_digest") == digest)
++sys.exit(0 if same_base else 1)
++PYTHON
++    then
++        exit 7
++    fi
+     if [ "${staged}" != "${desired}" ] && { [ "${desired}" != "${booted}" ] || [ -n "${staged}" ]; }; then
+         armada_update_fits "${r_required}" "${reserve_bytes}" || fail "Not enough free space for the update"
+         printf '%s\n' "${r_ver:-${r_digest}}"

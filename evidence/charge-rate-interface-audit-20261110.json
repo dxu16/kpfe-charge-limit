@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-10",
+  "kind": "static firmware interface audit; compiled diagnostic only",
+  "firmware_sha256": "03db3d3f68258b23c8026b02c2a77590cb29f4a0152abd95a8f454e3dd0aad3a",
+  "opcode": 6,
+  "stop": 0,
+  "resume": 100,
+  "request_bytes": 24,
+  "response_bytes": 16,
+  "static_anchors": {
+    "dispatch_reads_rate": "0x600ab1b0",
+    "dispatch_calls_rate_setter": "0x600ab204",
+    "store_rate_intent": "0x601be970",
+    "signal_state_machine": "0x601be978",
+    "default_rate_100": "0x6001ef9c",
+    "read_rate_in_stop_check": "0x60051f18",
+    "zero_rate_state_selection": "0x60051f6c",
+    "rate_stop_flag": "0x60051f7c",
+    "publish_stop_flags": "0x60052024"
+  },
+  "hardware_tested": false,
+  "installed_or_loaded": false,
+  "upstream_reference": "https://lkml.rescloud.iu.edu/hypermail/linux/kernel/2610.2/13151.html"
+}

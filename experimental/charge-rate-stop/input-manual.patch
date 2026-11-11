@@ -1,0 +1,237 @@
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/nvmem-consumer.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/property.h>
+@@ -74,6 +75,8 @@
+ #define BATT_CHG_CTRL_EN		24
+ #define BATT_CHG_CTRL_START_THR		25
+ #define BATT_CHG_CTRL_END_THR		26
++/* AYANEO/KONKR extension: 0 enables bypass, 1 restores normal charging. */
++#define BATT_OEM_CHARGE_ONLINE		29
+ 
+ #define BATTMGR_USB_PROPERTY_GET	0x32
+ #define BATTMGR_USB_PROPERTY_SET	0x33
+@@ -327,6 +330,9 @@
+ 	struct completion ack;
+ 
+ 	bool service_up;
++	bool oem_bypass_supported;
++	bool oem_charge_online;
++	bool native_charge_limit_enabled;
+ 
+ 	struct qcom_battmgr_info info;
+ 	struct qcom_battmgr_status status;
+@@ -514,6 +520,25 @@
+ 	return ret;
+ }
+ 
++/* Caller holds lock; read firmware state before every possible transition. */
++static int qcom_battmgr_get_oem_charge_behaviour(struct qcom_battmgr *battmgr,
++					       union power_supply_propval *val)
++{
++	int ret;
++
++	if (!battmgr->oem_bypass_supported)
++		return -EOPNOTSUPP;
++
++	ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_GET,
++					    BATT_OEM_CHARGE_ONLINE, 0);
++	if (ret)
++		return ret < 0 ? ret : -EIO;
++
++	val->intval = battmgr->oem_charge_online ? POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO :
++		POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
++	return 0;
++}
++
+ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
+ 					 enum power_supply_property psp,
+ 					 union power_supply_propval *val)
+@@ -524,6 +549,13 @@
+ 
+ 	if (!battmgr->service_up)
+ 		return -EAGAIN;
++
++	if (psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR) {
++		mutex_lock(&battmgr->lock);
++		ret = qcom_battmgr_get_oem_charge_behaviour(battmgr, val);
++		mutex_unlock(&battmgr->lock);
++		return ret;
++	}
+ 
+ 	if (battmgr->variant == QCOM_BATTMGR_SC8280XP ||
+ 	    battmgr->variant == QCOM_BATTMGR_X1E80100)
+@@ -677,10 +709,22 @@
+ 		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
+ 		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
+ 		.hdr.opcode = cpu_to_le32(BATTMGR_CHG_CTRL_LIMIT_EN),
+-		.enable = cpu_to_le32(1),
++		/* On KPFE, 100 must disable the native limiter, not retarget it. */
++		.enable = cpu_to_le32(!battmgr->oem_bypass_supported ||
++				     target_soc < CHARGE_CTRL_END_THR_MAX),
+ 		.target_soc = cpu_to_le32(target_soc),
+ 		.delta_soc = cpu_to_le32(delta_soc),
+ 	};
++	int ret;
++
++	if (battmgr->oem_bypass_supported && target_soc < CHARGE_CTRL_END_THR_MAX) {
++		ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_GET,
++						    BATT_OEM_CHARGE_ONLINE, 0);
++		if (ret)
++			return ret < 0 ? ret : -EIO;
++		if (!battmgr->oem_charge_online)
++			return -EBUSY;
++	}
+ 
+ 	return qcom_battmgr_request(battmgr, &request, sizeof(request));
+ }
+@@ -786,10 +830,61 @@
+ 	return ret;
+ }
+ 
++static int qcom_battmgr_set_oem_charge_behaviour(struct qcom_battmgr *battmgr,
++					       int behaviour)
++{
++	union power_supply_propval charge_state;
++	bool changed = false;
++	int ret;
++
++	if (!battmgr->oem_bypass_supported)
++		return -EOPNOTSUPP;
++	if (behaviour != POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO &&
++	    behaviour != POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
++		return -EINVAL;
++
++	mutex_lock(&battmgr->lock);
++	ret = qcom_battmgr_get_oem_charge_behaviour(battmgr, &charge_state);
++	if (ret || charge_state.intval == behaviour)
++		goto out;
++
++	/* Mixing the two mechanisms would leave the faulty native policy active. */
++	if (behaviour == POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE) {
++		ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_GET,
++						    BATT_CHG_CTRL_EN, 0);
++		if (ret)
++			goto out;
++		if (battmgr->native_charge_limit_enabled) {
++			ret = -EBUSY;
++			goto out;
++		}
++	}
++
++	/* Repeated entry can overwrite firmware's saved charge-current setting. */
++	ret = qcom_battmgr_request_property(battmgr, BATTMGR_BAT_PROPERTY_SET,
++					    BATT_OEM_CHARGE_ONLINE,
++					    behaviour == POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO);
++	if (!ret) {
++		ret = qcom_battmgr_get_oem_charge_behaviour(battmgr, &charge_state);
++		if (!ret && charge_state.intval != behaviour)
++			ret = -EIO;
++		changed = !ret;
++	}
++out:
++	mutex_unlock(&battmgr->lock);
++	if (changed)
++		power_supply_changed(battmgr->bat_psy);
++	return ret > 0 ? -EIO : ret;
++}
++
+ static int qcom_battmgr_bat_is_writeable(struct power_supply *psy,
+ 					 enum power_supply_property psp)
+ {
++	struct qcom_battmgr *battmgr = power_supply_get_drvdata(psy);
++
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		return battmgr->oem_bypass_supported;
+ 	case POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD:
+ 	case POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD:
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+@@ -817,6 +912,8 @@
+ 		return qcom_battmgr_set_charge_end_threshold(battmgr, pval->intval);
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+ 		return qcom_battmgr_set_charge_current_limit(battmgr, pval->intval);
++	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
++		return qcom_battmgr_set_oem_charge_behaviour(battmgr, pval->intval);
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -1508,6 +1605,18 @@
+ 		case BATT_POWER_NOW:
+ 			battmgr->status.power_now = le32_to_cpu(resp->intval.value);
+ 			break;
++		case BATT_OEM_CHARGE_ONLINE:
++		case BATT_CHG_CTRL_EN:
++			val = le32_to_cpu(resp->intval.value);
++			if (val > 1) {
++				battmgr->error = -EPROTO;
++				break;
++			}
++			if (property == BATT_OEM_CHARGE_ONLINE)
++				battmgr->oem_charge_online = val;
++			else
++				battmgr->native_charge_limit_enabled = val;
++			break;
+ 		case BATT_CHG_CTRL_START_THR:
+ 			battmgr->info.charge_ctrl_start = le32_to_cpu(resp->intval.value);
+ 			break;
+@@ -1681,6 +1790,29 @@
+ 
+ static char *qcom_battmgr_battery[] = { "battery" };
+ 
++static const struct power_supply_desc *
++qcom_battmgr_oem_battery_desc(struct qcom_battmgr *battmgr,
++			     const struct power_supply_desc *base)
++{
++	struct power_supply_desc *desc;
++	enum power_supply_property *props;
++
++	desc = devm_kmemdup(battmgr->dev, base, sizeof(*base), GFP_KERNEL);
++	if (!desc)
++		return ERR_PTR(-ENOMEM);
++	props = devm_kcalloc(battmgr->dev, base->num_properties + 1,
++			     sizeof(*props), GFP_KERNEL);
++	if (!props)
++		return ERR_PTR(-ENOMEM);
++	memcpy(props, base->properties, base->num_properties * sizeof(*props));
++	props[base->num_properties] = POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR;
++	desc->properties = props;
++	desc->num_properties++;
++	desc->charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO) |
++		BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
++	return desc;
++}
++
+ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 			      const struct auxiliary_device_id *id)
+ {
+@@ -1714,6 +1846,10 @@
+ 		battmgr->variant = (unsigned long)match->data;
+ 	else
+ 		battmgr->variant = QCOM_BATTMGR_SM8350;
++
++	/* OEM property numbers are not a portable Qualcomm firmware ABI. */
++	battmgr->oem_bypass_supported = battmgr->variant == QCOM_BATTMGR_SM8550 &&
++		of_machine_is_compatible("konkr,pocket-fit-elite");
+ 
+ 	ret = qcom_battmgr_charge_control_thresholds_init(battmgr);
+ 	if (ret < 0)
+@@ -1760,6 +1896,12 @@
+ 		else
+ 			psy_desc = &sm8350_bat_psy_desc;
+ 
++		if (battmgr->oem_bypass_supported) {
++			psy_desc = qcom_battmgr_oem_battery_desc(battmgr, psy_desc);
++			if (IS_ERR(psy_desc))
++				return PTR_ERR(psy_desc);
++		}
++
+ 		battmgr->bat_psy = devm_power_supply_register(dev, psy_desc, &psy_cfg);
+ 		if (IS_ERR(battmgr->bat_psy))
+ 			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),

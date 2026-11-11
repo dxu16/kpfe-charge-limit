@@ -1,0 +1,92 @@
+
+FILE drivers/power/supply/power_supply_core.c
+76: }
+77: 
+78: static void power_supply_changed_work(struct work_struct *work)
+79: {
+80: 	int ret;
+81: 	unsigned long flags;
+82: 	struct power_supply *psy = container_of(work, struct power_supply,
+83: 						changed_work);
+84: 
+85: 	dev_dbg(&psy->dev, "%s\n", __func__);
+86: 
+110: 		blocking_notifier_call_chain(&power_supply_notifier,
+111: 				PSY_EVENT_PROP_CHANGED, psy);
+112: 		kobject_uevent(&psy->dev.kobj, KOBJ_CHANGE);
+113: 		spin_lock_irqsave(&psy->changed_lock, flags);
+114: 	}
+115: 
+116: 	/*
+117: 	 * Hold the wakeup_source until all events are processed.
+118: 	 * power_supply_changed() might have called again and have set 'changed'
+119: 	 * to true.
+120: 	 */
+120: 	 */
+121: 	if (likely(!psy->changed))
+122: 		pm_relax(&psy->dev);
+123: 	spin_unlock_irqrestore(&psy->changed_lock, flags);
+124: }
+125: 
+126: struct psy_for_each_psy_cb_data {
+127: 	int (*fn)(struct power_supply *psy, void *data);
+128: 	void *data;
+129: };
+130: 
+148: EXPORT_SYMBOL_GPL(power_supply_for_each_psy);
+149: 
+150: void power_supply_changed(struct power_supply *psy)
+151: {
+152: 	unsigned long flags;
+153: 
+154: 	dev_dbg(&psy->dev, "%s\n", __func__);
+155: 
+156: 	spin_lock_irqsave(&psy->changed_lock, flags);
+157: 	psy->changed = true;
+158: 	pm_stay_awake(&psy->dev);
+156: 	spin_lock_irqsave(&psy->changed_lock, flags);
+157: 	psy->changed = true;
+158: 	pm_stay_awake(&psy->dev);
+159: 	spin_unlock_irqrestore(&psy->changed_lock, flags);
+160: 	schedule_work(&psy->changed_work);
+161: }
+162: EXPORT_SYMBOL_GPL(power_supply_changed);
+163: 
+164: /*
+165:  * Notify that power supply was registered after parent finished the probing.
+166:  *
+1650: 	 * Update use_cnt after any uevents (most notably from device_add()).
+1651: 	 * We are here still during driver's probe but
+1652: 	 * the power_supply_uevent() calls back driver's get_property
+1653: 	 * method so:
+1654: 	 * 1. Driver did not assigned the returned struct power_supply,
+1655: 	 * 2. Driver could not finish initialization (anything in its probe
+1656: 	 *    after calling power_supply_register()).
+1657: 	 */
+1658: 	atomic_inc(&psy->use_cnt);
+1659: 	psy->initialized = true;
+1660: 
+
+FILE drivers/power/supply/power_supply_sysfs.c
+413: }
+414: 
+415: static ssize_t power_supply_show_property(struct device *dev,
+416: 					  struct device_attribute *attr,
+417: 					  char *buf)
+418: {
+419: 	return power_supply_format_property(dev, false, attr, buf);
+420: }
+421: 
+422: static ssize_t power_supply_store_property(struct device *dev,
+423: 					   struct device_attribute *attr,
+559: }
+560: 
+561: int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
+562: {
+563: 	const struct power_supply *psy = dev_to_psy(dev);
+564: 	int ret = 0, j;
+565: 	char *prop_buf;
+566: 
+567: 	if (!psy || !psy->desc) {
+568: 		dev_dbg(dev, "No power supply yet\n");
+569: 		return ret;

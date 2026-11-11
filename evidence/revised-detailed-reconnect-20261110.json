@@ -1,0 +1,140 @@
+{
+  "date": "2026-11-10",
+  "ram_image_sha256": "8ee128fd5f4cb56868ad37357d8fa5c8c9ee5b0ee4d1ba5422294417471850a9",
+  "samples": 243,
+  "duration_seconds": 124.564,
+  "health": [
+    "Good"
+  ],
+  "voltage_max_uV": [
+    4380000
+  ],
+  "oem_set_requests": [
+    {
+      "boot_seconds": 112.905025,
+      "value": 1
+    },
+    {
+      "boot_seconds": 118.86992,
+      "value": 0
+    },
+    {
+      "boot_seconds": 161.327898,
+      "value": 1
+    },
+    {
+      "boot_seconds": 189.79517,
+      "value": 0
+    }
+  ],
+  "register_transitions": [
+    {
+      "utc": "2026-11-10T18:47:33.706958+00:00",
+      "elapsed": 0.302,
+      "usb_online": "1",
+      "charger_enable": 0,
+      "fast_current_code": 0,
+      "status_code": 135,
+      "reported_current_uA": -6714
+    },
+    {
+      "utc": "2026-11-10T18:47:45.059638+00:00",
+      "elapsed": 11.655,
+      "usb_online": "0",
+      "charger_enable": 1,
+      "fast_current_code": 20,
+      "status_code": 7,
+      "reported_current_uA": -8545
+    },
+    {
+      "utc": "2026-11-10T18:47:50.652510+00:00",
+      "elapsed": 17.248,
+      "usb_online": "0",
+      "charger_enable": 1,
+      "fast_current_code": 20,
+      "status_code": 135,
+      "reported_current_uA": -844752
+    },
+    {
+      "utc": "2026-11-10T18:47:51.155463+00:00",
+      "elapsed": 17.751,
+      "usb_online": "1",
+      "charger_enable": 1,
+      "fast_current_code": 0,
+      "status_code": 131,
+      "reported_current_uA": -6714
+    },
+    {
+      "utc": "2026-11-10T18:47:51.659475+00:00",
+      "elapsed": 18.255,
+      "usb_online": "1",
+      "charger_enable": 1,
+      "fast_current_code": 0,
+      "status_code": 132,
+      "reported_current_uA": 120242
+    },
+    {
+      "utc": "2026-11-10T18:47:56.203290+00:00",
+      "elapsed": 22.799,
+      "usb_online": "1",
+      "charger_enable": 0,
+      "fast_current_code": 0,
+      "status_code": 135,
+      "reported_current_uA": -549943
+    },
+    {
+      "utc": "2026-11-10T18:48:33.592852+00:00",
+      "elapsed": 60.188,
+      "usb_online": "0",
+      "charger_enable": 1,
+      "fast_current_code": 20,
+      "status_code": 7,
+      "reported_current_uA": -139774
+    },
+    {
+      "utc": "2026-11-10T18:49:01.407089+00:00",
+      "elapsed": 88.002,
+      "usb_online": "0",
+      "charger_enable": 1,
+      "fast_current_code": 20,
+      "status_code": 135,
+      "reported_current_uA": -521255
+    },
+    {
+      "utc": "2026-11-10T18:49:01.910643+00:00",
+      "elapsed": 88.506,
+      "usb_online": "1",
+      "charger_enable": 1,
+      "fast_current_code": 0,
+      "status_code": 135,
+      "reported_current_uA": -12207
+    },
+    {
+      "utc": "2026-11-10T18:49:02.414101+00:00",
+      "elapsed": 89.009,
+      "usb_online": "1",
+      "charger_enable": 1,
+      "fast_current_code": 0,
+      "status_code": 132,
+      "reported_current_uA": 266731
+    },
+    {
+      "utc": "2026-11-10T18:49:07.030640+00:00",
+      "elapsed": 93.626,
+      "usb_online": "1",
+      "charger_enable": 0,
+      "fast_current_code": 0,
+      "status_code": 135,
+      "reported_current_uA": -3662
+    }
+  ],
+  "recovery_branch_demonstrated": true,
+  "interpretation": "Compiler-clone GET return probes show the recovery helper executing and completing readback on both attached holds. SET operations are inlined in that helper and bypass the original request-wrapper probe. A further capture at pmic_glink_send is prepared to record transmitted SET values directly.",
+  "persistent_installation": false,
+  "recovery_helper_successful_readback_boot_seconds": [
+    124.17491,
+    124.175333,
+    195.092873,
+    195.093123
+  ]
+}

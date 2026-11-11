@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-10",
+  "scope": "Automatic KPFE policy in a temporary RAM boot, with awake threshold changes and one s2idle threshold crossing",
+  "source_sha256": "f40bcb900577fa8ab17dea38e580654bf79aae4ca9d0bd6dfb685164083fe643",
+  "awake": {
+    "initial_capacity_percent": 87,
+    "initial_end_threshold_percent": 85,
+    "initial_hold": { "charger_enable": 0, "current_uA": -5493, "status": "Full" },
+    "raised_end_threshold_percent": 88,
+    "resumed": { "charger_enable": 1, "current_uA": 3107393, "status": "Charging" },
+    "returned_end_threshold_percent": 85,
+    "stopped": { "charger_enable": 0, "current_uA": -4882, "status": "Full" }
+  },
+  "s2idle": {
+    "initial_capacity_percent": 87,
+    "end_threshold_percent": 88,
+    "machine_suspend_begin_boot_seconds": 182.087613,
+    "rate_zero_request_boot_seconds": 212.560903,
+    "machine_suspend_end_boot_seconds": 408.341250,
+    "stop_request_before_machine_suspend_end_seconds": 195.780347,
+    "firmware_logged_disable": true,
+    "firmware_disable_log_delivery_boot_seconds": 410.517927,
+    "power_button_irq_delta": 1,
+    "rtc_alarm_irq_delta": 0,
+    "trace_overruns": 0,
+    "trace_dropped_events": 0,
+    "post_resume_first_sample_boot_seconds": 410.07,
+    "post_resume_samples": 67,
+    "post_resume_capacity_percent": 88,
+    "post_resume_charger_enable_values": [0],
+    "post_resume_current_range_uA": [-7934, -610],
+    "post_resume_health": "Good",
+    "post_resume_status": "Full",
+    "post_resume_voltage_ceiling_uV": 4380000
+  },
+  "stock_restored": true,
+  "original_boot_and_module_hashes_match": true,
+  "restored_end_threshold": 85,
+  "restored_start_threshold": 70,
+  "limitations": [
+    "Physical register sampling paused during suspend. The trace timestamps the outbound stop request, not the hardware register change.",
+    "The awake resume used a raised upper threshold. Discharge through the lower threshold remains untested.",
+    "Long hold, charger attachment and firmware restart remain to be tested with the automatic driver. The status test read the Linux battery property, not the Steam icon."
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "test": "background_s2idle_and_limit_status",
+  "completed": true,
+  "start_capacity": "94",
+  "end_capacity": "95",
+  "health": [
+    "Good"
+  ],
+  "voltage_max": [
+    "4380000"
+  ],
+  "hold_status": [
+    "Full"
+  ],
+  "hold_current_min_uA": -9155.0,
+  "hold_current_max_uA": 1831.0,
+  "resumes": [
+    {
+      "time": "2026-11-10T11:19:58.76591-05:00",
+      "elapsed": 393.187,
+      "phase": "suspend_crossing",
+      "event": "resumed",
+      "suspended_seconds": 378.19873063400007,
+      "irqs": {
+        "22": {
+          "name": "pmic_pwrkey",
+          "count": 1
+        },
+        "220": {
+          "name": "pm8xxx_rtc_alarm",
+          "count": 0
+        },
+        "242": {
+          "name": "glink-smem",
+          "count": 43
+        },
+        "259": {
+          "name": "glink-smem",
+          "count": 12067
+        }
+      }
+    }
+  ],
+  "milestones": [
+    {
+      "time": "2026-11-10T11:13:28.375194-05:00",
+      "elapsed": 2.797,
+      "event": "charging_verified"
+    },
+    {
+      "time": "2026-11-10T11:20:04.859328-05:00",
+      "elapsed": 399.281,
+      "event": "background_test_observed"
+    },
+    {
+      "time": "2026-11-10T11:20:04.877958-05:00",
+      "elapsed": 399.3,
+      "event": "upower_fully_charged_verified"
+    },
+    {
+      "time": "2026-11-10T11:30:05.694601-05:00",
+      "elapsed": 1000.116,
+      "event": "test_completed"
+    }
+  ],
+  "trace_proof": {
+    "machine_suspend_begin": 138.119848,
+    "inhibit_request": 423.273194,
+    "inhibit_success_return_zero": 423.273525,
+    "machine_suspend_end": 516.356014,
+    "successful_inhibit_seconds_before_resume": 93.082489
+  },
+  "user_confirmed_stayed_asleep_until_late_manual_wake": true,
+  "user_confirmed_steam_full_checkmark": true,
+  "rtc_alarm_used": false
+}

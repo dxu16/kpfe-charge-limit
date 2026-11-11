@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-10",
+  "scope": "Attended RAM-only manual stop/resume and one short awake reconnect; no automatic percentage policy",
+  "source_sha256": "6a9022aeadffc656b01035330f5fb6cf18507be38cff0f8c8bf979f72be83e75",
+  "stop_resume_stop_passed": true,
+  "reconnect": {
+    "stable_start_boot_seconds": 212.48,
+    "stable_end_boot_seconds": 222.67,
+    "samples": 40,
+    "physical_charger_enable_values": [
+      0
+    ],
+    "battery_current_range_uA": [
+      -615252,
+      -4882
+    ],
+    "health": [
+      "Good"
+    ],
+    "voltage_ceiling_uV": [
+      4380000
+    ],
+    "additional_stop_or_recovery_requests": false,
+    "attachment_detection_bounce": "one online sample at 211.98, offline at 212.23, then stable online"
+  },
+  "native_limit_disabled_during_test": true,
+  "constant_charge_current_setting_uA": 8400000,
+  "normal_charge_windows_seconds": [
+    5.084,
+    5.251
+  ],
+  "trace_cpu_overruns": 0,
+  "trace_cpu_dropped_events": 0,
+  "stock_restored": true,
+  "original_boot_and_module_hashes_match": true,
+  "restored_end_threshold": 85,
+  "restored_start_threshold": 70,
+  "logger_and_probes_removed": true,
+  "limitations": [
+    "Short awake reconnect only; no ten-minute hold",
+    "No sleep or automatic threshold policy tested",
+    "Battery near-zero current with USB online supports external system power; input power was not independently measured",
+    "Firmware restart handling and status presentation remain to be designed"
+  ]
+}
