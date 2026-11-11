@@ -1,6 +1,6 @@
 # Reconnection follow-up, 2026-11-10
 
-Result: **default installation deferred; reconnection validation failed.** The unchanged tested candidate was booted into RAM. No persistent deployment or boot image replacement was performed.
+This is the original reconnection failure with the OEM bypass driver, tested in RAM. The failure deferred installation of that version. The final driver uses firmware command `0x06`. [Current validation](../docs/VALIDATION.md)
 
 - Stock starting state: 94%, Good, 85% end / 70% start, Linux 7.2.6.
 - First PC-to-charger handoff reading: Full, Good, -11597 uA, ceiling 4380000 uV.
@@ -13,6 +13,6 @@ The new read-only observer had two setup errors: it initially lowercased values,
 
 The charger was unplugged after capture. A normal reboot restored the original installed driver and removed the firmware logger. Original image/module hashes were verified; native 85/70 and 8400000 uA were reapplied while offline, with Good health. No full hysteresis cycle or persistent-image build/deployment was attempted after the anomaly.
 
-Next investigation: establish how attachment/charger initialization interacts with the OEM bypass path and why an active zero-current override can coexist with these readings. The capture does not establish that toggling/reasserting the property is a correct fix. Avoid a speculative retry loop or masking Charging as Full.
+Later firmware tracing captured an ordinary enable decision while the OEM zero-current override was still active. RFC3’s bypass recovery failed on suspended attachment. Those findings led to the charge-rate approach, which uses a stop condition in the firmware state machine. [Firmware findings](../docs/FIRMWARE_RECONNECTION_ROOT_CAUSE.md) · [Charge-rate audit](../docs/CHARGE_RATE_INTERFACE_AUDIT.md)
 
-Raw captures remain in the private local archive `charge-investigation/transition-validation-20261110/`. The local image context is preparation only. See [installation instructions](../docs/LOCAL_INSTALLATION.md).
+Raw captures remain in the private local archive `charge-investigation/transition-validation-20261110/`. For the final charge-rate driver, see the [local installation guide](../docs/LOCAL_INSTALLATION.md).

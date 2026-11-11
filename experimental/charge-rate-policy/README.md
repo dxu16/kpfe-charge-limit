@@ -1,8 +1,8 @@
-# KPFE automatic charge-rate candidate
+# KPFE automatic charge-rate fix
 
-The candidate passed its first awake and s2idle threshold tests in a temporary boot. Stock was restored. Apply `charge-rate-policy.patch` to `src/base` to reconstruct the candidate source. The patch replaces the older RFC for this experiment.
+This is the driver used in the final Armada submission and the tested local installation. It uses firmware command `0x06` after OEM bypass proved unreliable on charger attachment. The zero-rate stop condition is handled by the firmware state machine. Apply `charge-rate-policy.patch` to `src/base` to reconstruct the tested source. [OEM bypass failure](../../docs/RECONNECTION_INVESTIGATION.md) · [Installed validation](../../docs/VALIDATION.md)
 
-The driver matches the KPFE device-tree compatible and keeps the existing start and end threshold controls. It disables native percentage enforcement while retaining the threshold values in firmware. Battery and USB notifications trigger a fresh policy decision. At the upper threshold it sends rate 0, and at or below the lower threshold it sends rate 100. It retains the decision between thresholds, including across cable removal. After a battery service restart it reads the thresholds and sends the current policy again. A 100% end threshold allows normal charging.
+The driver matches the KPFE device-tree compatible and keeps the existing start and end threshold controls. It disables native percentage enforcement while retaining the threshold values in firmware. Battery and USB notifications trigger a fresh policy decision. At or above the upper threshold it selects rate 0 to stop charging. At or below the lower threshold it selects rate 100 to allow charging. Between thresholds it retains the previous decision, including across cable removal. A 100% end threshold allows normal charging. The driver is designed to read the thresholds and reapply the decision after a battery-service restart. That recovery path remains unverified on hardware.
 
 The driver reports a hold only when the current service acknowledged the stop, USB is online, health is Good, and live current is close to zero. A successful acknowledgement alone does not establish physical charger state.
 

@@ -1,6 +1,6 @@
 # First hardware test
 
-Executed once on 2026-11-10 under explicit approval; stock restored. See the [result](../../evidence/charge-rate-first-test-20261110.json). Obtain approval before any further RAM boot or module loading.
+This plan records the first manual `0x06` test on 2026-11-10. Stock was restored afterward. See the [manual result](../../evidence/charge-rate-first-test-20261110.json) and [later automatic driver validation](../../docs/VALIDATION.md).
 
 1. Verify image hash against `build-evidence.json`. RAM-boot it with the unchanged stock deployment and boot command line. Verify the loaded module note using `run_diagnostic.py`; the installed module remains stock.
 2. After switching to the usual charger, load the existing read-only firmware log reader and start `tools/capture-firmware-cause.py`. Do not change firmware logging categories or write registers.

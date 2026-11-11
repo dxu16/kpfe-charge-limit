@@ -1,8 +1,8 @@
 # Historical OEM bypass design
 
-This document describes the RFC2 and RFC3 approach. See the [automatic charge-rate candidate](../experimental/charge-rate-policy/README.md) for the current patch.
+RFC2 and RFC3 used OEM bypass (property `0x1d`). The firmware could re-enable charging after attachment while bypass was still active. The recovery sequence passed awake tests but failed during `s2idle` attachment. The final driver uses the firmware charge-rate command (`0x06`). [Current design](../experimental/charge-rate-policy/README.md) · [Why bypass failed](RECONNECTION_INVESTIGATION.md)
 
-One `drivers/power/supply/qcom_battmgr.c` change, 409 additions and one deletion. This includes the bounded reconnection correction verified on the same handheld. No daemon, new sysfs ABI, device-tree edit or shared processor configuration change is required.
+The RFC2 patch changed one file, `drivers/power/supply/qcom_battmgr.c`, with 409 additions and one deletion. It included the bounded reconnection recovery tested on one KPFE. RFC3 increased the frequency of hold checks.
 
 Activation requires both the SM8550-class protocol variant and exact root compatible `konkr,pocket-fit-elite`. SM8750 uses that protocol fallback; matching the processor alone is insufficient. Odin 3 and other models retain the existing backend/status path in the same compiled kernel. Cross-model runtime testing remains desirable.
 
@@ -21,10 +21,6 @@ Use `system_wq` with a soft wake hold rather than a freezable worker requiring a
 Fresh reads of raw status, health, native enable, OEM online, SOC, current and USB online prevent the stale native-enable cache seen in an earlier iteration. Only a confirmed, healthy, native-disabled, near-zero-current (+/-50 mA) hold may become Full at/above target, or Not charging in the hysteresis band. Unknown status, real charging/drain, faults and errors remain visible. This threshold is a tested heuristic, not an analog proof of zero battery current.
 
 GLINK restart clears readiness and schedules reinitialization. Removal/shutdown synchronously disables policy/enable work, preventing late requeues. Healthy bypass is released on shutdown; native percentage limiting stays disabled. Consequently **there is no powered-off percentage limit**. Returning to the stock driver requires reapplying a native threshold to re-enable its persisted control; the test restoration did that while unplugged.
-
-## Why retain these lines
-
-The policy helper alone would omit live readback, hysteresis, fault handling, s2idle notification processing, truthful status and teardown. Those parts were kept to address observed failures and lifecycle needs. Removing them solely to shorten the patch would discard tested behavior. Integration in Armada adds only the patch, its series entry and provenance. Further source changes should receive focused review and renewed tests.
 
 ## Reconnection verification
 

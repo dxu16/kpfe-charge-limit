@@ -1,12 +1,10 @@
 # Charge-rate command audit
 
-Status: promising firmware-managed stop path; compiled diagnostic only. No device command was sent, and no new module or image was loaded in this investigation. The current stock driver and native 85%/70% controls remain in use. The canonical RFC is still blocked.
+The final KPFE driver uses `BattMngrSetChargeRate` (`0x06`). This audit explains the firmware behavior that led us to switch from OEM bypass. The manual tests below preceded the automatic driver and its installed-image validation. [Current design](../experimental/charge-rate-policy/README.md) · [Hardware validation](VALIDATION.md)
 
 ## Result
 
 The KPFE firmware implements owner 0x800a/opcode 0x06, `BattMngrSetChargeRate`. Rate zero is treated as a stop condition in the state machine before normal charging-state selection. This differs from OEM property 29, whose zero-current vote was overridden by an attachment enable decision in the captured failure.
-
-This is a candidate for a clean Armada integration using an existing firmware command. Its hardware behavior is not yet validated. In particular, it must stop battery charging while keeping the system supplied externally, survive attachment and sleep transitions, resume correctly, and hold Good health without the delayed voltage-ceiling reduction.
 
 ## Code chain in this exact firmware
 
@@ -21,7 +19,7 @@ ADSP SHA256: `03db3d3f68258b23c8026b02c2a77590cb29f4a0152abd95a8f454e3dd0aad3a`.
 | Stop decision | `0x60051f14..0x60051f80`: rate zero sets next state to 7 if current state is 0 or 7, otherwise 0, and sets bit 0 of the stop-condition flags |
 | Priority | `0x60052024` stores the flags at context offset 0x548; caller `0x60050c00..0x60050cd0` skips ordinary charging-state selection while flags are nonzero |
 | Enable consequence | Decoded `en_charger` starts desired enable at zero; states 0 and 7 do not take an enabling case. They leave input suspend unset in this function |
-| Resume | Rate 100 removes this particular stop condition on the next successful check; ordinary state selection can resume. Manual resume and stop passed the first short hardware test; broader behavior remains unvalidated |
+| Resume | Rate 100 removes this particular stop condition on the next successful check; ordinary state selection can resume. Manual stop and resume passed, followed by automatic threshold tests |
 | Response | Firmware sends a 16-byte response: 12-byte header plus status at offset 0x0c |
 
 Simplified ordering, preserving the distinction from a direct register write:
@@ -34,11 +32,11 @@ non-charging state -> desired charger-enable false
 
 The relevant normal charging/BHM state-change routine is bypassed while the stop-condition flag is set. With native percentage limiting disabled separately, this offers a route that does not request the native partial-limit/BHM stop. The sender does not alter float-voltage or protection settings, and the decoded setter has no direct nonvolatile-storage write.
 
-No attachment reset of the primary rate field was found in the decoded path. This is static evidence, not a runtime persistence test. A firmware restart initializes it again, so a production Linux implementation would need service-restart handling. It would also need existing host percentage policy and sleep/notification handling; the diagnostic does not implement those.
+The decoded path showed no attachment reset of the primary rate field. The reconnect tests below exercised that behavior on hardware. Firmware initialization sets the rate back to 100. The final Linux driver invalidates cached state on service loss and is designed to reapply the policy when the service comes back. Hardware restart recovery remains unverified.
 
 ## Packet and independent upstream reference
 
-The proposed request is 24 bytes, little endian:
+The driver sends a 24-byte little-endian request:
 
 | Offset | Value |
 | --- | --- |
@@ -60,9 +58,9 @@ The KPFE decoder uses the rate at 0x10; the reviewed branch does not consume the
 - Operational-mode 0x03: selects factory/normal mode; not an appropriate replacement for ordinary charge control.
 - Firmware logging SET 0x19: writes logging parameters to SDAM; excluded, as previously documented.
 
-The extracted Android module exposes the known battery property setter and `charge_control_en` switch. The inspected OEM app uses property 29. Neither observation establishes Android use of opcode 0x06; this candidate is a different existing firmware interface.
+The extracted Android module exposes the known battery property setter and `charge_control_en` switch. The inspected OEM app uses property 29. The app and module inspection did not establish whether Android also uses opcode `0x06`.
 
-## Prepared diagnostic
+## Manual diagnostic and hardware results
 
 [Experimental source and patch](../experimental/charge-rate-stop/README.md) expose only manual stop/resume on exact `konkr,pocket-fit-elite`, with native percentage limiting required to be disabled before stop. There is no automatic percentage worker, OEM property-29 command, release/re-enter repair or recovery timer. Sysfs readback is explicitly the last acknowledged request, not proof that hardware stopped.
 

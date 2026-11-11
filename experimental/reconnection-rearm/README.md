@@ -1,6 +1,6 @@
 # Experimental reconnection correction
 
-This revision implements the repair sequence demonstrated by the isolated manual-bypass test. It is now included in the canonical patch under `patches/`; the superseded candidate is archived under `history/`. It has compiled and passed focused tests and the module ABI audit; the RAM-only reconnection/hold run passed, and expanded tracing shows the recovery helper executing on both attached holds. A later persistent trial failed its hold and was rolled back; see the main validation record.
+This is the historical RFC2 recovery for OEM bypass. The RAM-only reconnect and hold passed, but the installed hold failed and was rolled back. RFC3 checked more often and still failed attachment during `s2idle`. The final driver uses firmware command `0x06`. [Final design](../charge-rate-policy/README.md) · [Validation](../../docs/VALIDATION.md)
 
 The candidate allows five seconds for gauge readings to settle after inhibition. If positive current above 50 mA persists, it allows one recovery attempt during that hold: release OEM bypass, wait for firmware's normal-current setting acknowledgement, then re-enter bypass and verify again. The acknowledgement loop has a two-second software deadline, in addition to firmware request timeouts. Read failures after a confirmed release do not skip the stop attempt.
 

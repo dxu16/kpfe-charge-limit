@@ -1,3 +1,3 @@
 # Superseded RFC2
 
-The recovery sequence passed RAM tests, but the first installed hold failed after a near-zero sample became positive. RFC3 adds one line to keep verifying held current about every five seconds. This archive preserves the exact earlier candidate for reproduction; do not install it.
+RFC2’s OEM bypass recovery passed RAM tests, but the first installed hold failed when a near-zero current reading became positive. RFC3 checked about every five seconds and later failed charger attachment during `s2idle`. This archive preserves RFC2. The final driver uses firmware command `0x06`. [Final patch and design](../../experimental/charge-rate-policy/README.md)

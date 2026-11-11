@@ -21,4 +21,4 @@ just package kernel
 
 Check for base/series changes before applying to a newer revision. See the [contribution review](../docs/CONTRIBUTING_REVIEW.md), [draft PR description](PR_DESCRIPTION.md), and [validation status](../docs/VALIDATION.md).
 
-This is the local bundle for a normal GitHub PR. The patched driver passed hardware tests on one KPFE, including the installed hold. Battery-service restart recovery and the full Armada source build remain unverified. The separate local updater change is outside this PR.
+This bundle contains the charge-rate patch submitted in [Armada PR #881](https://github.com/armada-os/armada/pull/881). The patched driver passed hardware tests on one KPFE, including the installed hold. Battery-service restart recovery and the full Armada source build remain unverified. The separate local updater change is outside this PR.

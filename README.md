@@ -2,13 +2,13 @@
 
 This repository investigates the KONKR Pocket FIT Elite (KPFE) charge-limit fault. The current candidate is a KPFE-only Armada driver patch that uses the existing firmware charge-rate command (`0x06`) for stop and resume. It keeps Steam's existing threshold interface and uses battery and USB notifications to apply the policy. [Current patch and design](experimental/charge-rate-policy/README.md)
 
-The candidate passed an awake reconnect above the limit, a ten-minute hold, a fixed 86%/87% discharge and recharge cycle, and threshold crossing during `s2idle`. After attachment during `s2idle`, the charger was disabled at the first post-wake sample and through all 56 samples. The host sent no new stop request. Register sampling paused during sleep. [Validation and evidence](docs/VALIDATION.md)
+The original `Over voltage` fault followed a delayed drop in the firmware’s float-voltage target after reaching a partial charge limit. An earlier fix used OEM bypass (property `0x1d`), but the firmware could re-enable charging on attachment even with bypass selected. The final patch uses the charge-rate command’s separate firmware stop condition. [Original fault](docs/INVESTIGATION.md) · [Why OEM bypass failed](docs/RECONNECTION_INVESTIGATION.md)
 
-The candidate is packaged locally for Armada review. Battery-service restart recovery remains unverified. Firmware rejected a charger-only restart, and one approved full ADSP stop/start left the device unresponsive. A power cycle restored stock Armada at 85%/70%, with Good health and matching original boot and driver hashes. [Final hardware checks](evidence/charge-rate-policy-final-tests-20261110.json)
+On one KPFE, the patch passed awake reconnect, a ten-minute hold, recharge between fixed thresholds, and reaching the limit during `s2idle`. With the charger attached during `s2idle`, it was disabled on the first reading after wake. Register sampling paused during sleep. Battery-service restart recovery remains unverified. [Validation and evidence](docs/VALIDATION.md)
 
 The exact tested driver was subsequently installed in a local image derived from stock. It passed a normal reboot and ten-minute hold at 85%/70%. The standard local build includes an updater check that hides offers for the exact official base already installed. The battery-only image is the immediate rollback target on the test handheld, and stock remains pinned. [Installed battery validation](evidence/charge-rate-local-image-20261110.json) · [Updater verification](evidence/charge-rate-updater-install-20261110.json)
 
-The original fault followed a delayed float-voltage reduction after the native limiter reached a partial target. The reported health changed to `Over voltage`. Physical overcharging remains unconfirmed. The candidate disables native percentage enforcement and uses the firmware's separate stop condition. RFC3 used OEM bypass, which left the charger-enable path free to turn charging back on after attachment. [Firmware investigation](docs/FIRMWARE_RECONNECTION_ROOT_CAUSE.md) · [Charge-rate audit](docs/CHARGE_RATE_INTERFACE_AUDIT.md)
+The Armada submission is [PR #881](https://github.com/armada-os/armada/pull/881).
 
 ## Start here
 

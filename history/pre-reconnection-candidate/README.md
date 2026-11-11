@@ -1,3 +1,3 @@
 # Superseded candidate
 
-This original 321-addition candidate passed awake/sleep limit holds but failed reconnection validation. It is retained only to reproduce the incremental recovery revision. Use the current patch under `patches/` for review.
+This first OEM bypass patch passed awake and sleep limit holds but failed reconnection. It is preserved as the base for the historical RFC2 recovery patch. The final driver uses firmware command `0x06`. [Final patch and design](../../experimental/charge-rate-policy/README.md)

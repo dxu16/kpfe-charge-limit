@@ -1,6 +1,6 @@
 # Firmware handling of unwanted charging after attachment
 
-This report covers the firmware investigation that followed the RFC3 charger-attachment failure during `s2idle`. Its findings led to the current charge-rate candidate. [Current validation](VALIDATION.md)
+RFC3 failed when the charger was attached during `s2idle`. The firmware could enable charging even with OEM bypass active. The final KPFE driver uses firmware command `0x06`, which makes zero rate a stop condition before the ordinary charging-state decision. [Charge-rate interface](CHARGE_RATE_INTERFACE_AUDIT.md) · [Final patch validation](VALIDATION.md)
 
 ## Findings
 
@@ -40,19 +40,13 @@ Near-zero current immediately after attachment does not prove the charger stayed
 
 FCC=0 also does not establish electrical zero current while enable remains set. The firmware contains several PMIC conversion tables, precharge settings and state machines. The captured approximately 0.29 A has not been tied to a verified PMIH0108 minimum-current or precharge rule. In particular, register 0x2650 is a precharge setting, not FCC; its numerical resemblance to the measured current is insufficient proof. No new physical-overcharge claim follows from this analysis.
 
-## Fundamental correction
+## Firmware implications
 
 The firmware should preserve one invariant across initialization, cable changes and charger-state changes: an active charge-stop request must prevent every ordinary path from enabling charging. A coherent enable decision should combine the existing safety/state conditions with the persistent stop request (or effective zero-current result), and all writers should share or invalidate the same enable state. Re-applying an already active stop request should be able to reconcile hardware state without temporarily releasing the stop.
 
 This describes the required behavior, not a ready firmware patch: vendor source and a runtime trace identifying the responsible writer are still missing. The correction must preserve thermal/protection decisions and legitimate recharge behavior.
 
-For an Armada-only correction, first establish a supported firmware command that provides this persistent inhibit behavior. The reviewed OEM property handler supports FCC control, native percentage control and OEM bypass; it has not revealed an independent persistent inhibit that is proven to dominate the ordinary enable policy. A raw register clear would compete with that policy and is not a substitute for this investigation. Increasing polling or adding more release/re-enter cycles treats the consequence and remains incomplete during suspend.
-
-## Decisive remaining evidence
-
-Capture the existing firmware log messages for charging-state initialization, the enable decision (`ChargerState`/`SetChargerState`), current-aggregator result and OEM SET requests during one bounded attachment. Correlate the first contradictory hardware enable state with those messages. That distinguishes ordinary initialization from another firmware enable writer and distinguishes a delayed gauge reading from a delayed enable write. If existing log coverage cannot identify the writer, instruction-level firmware tracing or vendor instrumentation is needed; Linux request tracing alone cannot prove which internal branch ran.
-
-No new driver was loaded, charging control changed or register written for this static investigation. The existing RFC remains blocked. See [suspended-attachment failure](../evidence/rfc3-suspended-attachment-20261110.json).
+The Armada fix uses the separate charge-rate interface. It leaves the OEM bypass implementation in firmware as it was. Polling or repeating the bypass sequence could recover some awake attachments, but RFC3 showed the limits of that approach during suspend. [Charge-rate interface audit](CHARGE_RATE_INTERFACE_AUDIT.md)
 
 ## Follow-up static findings
 
@@ -64,13 +58,13 @@ The independent `icm_pre_chg_init` path can also enable charging, but its firmwa
 
 The stock Linux logger polls firmware opcode 0x18 for up to 8192 bytes once per response plus one second. It neither configures verbosity nor changes charging. Firmware timestamps are preserved as raw values; their conversion to Linux boot time has not been established. Linux trace delivery time may lag the original firmware event. Absence of a log message or zero Linux trace overruns does not prove the firmware log was complete.
 
-The separate logging setter, owner 0x800a/opcode 0x19 at `0x600a8894`, accepts a category mask at offset 0x10 and verbosity at 0x18. It calls `battmngr_platform_set_logging_level_to_sdam` (`0x60041a70`) and `battmngr_platform_set_logging_categories_to_sdam` (`0x60041b60`). It is therefore excluded from the proposed passive capture: reboot alone cannot be assumed to restore persistent logging settings. No such command has been sent.
+The separate logging setter, owner 0x800a/opcode 0x19 at `0x600a8894`, accepts a category mask at offset 0x10 and verbosity at 0x18. It calls `battmngr_platform_set_logging_level_to_sdam` (`0x60041a70`) and `battmngr_platform_set_logging_categories_to_sdam` (`0x60041b60`). The passive capture left it untouched because reboot alone may not restore persistent logging settings.
 
-### Prepared bounded diagnostic
+### Bounded attachment capture
 
 The existing manual-bypass RAM image is unchanged, SHA256 `abd8cba40045a6a65a4adddbfce82937465b1372939a8da1b09713f19a7a6516`. The new [passive collector](../tools/capture-firmware-cause.py) starts before attachment and records transmitted property/threshold requests, existing firmware logs, and five already audited charger status/configuration registers. It streams trace output to prevent the earlier late snapshot from losing the transition, and saves per-CPU trace statistics. Plan mode and syntax were checked locally; the authorized run is recorded below.
 
-If approved, temporarily boot that image, load the existing firmware log reader, establish manual bypass with native limiting disabled at 100% (initial normal charging bounded to 15 seconds), and capture one unplug/reconnect. Stop the abnormal-state observation within 20 seconds and unplug; do not run a release/re-enter recovery experiment in this capture. Return to stock and native 85%/70% unplugged. No installed-image, raw-register, voltage/protection or persistent logging changes are included. This is an awake attachment diagnostic, not another suspend or ten-minute hold test. The user must approve loading system components before execution.
+The diagnostic used manual bypass with the native limit disabled. It captured one awake reconnection without sending a recovery command. The operator unplugged afterward, and the device was returned to stock at 85%/70%.
 
 ## Completed diagnostic: attachment enable decision captured
 

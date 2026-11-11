@@ -1,6 +1,6 @@
 # Charge-rate stop diagnostic
 
-**Compiled, audited and tested in RAM for manual stop/resume and one short awake reconnect; stock restored.** This is separate from the canonical RFC and has no automatic percentage policy.
+This manual diagnostic tested the firmware command that replaced OEM bypass. The [final automatic driver](../charge-rate-policy/README.md) adds percentage thresholds and uses battery and USB notifications. The diagnostic was run in RAM, and stock was restored afterward.
 
 Uses the firmware's existing opcode 0x06: rate 0 requests stop, rate 100 requests normal charging. The decoded zero-rate path changes firmware charging state rather than merely voting current to zero. See the [interface audit](../../docs/CHARGE_RATE_INTERFACE_AUDIT.md) for code addresses, packet layout, upstream citation and unresolved behavior.
 
@@ -13,6 +13,6 @@ Uses the firmware's existing opcode 0x06: rate 0 requests stop, rate 100 request
 
 `charge_behaviour` readback records the last acknowledged request only. Validate physical enable/current and firmware logs; do not infer success from that attribute. The diagnostic rejects stop while native percentage limiting is enabled. Other models retain their original descriptors and behavior.
 
-No protection, voltage, raw-register or installed-image changes are included. Testing this new image requires approval. Do not treat the prepared image as ready for default installation.
+No protection, voltage, raw-register or installed-image changes are included. For an installable build of the automatic driver, follow the [local installation guide](../../docs/LOCAL_INSTALLATION.md).
 
-The [first hardware result](../../evidence/charge-rate-first-test-20261110.json) kept physical charger-enable clear throughout the ten-second reconnect without another stop command. This does not validate long holds, sleep or an automatic percentage policy. The firmware reports Discharging during this stop; status presentation remains unresolved.
+The [first hardware result](../../evidence/charge-rate-first-test-20261110.json) kept physical charger-enable clear throughout the ten-second reconnect without another stop command. This does not validate long holds, sleep or an automatic percentage policy. The diagnostic exposed the raw firmware `Discharging` status during the hold. The automatic driver later added telemetry checks for reporting `Full`. [Automatic driver status behavior](../charge-rate-policy/README.md)

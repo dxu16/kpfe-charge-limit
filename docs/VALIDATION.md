@@ -13,11 +13,11 @@ The current charge-rate candidate was tested on one KPFE using temporary boots. 
 
 After the temporary boots, stock Armada booted with matching original hashes, Good health, and native 85%/70% settings. The same tested module and initramfs were then installed in a local image derived from the exact stock release. A normal reboot loaded the expected driver. With the usual charger attached, all 121 samples over ten minutes showed charger-enable clear, Good health and the unchanged 4.38 V ceiling. The local image was kept as default with stock pinned for rollback. [Installed build and hold](../evidence/charge-rate-local-image-20261110.json)
 
-The current patch is ready for RFC review. Remaining release checks include service recovery, reaching the lower threshold while continuously plugged in, and the full Armada source build.
+The charge-rate patch was submitted for review in [Armada PR #881](https://github.com/armada-os/armada/pull/881). Remaining release checks include service recovery, reaching the lower threshold while continuously plugged in, and the full Armada source build.
 
 ## Historical OEM bypass tests
 
-RFC3 passed its installed awake hold and threshold crossing during `s2idle`. It failed charger attachment while already suspended and was rolled back. [RFC3 failure](../evidence/rfc3-suspended-attachment-20261110.json) · [Firmware analysis](FIRMWARE_RECONNECTION_ROOT_CAUSE.md)
+RFC3 passed its installed awake hold and threshold crossing during `s2idle`. It failed charger attachment while already suspended and was rolled back. This failure prompted the switch from OEM bypass to the charge-rate command. [RFC3 failure](../evidence/rfc3-suspended-attachment-20261110.json) · [Firmware analysis](FIRMWARE_RECONNECTION_ROOT_CAUSE.md)
 
 RFC3's installed awake hold had 121 healthy Full samples over ten minutes, current -8545..0 uA and an unchanged 4380000 uV ceiling. The sleep-crossing inhibit completed 321.431 seconds before full resume. In the suspended-attachment failure, the initial inhibit and early negative current replies were followed by a 320.598-second worker gap; first resume current was +291146 uA. Physical current was not sampled continuously in suspend. No Over voltage flag occurred in that case.
 
@@ -52,4 +52,4 @@ These are single-device results. They do not establish physical overcharging in 
 
 ### Firmware-cause capture after rollback
 
-An unchanged manual-bypass RAM image reproduced one awake reconnection with native limiting disabled. Firmware recorded an enable decision while effective current override remained zero. Hardware enable was already set at the first connected sample; positive current appeared 3.88 seconds later, peaking at +295419 uA. No host bypass-release command occurred. All 57 connected samples showed enable=1/FCC=0, health remained Good, and Linux trace loss counters were zero. Observation ended with unplug after 14.93 seconds of measured USB-online time; stock boot/module identities and native 85%/70% were restored. This diagnoses the firmware interaction and does not validate the candidate as fixed. See [evidence](../evidence/firmware-reconnect-cause-20261110.json).
+An unchanged manual-bypass RAM image reproduced one awake reconnection with native limiting disabled. Firmware recorded an enable decision while effective current override remained zero. Hardware enable was already set at the first connected sample; positive current appeared 3.88 seconds later, peaking at +295419 uA. No host bypass-release command occurred. All 57 connected samples showed enable=1/FCC=0, health remained Good, and Linux trace loss counters were zero. Observation ended with unplug after 14.93 seconds of measured USB-online time; stock boot/module identities and native 85%/70% were restored. This capture documents the OEM bypass failure. The charge-rate results are listed above. See [evidence](../evidence/firmware-reconnect-cause-20261110.json).

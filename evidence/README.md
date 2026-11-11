@@ -11,7 +11,9 @@ Selected from the original local `charge-investigation/` archive on 2026-11-10. 
 - Installed updater check, Steam refresh, and two-minute battery hold with the same driver. [Updater verification](charge-rate-updater-install-20261110.json)
 - Firmware interface and manual hardware checks that preceded the automatic patch. [Interface audit](../docs/CHARGE_RATE_INTERFACE_AUDIT.md)
 
-## Historical OEM bypass evidence
+## Original fault and historical OEM bypass evidence
+
+The OEM bypass captures document a failed approach. Firmware could re-enable the charger on attachment while bypass remained selected. The final driver and its `0x06` results are linked above.
 
 | File | Meaning |
 | --- | --- |
@@ -32,14 +34,12 @@ Selected from the original local `charge-investigation/` archive on 2026-11-10. 
 
 The text reports retain historical chronology and references to original archive paths. Those paths are provenance references, not missing runtime dependencies. Final docs distinguish current conclusions from earlier uncertainty. Complete raw captures remain in the original workspace archive and have not been uploaded.
 
-## Revised candidate, November 10
+## Historical RFC2 and RFC3 tests, November 10
 
 - [Automatic awake hold](revised-automatic-hold-20261110.json): 121 samples over ten minutes.
 - [Expanded reconnection trace](revised-detailed-reconnect-20261110.json): recovery-helper readbacks on both attachments.
 - [Transmitted recovery commands](revised-wire-recovery-20261110.json) and [selected trace](selected/revised-wire-recovery-excerpt.txt): compiler-inlined SET writes verified at `pmic_glink_send`; hardware enable clears.
 - [Sleep result](revised-sleep-20261110.json): 91% to 92%, manual wake, ten-minute hold; includes the final-trace overrun limitation.
-
-The earlier `final-hardware-results.txt` and packaging record describe the superseded 321-addition candidate; current source identities are in `upstream/BASELINE.json`.
 
 - [Real recharge](revised-real-recharge-20261110.json): actual discharge to the temporary start threshold, reconnection, recharge and stop; continuous-connected hysteresis remains untested.
 
@@ -50,4 +50,4 @@ The OEM bypass investigation concluded with the [RFC3 suspended attachment failu
 
 [Completed firmware-cause capture](firmware-reconnect-cause-20261110.json): ordinary firmware enable decision observed with zero OEM override; hardware enable precedes the delayed positive gauge report. Stock restored.
 
-[Charge-rate interface audit](charge-rate-interface-audit-20261110.json): opcode 0x06 stop-state path and a separately compiled, hardware-untested diagnostic.
+[Original charge-rate audit record](charge-rate-interface-audit-20261110.json) captures the static analysis and build before hardware testing. The [later hardware results](../docs/CHARGE_RATE_INTERFACE_AUDIT.md#manual-diagnostic-and-hardware-results) cover the manual diagnostic and link to automatic policy validation.
