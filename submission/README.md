@@ -1,16 +1,21 @@
 # Armada submission
 
-PR title **`fix(kernel): restore charge limiting on KONKR Pocket FIT Elite`**
+The `0905` kernel patch restores charge limiting on KPFE and allows USB-PD to renegotiate higher input voltage after an eligible awake reconnect. The overlay contains the combined driver patch, its series entry and its provenance.
 
-`armada-kpfe-charge-limit.patch` is a unified diff against Armada commit `066ecdc0d26edf7ba228cec26cbd2054810e92f8`. It contains exactly:
+## Update PR #881
 
-1. `packages/kernel/patches/0905-power-supply-qcom-battmgr-kpfe-charge-rate.patch`
-2. `packages/kernel/patches/series` adds 0905 immediately after 0904.
-3. `packages/kernel/PATCHES.md` records patch provenance.
+Use `armada-kpfe-usb-pd-follow-up.patch` on `dxu16/armada:fix/kpfe-charge-limit` at the original PR commit `83642b06f35c0c49578a0a20f42921e445bf45c7`. It updates `0905` in place and revises its provenance. [Armada PR #881](https://github.com/armada-os/armada/pull/881)
 
-The Linux patch changes one driver file, with 381 insertions and six deletions. It reconstructs the exact source tested on the handheld. `overlay/` contains the three resulting Armada files.
+```sh
+git apply --check /absolute/path/to/armada-kpfe-usb-pd-follow-up.patch
+git apply /absolute/path/to/armada-kpfe-usb-pd-follow-up.patch
+```
 
-In a clean full Armada checkout at the stated base:
+Suggested follow-up commit title **`fix(kernel): recover USB-PD voltage on KPFE charge-limit reconnect`**. The [updated PR description](PR_DESCRIPTION.md) covers both changes.
+
+## Apply the full submission to a fresh checkout
+
+`armada-kpfe-charge-limit.patch` applies the complete overlay to the pinned Armada snapshot at `066ecdc0d26edf7ba228cec26cbd2054810e92f8`. It also applies to the parent of the original PR commit, `b031deef99a095104ef234c5a0705850152dffe1`. Check for series changes on other revisions.
 
 ```sh
 git apply --check /absolute/path/to/armada-kpfe-charge-limit.patch
@@ -19,6 +24,4 @@ just check
 just package kernel
 ```
 
-Check for base/series changes before applying to a newer revision. See the [contribution review](../docs/CONTRIBUTING_REVIEW.md), [draft PR description](PR_DESCRIPTION.md), and [validation status](../docs/VALIDATION.md).
-
-This bundle contains the base charge-limit patch originally submitted in [Armada PR #881](https://github.com/armada-os/armada/pull/881). The patched driver passed hardware tests on one KPFE, including the installed hold. Battery-service restart recovery and the full Armada source build remain unverified. The [USB-PD reconnect trial](../experimental/usb-pd-reconnect/README.md) and [same-base updater check](../experimental/local-image-update/README.md) are available separately from this bundle.
+The combined `0905` reconstructs the exact driver used in the [installed trial](../experimental/usb-pd-reconnect/README.md#validation) on one KPFE. The 5 V-only USB-PD timeout was tested in simulation. Battery-service restart recovery and a full Armada kernel package build remain unverified. See the [contribution review](../docs/CONTRIBUTING_REVIEW.md) and the [local installation guide](../docs/LOCAL_INSTALLATION.md) for deployment and the same-base updater check.

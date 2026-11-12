@@ -1,6 +1,6 @@
 # KPFE USB-PD reconnect trial
 
-`pd-reconnect.patch` applies to `drivers/power/supply/qcom_battmgr.c` after the [base charge-limit patch](../charge-rate-policy/README.md). The exact tested source is `qcom_battmgr.c`. See the [USB-PD investigation](../../docs/USB_PD_INVESTIGATION.md) for the stock comparison and firmware findings.
+`pd-reconnect.patch` shows the Linux driver changes relative to the [base charge-limit patch](../charge-rate-policy/README.md). The [Armada submission](../../submission/README.md) incorporates both in `0905`. The exact tested source is `qcom_battmgr.c`. See the [USB-PD investigation](../../docs/USB_PD_INVESTIGATION.md) for the stock comparison and firmware findings.
 
 The follow-up runs automatically on KPFE when included in a build. It makes one attempt after a new awake attachment with battery charging already held, a 5 V contract, Good battery health, and USB-PD detected. A known 5 V-only source is skipped. If UCSI identifies PD but cannot report the advertised voltage, the driver can try once and time out. Attachments observed during `s2idle` are skipped.
 
@@ -19,6 +19,6 @@ The driver briefly sends rate 100 and reapplies rate zero after two consecutive 
 
 Linux 7.2.6 configuration, exported symbols, version magic and type layouts passed the [ABI audit](../../evidence/usb-pd-20261112/abi-audit.json). The [temporary boot report](../../evidence/usb-pd-20261112/temporary-boot-report.json) records the one changed initramfs entry. Checkpatch reported zero errors and two formatting warnings. The [installed image](../../evidence/usb-pd-20261112/installed-boot-r2.json) booted the same module, kept 85% stop and 70% resume, and retained the same-base updater. It was kept as the default on the test device with the previous working deployment and stock pinned.
 
-The real 5 V-only USB-PD timeout remains unverified. The tested charger matrix supports a local trial. See [local installation](../../docs/LOCAL_INSTALLATION.md#add-the-usb-pd-reconnect-trial) and [offline testing](../../docs/TESTING.md#offline-tests).
+The real 5 V-only USB-PD timeout remains unverified. The tested charger matrix supports a local trial. See [local installation](../../docs/LOCAL_INSTALLATION.md#build-a-matching-armada-image) and [offline testing](../../docs/TESTING.md#offline-tests).
 
 To undo the local trial, follow the [stock Armada rollback instructions](../../docs/LOCAL_INSTALLATION.md#roll-back-to-stock-armada).

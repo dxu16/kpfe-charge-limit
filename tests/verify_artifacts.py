@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NAME = '0905-power-supply-qcom-battmgr-kpfe-oem-charge-limit.patch'
 SUBMISSION_NAME = '0905-power-supply-qcom-battmgr-kpfe-charge-rate.patch'
 POLICY = ROOT / 'experimental/charge-rate-policy'
+PD = ROOT / 'experimental/usb-pd-reconnect'
 REL = Path('drivers/power/supply/qcom_battmgr.c')
 
 
@@ -49,7 +50,10 @@ with tempfile.TemporaryDirectory(prefix='kpfe-patch-check-') as tmp:
     assert {row.split('\t')[2] for row in outer_stats.strip().splitlines()} == expected
     for path in expected:
         assert (tmp / 'armada' / path).read_bytes() == (ROOT / 'submission/overlay' / path).read_bytes()
-    assert (tmp / 'armada/packages/kernel/patches' / SUBMISSION_NAME).read_bytes() == (POLICY / 'charge-rate-policy.patch').read_bytes()
+    combined = tmp / 'armada/packages/kernel/patches' / SUBMISSION_NAME
+    shutil.copytree(ROOT / 'src/base', tmp / 'combined-kernel')
+    run('git', 'apply', str(combined), cwd=tmp / 'combined-kernel')
+    assert (tmp / 'combined-kernel' / REL).read_bytes() == (PD / 'qcom_battmgr.c').read_bytes()
     series = (tmp / 'armada/packages/kernel/patches/series').read_text().splitlines()
     assert series.count(SUBMISSION_NAME) == 1 and NAME not in series
     assert series[series.index(SUBMISSION_NAME) - 1].startswith('0904-')
@@ -102,18 +106,17 @@ with tempfile.TemporaryDirectory(prefix='kpfe-patch-check-') as tmp:
             assert hardware['source_sha256'] == build['source_sha256']
             assert hardware['stock_restored']
         print('PASS: automatic charge-rate patch reconstructs the audited RAM candidate')
-        pd = ROOT / 'experimental/usb-pd-reconnect'
         pd_evidence = ROOT / 'evidence/usb-pd-20261112'
-        pd_build = json.loads((pd / 'build-evidence.json').read_text())
+        pd_build = json.loads((PD / 'build-evidence.json').read_text())
         pd_audit = json.loads((pd_evidence / 'abi-audit.json').read_text())
         pd_boot = json.loads((pd_evidence / 'temporary-boot-report.json').read_text())
         pd_installed = json.loads((pd_evidence / 'installed-boot-r2.json').read_text())
         pd_hold = json.loads((pd_evidence / 'installed-hold-summary-r2.json').read_text())
         pd_tree = tmp / 'charge-rate-policy'
-        run('git', 'apply', '--check', str(pd / 'pd-reconnect.patch'), cwd=pd_tree)
-        run('git', 'apply', str(pd / 'pd-reconnect.patch'), cwd=pd_tree)
-        assert (pd_tree / REL).read_bytes() == (pd / 'qcom_battmgr.c').read_bytes()
-        assert digest(pd / 'qcom_battmgr.c') == pd_build['source_sha256']
+        run('git', 'apply', '--check', str(PD / 'pd-reconnect.patch'), cwd=pd_tree)
+        run('git', 'apply', str(PD / 'pd-reconnect.patch'), cwd=pd_tree)
+        assert (pd_tree / REL).read_bytes() == (PD / 'qcom_battmgr.c').read_bytes()
+        assert digest(PD / 'qcom_battmgr.c') == pd_build['source_sha256']
         assert pd_audit['checks_pass'] and pd_audit['config_identical']
         module_path = REL.with_suffix('.ko').as_posix()
         assert pd_boot['changed_entries'] == [f'usr/lib/modules/{pd_build["kernel"]}/kernel/{module_path}']
@@ -140,6 +143,14 @@ with tempfile.TemporaryDirectory(prefix='kpfe-patch-check-') as tmp:
             assert series.count(name) == 1 and series[series.index(name) - 1].startswith('0904-')
             assert name in (checkout / 'packages/kernel/PATCHES.md').read_text()
             print('PASS: Armada integration inserts the exact tested charge-rate patch')
+            follow_up = ROOT / 'submission/armada-kpfe-usb-pd-follow-up.patch'
+            stats = run('git', 'apply', '--numstat', str(follow_up), cwd=checkout)
+            assert {row.split('\t')[2] for row in stats.strip().splitlines()} == {
+                path, 'packages/kernel/PATCHES.md'}
+            run('git', 'apply', str(follow_up), cwd=checkout)
+            for file in expected:
+                assert (checkout / file).read_bytes() == (tmp / 'armada' / file).read_bytes()
+            print('PASS: PR follow-up updates 0905 in place to match the full submission')
 
 manifest = ROOT / 'MANIFEST.sha256'
 recorded = set()

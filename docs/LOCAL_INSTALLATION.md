@@ -1,6 +1,6 @@
 # Install the KPFE charge-limit patch locally
 
-This guide builds a local image with the base KPFE charge-limit patch and the same-base update check. Steam hides the offer for the exact official image used as the build's base. A newer image or channel change still appears. The separate USB-PD reconnect trial can be added before building the kernel. Both patches were tested on Armada `20261109.dfed5d6` with Linux `7.2.6`. Recovery after a battery-service restart remains unverified. [Hardware results](VALIDATION.md) · [Updater verification](../evidence/charge-rate-updater-install-20261110.json)
+This guide builds a local image with the combined KPFE charge-limit and USB-PD reconnect patch and the same-base update check. Steam hides the offer for the exact official image used as the build's base. A newer image or channel change still appears. The driver was tested on Armada `20261109.dfed5d6` with Linux `7.2.6`. Recovery after a battery-service restart remains unverified. [Hardware results](VALIDATION.md) · [Updater verification](../evidence/charge-rate-updater-install-20261110.json)
 
 ## Build a matching Armada image
 
@@ -32,28 +32,15 @@ python3 "$kpfe_repo/tools/build-local-update-image.py" \
 podman save --format oci-archive -o armada-kpfe-charge-rate.oci.tar "$image"
 ~~~
 
+The single `git apply` command installs `0905`, which includes the charge-limit fix and USB-PD reconnect. If you are starting from the original PR #881 branch, use the [follow-up diff](../submission/README.md#update-pr-881) to update its existing `0905` before building.
+
 The `battery-` tag is the intermediate image. The `charge-rate-` tag is the installation image and contains the update check. The image tool stops if the updater patch does not apply. If the kernel integration or updater has changed in the selected release, reconcile the source changes and retest the final image. Use a new output tag if rebuilding an existing version. [Armada package build](https://github.com/armada-os/armada/blob/066ecdc0d26edf7ba228cec26cbd2054810e92f8/packages/README.md) · [Updater patch](../experimental/local-image-update/README.md)
 
 For the exact tested release, you can derive an image from the stock base. This requires the matching stock boot image, RAM-tested boot image and ABI-audited module. The [image context tool](../tools/prepare-local-image.py) verifies them against the [build evidence](../experimental/charge-rate-policy/build-evidence.json) and records the official base. After building that context as an intermediate image, run `build-local-update-image.py` with that tag as `--input-image` and a new `--output-image`. It reads the channel and digest from the build record. Use the same Podman store for both steps. Export the final image as shown above. [bootc initramfs guidance](https://bootc.dev/bootc/bootc-initramfs.7.html)
 
 The derived image passed a normal boot and ten-minute installed hold on the test handheld. The guide's final image step reproduced the installed updater, driver and initramfs byte for byte and passed container lint. The kernel integration diff was checked against the pinned snapshot. A complete Armada source build remains pending. [Installed build record](../evidence/charge-rate-local-image-20261110.json)
 
-### Add the USB-PD reconnect trial
-
-For a local trial, run this after applying `armada-kpfe-charge-limit.patch` and before `just check` and `just package kernel`. The example uses the pinned Armada series. Use a unique filename if the target checkout already uses this number. The USB-PD patch must run after the base charge-limit patch. If the checkout already includes either patch, skip that application step.
-
-~~~sh
-patch_dir=packages/kernel/patches
-charge_patch=0905-power-supply-qcom-battmgr-kpfe-charge-rate.patch
-pd_patch=0906-power-supply-qcom-battmgr-kpfe-usb-pd-reconnect.patch
-test "$(grep -Fxc "$charge_patch" "$patch_dir/series")" -eq 1
-test ! -e "$patch_dir/$pd_patch"
-test "$(grep -Fxc "$pd_patch" "$patch_dir/series" || true)" -eq 0
-install -m 0644 "$kpfe_repo/experimental/usb-pd-reconnect/pd-reconnect.patch" "$patch_dir/$pd_patch"
-sed -i "/^0905-power-supply-qcom-battmgr-kpfe-charge-rate\.patch$/a $pd_patch" "$patch_dir/series"
-~~~
-
-Continue the build with distinct image tags and run the same-base updater step above. The version-locked image tool above expects the exact artifacts from the base charge-limit build. The USB-PD trial on the test KPFE instead derived a local image from the existing updater-enabled deployment using the exact RAM-tested module and initramfs. The two-patch source build remains unverified. [Trial build and results](../experimental/usb-pd-reconnect/README.md)
+The version-locked image tool above expects the exact artifacts from the base charge-limit build. The USB-PD trial on the test KPFE derived a local image from the existing updater-enabled deployment using the exact RAM-tested module and initramfs. The combined source build remains unverified. [Trial build and results](../experimental/usb-pd-reconnect/README.md)
 
 ## Keep a stock recovery path
 
