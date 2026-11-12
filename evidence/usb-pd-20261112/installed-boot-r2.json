@@ -1,0 +1,20 @@
+{
+  "image": {
+    "architecture": "arm64",
+    "image": {
+      "image": "localhost/armada-kpfe:pd-reconnect-r2",
+      "transport": "containers-storage"
+    },
+    "imageDigest": "sha256:d4385ae62d98a923949cddfbbe506c7f6e70f72bcdb36015327954a52a8abbcb",
+    "timestamp": "2026-11-10T02:24:03Z",
+    "version": "20261109.dfed5d6-kpfe-pd-reconnect-r2"
+  },
+  "driver_build_id_sha256": "5829b2046881df9ede7a9c1f1ff2aa28e98f250bb55ca4e136221aab85779cf0",
+  "boot_sha256": "f7755b4cb3f85b4073bfebb81f9d8ed4974503d4788e28b72b821030fa2511ad",
+  "rollback": "31e5d9e1c037bfdf31a0d081553d34cd49bb819d8d1cc6d74d33529399c90cbd",
+  "stock": "16d423818a7e7ca8af1003637d955f017ae98b934dec361588ab04abcf330b8c",
+  "capacity": "82",
+  "health": "Good",
+  "start_threshold": 70,
+  "end_threshold": 85
+}

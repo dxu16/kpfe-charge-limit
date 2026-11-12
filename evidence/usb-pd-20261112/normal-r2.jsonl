@@ -1,0 +1,57 @@
+{"phase": "initial hold", "enable": 0, "current": -6103, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 0, "current": -6103, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": -2441, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "below resume threshold", "enable": 1, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 85, "end": 87, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 1, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 3532821, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after lower-threshold check", "enable": 0, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 0, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 4882, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "cap disabled", "enable": 1, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 100, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 1, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": 3201390, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}
+{"phase": "stop after cap-disabled check", "enable": 0, "current": -1831, "health": "Good", "online": 1, "temperature": 250, "start": 70, "end": 82, "capacity": 84, "usb_max": 9000000}

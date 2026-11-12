@@ -1,0 +1,31 @@
+{
+  "hold_seconds": 600.22,
+  "samples": 2316,
+  "min_current_ua": -10986,
+  "max_current_ua": 3051,
+  "final": {
+    "time": "2026-11-12T10:57:54.806-05:00",
+    "event": "sample",
+    "usb": {
+      "online": "1",
+      "voltage_now": "9023000",
+      "voltage_max": "9000000"
+    },
+    "battery": {
+      "capacity": "85",
+      "status": "Full",
+      "health": "Good",
+      "current_now": "-6714",
+      "voltage_now": "4163914",
+      "voltage_max": "4380000",
+      "temp": "260",
+      "charge_control_start_threshold": "70",
+      "charge_control_end_threshold": "85"
+    },
+    "ucsi": {
+      "online": "1",
+      "usb_type": "C [PD] PD_PPS",
+      "voltage_max": "0"
+    }
+  }
+}

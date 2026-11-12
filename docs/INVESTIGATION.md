@@ -2,7 +2,7 @@
 
 ## What reproduced
 
-Native charge limiting reproduced a delayed `Good` to `Over voltage` health transition after reaching the selected percentage. Connecting while already above the threshold did not demonstrate the same failure in the observed sessions; that does not validate every reconnect path.
+Native charge limiting reproduced a delayed `Good` to `Over voltage` health transition after reaching the selected percentage. Earlier above-threshold attachment sessions did not reproduce the fault. A later stock test reproduced it about 61 seconds after attaching at exactly 84% with an 84% cap. [USB-PD comparison](USB_PD_INVESTIGATION.md#measurements-on-one-kpfe)
 
 The strongest synchronized protection capture selected 92% at 91%:
 
@@ -27,9 +27,11 @@ Static analysis of the stock AYAWindow APK identifies percentage policy driven b
 
 Property 29 requests a zero-current override. On Armada, reconnecting the charger could set the charger-enable bit while that override and the fast-charge current setting both stayed at zero. The gauge subsequently reported about +0.29 A. Releasing and re-entering bypass recovered the hold in awake tests, but RFC3 still failed when the charger was attached during `s2idle`. The Android analysis establishes which interface the app calls. Its behavior on Android hardware was not tested. [Reconnection results](RECONNECTION_INVESTIGATION.md)
 
-## What the final patch does
+## What the charge-limit patch does
 
 The KPFE driver keeps Steam’s existing thresholds and evaluates them on battery and USB notifications. It disables native percentage enforcement and uses firmware command `0x06`. Rate 0 selects a stop condition in the firmware state machine, and rate 100 lets normal charging resume. The patch avoids the native float-voltage reduction path and the OEM zero-current override. It leaves the firmware and protection settings intact. [Charge-rate interface](CHARGE_RATE_INTERFACE_AUDIT.md) · [Hardware validation](VALIDATION.md)
+
+On a fresh attachment with rate zero already active, USB can stay at 5 V. The separate local trial briefly allows the firmware to negotiate higher input voltage and reapplies the stop. [USB-PD investigation](USB_PD_INVESTIGATION.md)
 
 The label correction matters: 4100 mAh rated / 4200 mAh nominal cells make the reported 8400 mAh design value plausible in the vendor's single-cell-equivalent convention. Elevated learned capacities remain unexplained, including on Android. They are not established as the cause.
 

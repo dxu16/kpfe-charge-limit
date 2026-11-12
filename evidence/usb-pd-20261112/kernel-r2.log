@@ -1,0 +1,7 @@
+2026-11-12T10:15:24.925772-05:00 armada kernel: PM: suspend entry (s2idle)
+2026-11-12T10:16:35.294017-05:00 armada kernel: PM: suspend exit
+2026-11-12T10:19:06.318067-05:00 armada kernel: qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: USB-PD reconnect: higher voltage observed; battery stop restored
+2026-11-12T10:19:06.331268-05:00 armada kernel: PM: suspend entry (s2idle)
+2026-11-12T10:19:54.980309-05:00 armada kernel: PM: suspend exit
+2026-11-12T10:20:51.015497-05:00 armada kernel: qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: USB-PD reconnect: no higher voltage observed; battery stop restored
+2026-11-12T10:21:20.447766-05:00 armada kernel: qcom_battmgr.pmic_glink_power_supply pmic_glink.power-supply.0: USB-PD reconnect: higher voltage observed; battery stop restored

@@ -1,6 +1,6 @@
 # Reconnection investigation
 
-**Why we switched:** Attaching a charger could re-enable charging while OEM bypass was selected and the fast-charge current setting was zero. Releasing and re-entering bypass recovered the hold while awake, but RFC3 failed charger attachment during `s2idle` and was rolled back. The final driver uses firmware command `0x06`, whose zero rate selects a stop condition in the firmware state machine. [Firmware analysis](FIRMWARE_RECONNECTION_ROOT_CAUSE.md) · [Final patch validation](VALIDATION.md)
+Attaching a charger could re-enable charging while OEM bypass was selected and the fast-charge current setting was zero. Releasing and re-entering bypass recovered the hold while awake, but RFC3 failed charger attachment during `s2idle` and was rolled back. The base charge-limit patch uses firmware command `0x06`, whose zero rate selects a stop condition in the firmware state machine. The later USB-PD investigation covers the separate question of negotiating higher USB input voltage while using that stop condition. [Firmware analysis](FIRMWARE_RECONNECTION_ROOT_CAUSE.md) · [Validation](VALIDATION.md) · [USB-PD investigation](USB_PD_INVESTIGATION.md)
 
 ## Observed hardware states
 

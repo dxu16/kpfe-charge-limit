@@ -1,6 +1,6 @@
 # Install the KPFE charge-limit patch locally
 
-This guide builds a local image with the KPFE charge-limit fix and the same-base update check. Steam hides the offer for the exact official image used as the build's base. A newer image or channel change still appears. The battery patch was tested on Armada `20261109.dfed5d6` with Linux `7.2.6`. Recovery after a battery-service restart remains unverified. [Hardware results](VALIDATION.md) · [Updater verification](../evidence/charge-rate-updater-install-20261110.json)
+This guide builds a local image with the base KPFE charge-limit patch and the same-base update check. Steam hides the offer for the exact official image used as the build's base. A newer image or channel change still appears. The separate USB-PD reconnect trial can be added before building the kernel. Both patches were tested on Armada `20261109.dfed5d6` with Linux `7.2.6`. Recovery after a battery-service restart remains unverified. [Hardware results](VALIDATION.md) · [Updater verification](../evidence/charge-rate-updater-install-20261110.json)
 
 ## Build a matching Armada image
 
@@ -38,6 +38,23 @@ For the exact tested release, you can derive an image from the stock base. This 
 
 The derived image passed a normal boot and ten-minute installed hold on the test handheld. The guide's final image step reproduced the installed updater, driver and initramfs byte for byte and passed container lint. The kernel integration diff was checked against the pinned snapshot. A complete Armada source build remains pending. [Installed build record](../evidence/charge-rate-local-image-20261110.json)
 
+### Add the USB-PD reconnect trial
+
+For a local trial, run this after applying `armada-kpfe-charge-limit.patch` and before `just check` and `just package kernel`. The example uses the pinned Armada series. Use a unique filename if the target checkout already uses this number. The USB-PD patch must run after the base charge-limit patch. If the checkout already includes either patch, skip that application step.
+
+~~~sh
+patch_dir=packages/kernel/patches
+charge_patch=0905-power-supply-qcom-battmgr-kpfe-charge-rate.patch
+pd_patch=0906-power-supply-qcom-battmgr-kpfe-usb-pd-reconnect.patch
+test "$(grep -Fxc "$charge_patch" "$patch_dir/series")" -eq 1
+test ! -e "$patch_dir/$pd_patch"
+test "$(grep -Fxc "$pd_patch" "$patch_dir/series" || true)" -eq 0
+install -m 0644 "$kpfe_repo/experimental/usb-pd-reconnect/pd-reconnect.patch" "$patch_dir/$pd_patch"
+sed -i "/^0905-power-supply-qcom-battmgr-kpfe-charge-rate\.patch$/a $pd_patch" "$patch_dir/series"
+~~~
+
+Continue the build with distinct image tags and run the same-base updater step above. The version-locked image tool above expects the exact artifacts from the base charge-limit build. The USB-PD trial on the test KPFE instead derived a local image from the existing updater-enabled deployment using the exact RAM-tested module and initramfs. The two-patch source build remains unverified. [Trial build and results](../experimental/usb-pd-reconnect/README.md)
+
 ## Keep a stock recovery path
 
 On the handheld, confirm the device, save the current deployment details, and save the native battery settings.
@@ -46,7 +63,7 @@ On the handheld, confirm the device, save the current deployment details, and sa
 tr '\0' '\n' </sys/firmware/devicetree/base/compatible | grep -x 'konkr,pocket-fit-elite'
 mkdir -p "$HOME/kpfe-stock-recovery"
 sudo bootc status --json | tee "$HOME/kpfe-stock-recovery/bootc-status.json"
-sudo ostree admin status
+sudo ostree admin status | tee "$HOME/kpfe-stock-recovery/ostree-status.txt"
 for attr in charge_control_end_threshold charge_control_start_threshold constant_charge_current; do
     cat "/sys/class/power_supply/battery/$attr" > "$HOME/kpfe-stock-recovery/$attr"
 done
@@ -70,9 +87,9 @@ sudo bootc switch --transport containers-storage "$image"
 sudo bootc status --json
 ~~~
 
-Before switching, confirm the booted deployment is the stock image you pinned and that there is no unrelated staged deployment. After switching, confirm the staged image matches the local image you built. Unplug the charger and reboot normally with `sudo systemctl reboot`. Armada's normal reboot runs the hooks that generate the boot image for the new deployment.
+Before switching, confirm the booted deployment is the working image you pinned and that there is no unrelated staged deployment. If upgrading a local image, keep the pinned stock deployment too. After switching, confirm the staged image matches the local image you built. Unplug the charger and reboot normally with `sudo systemctl reboot`. Armada's normal reboot runs the hooks that generate the boot image for the new deployment.
 
-After boot, confirm the local image is booted and stock is available for rollback. Check the kernel, driver and battery settings:
+After boot, confirm the new image is running and the stock deployment is still pinned. Check the kernel, driver and battery settings:
 
 ~~~sh
 sudo bootc status
@@ -95,16 +112,20 @@ python3 /absolute/path/to/tools/observe-transition.py --label local-install --mo
 
 On the exact tested KPFE build, run the observer with `sudo` and add `--physical-enable` to verify that the audited charger-enable bit stays clear. A brief negative current indicates discharge. Sustained positive current or an unexpected health or voltage change is grounds to unplug and roll back.
 
-## Roll back or return to official updates
+For the USB-PD trial, expect a brief enable window on eligible awake attachments. Use the same charger and cable, verify the stop after negotiation, then start the ten-minute hold. On the tested charger, `qcom-battmgr-usb` reported 9 V while charger-enable stayed clear and battery health stayed Good. An attachment during `s2idle` can stay at 5 V. [Trial validation](../experimental/usb-pd-reconnect/README.md#validation)
 
-If the local deployment boots but the hold fails, unplug the charger. Verify that the rollback slot in `sudo bootc status` is the pinned official image before running:
+## Roll back to stock Armada
+
+Unplug the charger. Run `sudo ostree admin status` and match the pinned stock deployment to the checksum and deployment serial saved in `ostree-status.txt` before installation. Count deployment entries from the top, starting at zero. Replace `INDEX` with the current index of that exact stock entry. The default `bootc rollback` command selects the immediate rollback slot, which can contain an earlier local build. [OSTree deployment selection](https://github.com/ostreedev/ostree/blob/main/man/ostree-admin-set-default.xml) · [bootc rollback](https://bootc.dev/bootc/man/bootc-rollback.8.html)
 
 ~~~sh
-sudo bootc rollback
-sudo systemctl reboot
+sudo ostree admin set-default INDEX
+sudo ostree admin status
 ~~~
 
-If the local deployment cannot boot, use the verified PC connection to temporarily boot the saved stock image with `fastboot boot KERNEL.stock`. A saved image requires the referenced deployment to still exist. From that stock session, compare `sudo ostree admin status` with the saved stock checksum and serial. If stock is not the default, run `sudo ostree admin set-default INDEX` using the zero-based index of that exact pinned stock entry. Confirm it is first in the list and reboot normally. Armada's boot image sync service updates OpenABL's image for the selected deployment on shutdown.
+Confirm the stock deployment is first in the list, then run `sudo systemctl reboot`. Armada's shutdown hooks regenerate the boot image for the selected deployment. After reboot, verify that the booted checksum and serial match the stock entry you saved.
+
+If the local deployment cannot boot, use the verified PC connection to temporarily boot the saved stock image with `fastboot boot KERNEL.stock`. The referenced deployment must still exist. From that stock session, use the same selection and verification steps to make stock the default before rebooting normally.
 
 After booting stock, keep the charger unplugged while restoring the saved native settings. The automatic driver disables native percentage enforcement in firmware, so the stock driver needs its settings reapplied.
 
@@ -116,6 +137,8 @@ done
 cat "$bat/health" "$bat/charge_control_end_threshold" "$bat/charge_control_start_threshold"
 ~~~
 
+## Return to official updates
+
 A local image is a separate bootc source. Raw `bootc upgrade` follows that reference. The tested Armada Steam updater resolved a local image to the official repository and selected channel. An actual official update from the local image has yet to be tested. You can also explicitly switch back to your chosen official tag, for example `sudo bootc switch ghcr.io/armada-os/armada:stable`, then reboot and verify the native charge controls. An official update replaces the local patch unless that release includes it. [Updater check](../evidence/updater-target-20261110.json)
 
-To keep the charge fix on a newer release, rerun the build with that release's source and recorded base digest. The update check will then suppress the equivalent official offer for that new local image.
+To keep the charge fix or the USB-PD follow-up on a newer release, check which changes that release already includes, then rebuild any remaining patches against its source and recorded base digest. The update check will then suppress the equivalent official offer for that new local image.

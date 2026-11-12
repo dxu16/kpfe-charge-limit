@@ -1,30 +1,28 @@
 # KPFE charge-limit investigation and Armada RFC
 
-This repository investigates the KONKR Pocket FIT Elite (KPFE) charge-limit fault. The current candidate is a KPFE-only Armada driver patch that uses the existing firmware charge-rate command (`0x06`) for stop and resume. It keeps Steam's existing threshold interface and uses battery and USB notifications to apply the policy. [Current patch and design](experimental/charge-rate-policy/README.md)
+This repository investigates charge limiting and USB-PD reconnection on the KONKR Pocket FIT Elite (KPFE).
 
-The original `Over voltage` fault followed a delayed drop in the firmware’s float-voltage target after reaching a partial charge limit. An earlier fix used OEM bypass (property `0x1d`), but the firmware could re-enable charging on attachment even with bypass selected. The final patch uses the charge-rate command’s separate firmware stop condition. [Original fault](docs/INVESTIGATION.md) · [Why OEM bypass failed](docs/RECONNECTION_INVESTIGATION.md)
+- **Base charge-limit patch.** The original `Over voltage` fault followed a delayed drop in the firmware’s float-voltage target. OEM bypass also proved unreliable on reconnection. The base patch keeps Steam’s thresholds and uses the firmware charge-rate command (`0x06`) for stop and resume. [Original fault](docs/INVESTIGATION.md) · [Patch and design](experimental/charge-rate-policy/README.md)
 
-On one KPFE, the patch passed awake reconnect, a ten-minute hold, recharge between fixed thresholds, and reaching the limit during `s2idle`. With the charger attached during `s2idle`, it was disabled on the first reading after wake. Register sampling paused during sleep. Battery-service restart recovery remains unverified. [Validation and evidence](docs/VALIDATION.md)
+- **USB-PD reconnect follow-up, local trial.** With charging already held by the base patch, a fresh attachment could stay at 5 V. The follow-up makes one bounded attempt on an eligible awake USB-PD attachment. The installed trial negotiated 9 V after a 0.75-second charge window and held at 85% for ten minutes with charging disabled and Good health. The real 5 V-only PD timeout still needs hardware testing. [Investigation](docs/USB_PD_INVESTIGATION.md) · [Follow-up patch and validation](experimental/usb-pd-reconnect/README.md)
 
-The exact tested driver was subsequently installed in a local image derived from stock. It passed a normal reboot and ten-minute hold at 85%/70%. The standard local build includes an updater check that hides offers for the exact official base already installed. The battery-only image is the immediate rollback target on the test handheld, and stock remains pinned. [Installed battery validation](evidence/charge-rate-local-image-20261110.json) · [Updater verification](evidence/charge-rate-updater-install-20261110.json)
+Armada review is tracked in [PR #881](https://github.com/armada-os/armada/pull/881).
 
-The Armada submission is [PR #881](https://github.com/armada-os/armada/pull/881).
+The local installation guide includes the same-base Steam update check. The USB-PD trial is the default on the test KPFE, with stock Armada pinned for recovery. [Local installation](docs/LOCAL_INSTALLATION.md) · [Roll back to stock Armada](docs/LOCAL_INSTALLATION.md#roll-back-to-stock-armada)
 
 ## Start here
 
-- [Investigation and confidence](docs/INVESTIGATION.md): observed fault, static-code evidence, unresolved protection trigger.
-- [Current candidate](experimental/charge-rate-policy/README.md): KPFE gate, firmware stop/resume, threshold policy and build evidence.
-- [Validation and remaining work](docs/VALIDATION.md): hardware results and review gaps.
-- [Local installation guide](docs/LOCAL_INSTALLATION.md): source build, recovery, verification, and official updates.
-- [Contribution review](docs/CONTRIBUTING_REVIEW.md): rules/conventions checked against pinned Armada sources.
-- [Evidence index](evidence/README.md): selected captures, test output and provenance.
-- [Armada submission](submission/README.md): integration diff, reviewable overlay, and PR description.
+- [Validation and remaining work](docs/VALIDATION.md)
+- [Local installation guide](docs/LOCAL_INSTALLATION.md)
+- [Evidence index](evidence/README.md)
+- [Armada submission](submission/README.md) and [contribution review](docs/CONTRIBUTING_REVIEW.md)
 
 ## Layout
 
 | Path | Purpose |
 | --- | --- |
-| `experimental/charge-rate-policy/` | Current Linux patch and exact RAM-tested source, 381 additions / 6 deletions |
+| `experimental/charge-rate-policy/` | Base charge-limit patch and exact tested source |
+| `experimental/usb-pd-reconnect/` | Follow-up Linux patch, exact tested source, and fault-injection tests |
 | `src/base/` | Exact stock driver source used as the patch base |
 | `submission/` | Current Armada integration diff, overlay, and PR description |
 | `patches/`, `src/patched/` | Historical RFC3 Linux patch and source |
@@ -37,7 +35,7 @@ Armada hardware-test base: `dfed5d61e344c473c6e3c654f4090d7f618f3a5a`, Linux 7.2
 
 ## Offline checks
 
-Python 3 and Git verify the manifest, reconstruct the current patch, and check the Armada integration diff.
+Python 3 and Git verify the manifest, reconstruct both patches, and check the Armada integration diff.
 
 ```sh
 python3 tests/verify_artifacts.py

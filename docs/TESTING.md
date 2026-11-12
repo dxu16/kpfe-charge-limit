@@ -12,7 +12,9 @@ For an already planned charge, observe from below the limit through crossing and
 
 ## Offline tests
 
-Run `python3 tests/verify_artifacts.py` from the repository root. It checks recorded hashes, reconstructs the current charge-rate patch, and verifies the Armada integration diff. The historical C fixtures cover the earlier OEM bypass policy and status logic. They require a compiler and write outputs into temporary directories. The current hardware procedure and results are in the [charge-rate candidate](../experimental/charge-rate-policy/README.md).
+Run `python3 tests/verify_artifacts.py` from the repository root. It checks recorded hashes, reconstructs both driver patches, and verifies the base patch’s Armada integration diff. The historical C fixtures cover the earlier OEM bypass policy and status logic. They require a compiler and write outputs into temporary directories. The base driver's hardware procedure is in the [charge-rate patch notes](../experimental/charge-rate-policy/README.md).
+
+Run `python3 experimental/usb-pd-reconnect/test-pd-reconnect.py` with a C compiler (`CC` defaults to `cc`). The harness compiles functions from the tested driver and simulates the 5 V timeout, early 9 V, cable removal, suspend gating, and late or missing firmware replies. See the [USB-PD test matrix](../experimental/usb-pd-reconnect/README.md#validation) for the hardware results and remaining gaps.
 
 `tools/prepare-submission.ps1` recreates only the local overlay and Armada diff from pinned snapshots. It preserves the tested C delta. Run verification again after regenerating.
 

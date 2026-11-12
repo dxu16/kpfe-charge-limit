@@ -1,0 +1,5 @@
+{"time": "2026-11-12T10:17:35.859-05:00", "event": "charger_enable", "enable": 0}
+{"time": "2026-11-12T10:19:05.610-05:00", "event": "charger_enable", "enable": 1}
+{"time": "2026-11-12T10:19:05.610-05:00", "event": "suspend_requested"}
+{"time": "2026-11-12T10:19:05.618-05:00", "event": "suspend_request_returned", "returncode": 0}
+{"time": "2026-11-12T10:19:54.994-05:00", "event": "charger_enable", "enable": 0}

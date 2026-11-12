@@ -1,8 +1,14 @@
 # Evidence index
 
-Selected from the original local `charge-investigation/` archive on 2026-11-10. Large binaries, firmware, APKs, full network/device inventories and obsolete candidate modules/images are deliberately excluded. No private keys, passwords, network addresses or device serials are needed for this review. `MANIFEST.sha256` records included file contents.
+Selected from the local `charge-investigation/` archive on November 10 and 12, 2026. `MANIFEST.sha256` records the included text files and source. Firmware, APKs, boot images and modules stay in the local archive.
 
-## Current charge-rate candidate
+## USB-PD reconnect trial, November 12
+
+- [Stock and patched measurements](../docs/USB_PD_INVESTIGATION.md#measurements-on-one-kpfe) link to the selected USB and battery logs in `usb-pd-20261112/`.
+- [RAM hold](usb-pd-20261112/hold-r2.json), [reconnect excerpts](usb-pd-20261112/ram-reconnect-excerpts.jsonl), [kernel events](usb-pd-20261112/kernel-r2.log), [suspend request events](usb-pd-20261112/suspend-window-events.jsonl), and [normal charging samples](usb-pd-20261112/normal-r2.jsonl).
+- [ABI audit](usb-pd-20261112/abi-audit.json), [temporary boot report](usb-pd-20261112/temporary-boot-report.json), [installed boot verification](usb-pd-20261112/installed-boot-r2.json), and [installed ten-minute hold](usb-pd-20261112/installed-hold-summary-r2.json).
+
+## Base charge-limit patch, November 10
 
 - Awake threshold changes and the pre-wake stop request during `s2idle`. [First automatic test](charge-rate-policy-first-test-20261110.json)
 - Above-limit reconnect, ten-minute hold, fixed-threshold recharge, and the Steam check mark. [Automatic follow-up](charge-rate-policy-followup-20261110.json)

@@ -1,6 +1,8 @@
 # Validation and release gaps
 
-The current charge-rate candidate was tested on one KPFE using temporary boots. Its exact source and image hashes, kernel compatibility audit, and patch are in the [candidate folder](../experimental/charge-rate-policy/README.md).
+## Base charge-limit patch
+
+The charge-rate driver was tested on one KPFE using temporary boots and a local installation. The [patch and build evidence](../experimental/charge-rate-policy/README.md) record the exact source, image hashes and kernel compatibility audit.
 
 | Check | Result |
 | --- | --- |
@@ -11,9 +13,13 @@ The current charge-rate candidate was tested on one KPFE using temporary boots. 
 | Charger attachment in `s2idle` | At 88% with an 85% limit, charger-enable was clear on the first read after wake and through all 56 samples. The host sent no new rate command. Register sampling paused during sleep, leaving brief transitions unmeasured. [Final checks](../evidence/charge-rate-policy-final-tests-20261110.json) |
 | Battery-service restart | Unverified. Firmware rejected the targeted restart with `QMI_ERR_DISABLED`. A single approved ADSP stop/start made the device unresponsive. The logs leave the failure point unknown. [Final checks](../evidence/charge-rate-policy-final-tests-20261110.json) |
 
-After the temporary boots, stock Armada booted with matching original hashes, Good health, and native 85%/70% settings. The same tested module and initramfs were then installed in a local image derived from the exact stock release. A normal reboot loaded the expected driver. With the usual charger attached, all 121 samples over ten minutes showed charger-enable clear, Good health and the unchanged 4.38 V ceiling. The local image was kept as default with stock pinned for rollback. [Installed build and hold](../evidence/charge-rate-local-image-20261110.json)
+After the temporary boots, stock Armada booted with matching original hashes, Good health, and native 85%/70% settings. The same tested module and initramfs were then installed in a local image derived from the exact stock release. A normal reboot loaded the expected driver. With the usual charger attached, all 121 samples over ten minutes showed charger-enable clear, Good health and the unchanged 4.38 V ceiling. That image was the November 10 default, with stock pinned for rollback. [Installed build and hold](../evidence/charge-rate-local-image-20261110.json)
 
-The charge-rate patch was submitted for review in [Armada PR #881](https://github.com/armada-os/armada/pull/881). Remaining release checks include service recovery, reaching the lower threshold while continuously plugged in, and the full Armada source build.
+Armada review is tracked in [Armada PR #881](https://github.com/armada-os/armada/pull/881). Remaining release checks include service recovery, reaching the lower threshold while continuously plugged in, and the full Armada source build.
+
+## USB-PD reconnect follow-up
+
+On the November 12 local trial, the device charged from 82% to the 85% cap and stopped. Reconnection negotiated 9 V after a 0.75-second charger-enable window. The charger stayed disabled and health stayed Good for ten minutes. RAM-boot tests also covered the non-PD 5 V skip, unplugging during negotiation, attachment during `s2idle`, a suspend request during negotiation, and normal charging. The unknown-profile 5 V-only USB-PD timeout and late or missing firmware replies were exercised in simulation. The full Armada source build remains unverified. [Test matrix and evidence](../experimental/usb-pd-reconnect/README.md)
 
 ## Historical OEM bypass tests
 

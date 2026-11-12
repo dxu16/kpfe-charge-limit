@@ -1,6 +1,6 @@
 # Charge-rate command audit
 
-The final KPFE driver uses `BattMngrSetChargeRate` (`0x06`). This audit explains the firmware behavior that led us to switch from OEM bypass. The manual tests below preceded the automatic driver and its installed-image validation. [Current design](../experimental/charge-rate-policy/README.md) · [Hardware validation](VALIDATION.md)
+The KPFE driver uses `BattMngrSetChargeRate` (`0x06`). This audit explains the firmware behavior that led us to switch from OEM bypass. The manual tests preceded the automatic charge-limit driver and its installed-image validation. The USB-PD reconnect trial builds on the same command. [Charge-limit design](../experimental/charge-rate-policy/README.md) · [Hardware validation](VALIDATION.md) · [USB-PD investigation](USB_PD_INVESTIGATION.md)
 
 ## Result
 

@@ -1,0 +1,15 @@
+{
+  "base_image_digest": "sha256:0f0c990818303ae621c7bcbd10979409aa1143a12e2457f3c0c0452652d35d73",
+  "kernel": "7.2.6",
+  "version": "20261109.dfed5d6-kpfe-pd-reconnect-r2",
+  "source_sha256": "b69bfeced2ebb0d2cbe893b16fc19e554314bdc69b97283ac2730b3212e2a553",
+  "driver_build_id_note_sha256": "5829b2046881df9ede7a9c1f1ff2aa28e98f250bb55ca4e136221aab85779cf0",
+  "module_sha256": "412d4943d90f8ea9a60165c7ab785d07257f716814ddcdf5cf58b299a5bbf0cf",
+  "initramfs_sha256": "c3462c910c5e7fe3f52f37533a5c51af26e3f985f27e240a217d9c062be66395",
+  "original_initramfs_sha256": "c5086bee63568724eb54e7ec3b0eb3a6fe9fe13f5333aa98b25a5b7d6c6ff711",
+  "candidate_boot_sha256": "40f94d1b4d2e9bfdd0c5f61312c8f489fbf81a150397ab265b7f2070b634f478",
+  "original_boot_sha256": "9d6d98417032f1b8768679e02c1441083825bfff8119af49605352f2e8d72544",
+  "ram_boot_tested": true,
+  "installed_image_tested": true,
+  "base_image_ref": "ghcr.io/armada-os/armada:stable"
+}

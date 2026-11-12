@@ -102,6 +102,28 @@ with tempfile.TemporaryDirectory(prefix='kpfe-patch-check-') as tmp:
             assert hardware['source_sha256'] == build['source_sha256']
             assert hardware['stock_restored']
         print('PASS: automatic charge-rate patch reconstructs the audited RAM candidate')
+        pd = ROOT / 'experimental/usb-pd-reconnect'
+        pd_evidence = ROOT / 'evidence/usb-pd-20261112'
+        pd_build = json.loads((pd / 'build-evidence.json').read_text())
+        pd_audit = json.loads((pd_evidence / 'abi-audit.json').read_text())
+        pd_boot = json.loads((pd_evidence / 'temporary-boot-report.json').read_text())
+        pd_installed = json.loads((pd_evidence / 'installed-boot-r2.json').read_text())
+        pd_hold = json.loads((pd_evidence / 'installed-hold-summary-r2.json').read_text())
+        pd_tree = tmp / 'charge-rate-policy'
+        run('git', 'apply', '--check', str(pd / 'pd-reconnect.patch'), cwd=pd_tree)
+        run('git', 'apply', str(pd / 'pd-reconnect.patch'), cwd=pd_tree)
+        assert (pd_tree / REL).read_bytes() == (pd / 'qcom_battmgr.c').read_bytes()
+        assert digest(pd / 'qcom_battmgr.c') == pd_build['source_sha256']
+        assert pd_audit['checks_pass'] and pd_audit['config_identical']
+        module_path = REL.with_suffix('.ko').as_posix()
+        assert pd_boot['changed_entries'] == [f'usr/lib/modules/{pd_build["kernel"]}/kernel/{module_path}']
+        assert pd_boot['test_module_sha256'] == pd_build['module_sha256']
+        assert pd_boot['temporary_boot_sha256'] == pd_build['candidate_boot_sha256']
+        assert pd_installed['driver_build_id_sha256'] == pd_build['driver_build_id_note_sha256']
+        assert pd_build['ram_boot_tested'] and pd_build['installed_image_tested']
+        assert pd_hold['hold_seconds'] >= 600 and pd_hold['final']['usb']['voltage_max'] == '9000000'
+        assert pd_hold['final']['battery']['health'] == 'Good'
+        print('PASS: USB-PD follow-up reconstructs the audited and installed trial source')
         integration = policy / 'armada-charge-rate-policy.patch'
         if integration.exists():
             checkout = tmp / 'armada-charge-rate-policy'

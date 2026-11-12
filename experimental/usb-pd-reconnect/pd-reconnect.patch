@@ -1,0 +1,319 @@
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index 97508d3..8444a87 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -6,6 +6,7 @@
+  */
+ #include <linux/atomic.h>
+ #include <linux/auxiliary_bus.h>
++#include <linux/delay.h>
+ #include <linux/devm-helpers.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
+@@ -13,6 +14,7 @@
+ #include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/pm.h>
+ #include <linux/pm_wakeup.h>
+ #include <linux/power_supply.h>
+ #include <linux/property.h>
+@@ -351,7 +353,17 @@ struct qcom_battmgr {
+ 	int host_ready_epoch;
+ 	int host_rate_epoch;
+ 	unsigned int pending_opcode;
+-	struct work_struct host_work;
++	struct delayed_work host_work;
++	bool host_pd_online;
++	bool host_pd_offline_seen;
++	bool host_pd_pending;
++	bool host_pd_restop;
++	bool host_pd_confirm_twice;
++	bool host_pd_suspended;
++	int host_pd_epoch;
++	int host_pd_rate_error_epoch;
++	unsigned long host_pd_offline_at;
++	unsigned long host_pd_check_until;
+ 
+ 	struct qcom_battmgr_info info;
+ 	struct qcom_battmgr_status status;
+@@ -825,7 +837,7 @@ static void qcom_battmgr_host_queue(struct qcom_battmgr *battmgr)
+ 		return;
+ 	/* GLINK notifications can be handled while user space remains suspended. */
+ 	pm_wakeup_event(battmgr->dev, 5000);
+-	schedule_work(&battmgr->host_work);
++	mod_delayed_work(system_wq, &battmgr->host_work, 0);
+ }
+ 
+ /* Caller holds the request mutex. The ACK is scoped to this service lifetime. */
+@@ -845,8 +857,11 @@ static int qcom_battmgr_host_set_rate(struct qcom_battmgr *battmgr, bool inhibit
+ 	if (!READ_ONCE(battmgr->service_up) || epoch != atomic_read(&battmgr->host_epoch))
+ 		return -EAGAIN;
+ 	ret = qcom_battmgr_request(battmgr, &request, sizeof(request));
+-	if (ret)
++	if (ret) {
++		/* This service may still send an untagged rate response. */
++		battmgr->host_pd_rate_error_epoch = epoch;
+ 		return ret;
++	}
+ 	if (epoch != atomic_read(&battmgr->host_epoch))
+ 		return -EAGAIN;
+ 
+@@ -856,14 +871,160 @@ static int qcom_battmgr_host_set_rate(struct qcom_battmgr *battmgr, bool inhibit
+ 	return 0;
+ }
+ 
++/* A short cable bounce cannot start another negotiation window. */
++static void qcom_battmgr_host_pd_connection(struct qcom_battmgr *battmgr, int epoch)
++{
++	if (battmgr->host_pd_epoch != epoch) {
++		battmgr->host_pd_epoch = epoch;
++		battmgr->host_pd_pending = false;
++		battmgr->host_pd_offline_seen = false;
++	}
++
++	if (!battmgr->usb.online) {
++		if (!battmgr->host_pd_offline_seen)
++			battmgr->host_pd_offline_at = jiffies;
++		battmgr->host_pd_offline_seen = true;
++		battmgr->host_pd_online = false;
++		battmgr->host_pd_pending = false;
++	} else if (!battmgr->host_pd_online) {
++		battmgr->host_pd_pending = !battmgr->host_pd_suspended &&
++			battmgr->host_pd_offline_seen &&
++			time_after_eq(jiffies, battmgr->host_pd_offline_at + HZ);
++		battmgr->host_pd_check_until = jiffies + 4 * HZ;
++		battmgr->host_pd_online = true;
++		battmgr->host_pd_offline_seen = false;
++	}
++}
++
++static int qcom_battmgr_host_pd_source(void)
++{
++	union power_supply_propval type, maximum;
++	struct power_supply *psy;
++	int ret;
++
++	/* KPFE has one USB-C port on the PMIC GLINK UCSI instance. */
++	psy = power_supply_get_by_name("ucsi-source-psy-pmic_glink.ucsi.01");
++	if (!psy)
++		return -EAGAIN;
++	ret = power_supply_get_property(psy, POWER_SUPPLY_PROP_ONLINE, &type);
++	if (!ret && !type.intval)
++		ret = -EAGAIN;
++	if (!ret)
++		ret = power_supply_get_property(psy, POWER_SUPPLY_PROP_USB_TYPE, &type);
++	if (!ret && type.intval != POWER_SUPPLY_USB_TYPE_PD &&
++	    type.intval != POWER_SUPPLY_USB_TYPE_PD_PPS)
++		ret = -EAGAIN;
++	if (!ret)
++		ret = power_supply_get_property(psy, POWER_SUPPLY_PROP_VOLTAGE_MAX,
++						&maximum);
++	power_supply_put(psy);
++	if (ret)
++		return ret;
++	/* Some firmware confirms PD but does not export the source PDOs. */
++	return !maximum.intval || maximum.intval >= 9000000;
++}
++
++static int qcom_battmgr_host_pd_reapply_stop(struct qcom_battmgr *battmgr, int epoch)
++{
++	int ret;
++
++	ret = qcom_battmgr_host_set_rate(battmgr, true, epoch);
++	/*
++	 * A failed release may still reply while we wait for the stop.
++	 * Require two successful replies in that case: at most one can
++	 * be for the release, and every subsequent request is a stop.
++	 */
++	if (!ret && battmgr->host_pd_confirm_twice) {
++		battmgr->host_pd_confirm_twice = false;
++		battmgr->host_rate_valid = false;
++		ret = -EAGAIN;
++	}
++	if (!ret) {
++		battmgr->host_pd_restop = false;
++	} else if (READ_ONCE(battmgr->service_up)) {
++		queue_delayed_work(system_wq, &battmgr->host_work, msecs_to_jiffies(250));
++	}
++	return ret;
++}
++
++/* Called with the request mutex held after the battery stop has been applied. */
++static int qcom_battmgr_host_pd_upgrade(struct qcom_battmgr *battmgr, int epoch)
++{
++	unsigned long deadline;
++	int ret, high_samples = 0;
++
++	if (!battmgr->host_pd_pending || battmgr->host_pd_suspended)
++		return 0;
++	if (battmgr->host_pd_rate_error_epoch == epoch ||
++	    time_after_eq(jiffies, battmgr->host_pd_check_until)) {
++		battmgr->host_pd_pending = false;
++		return 0;
++	}
++	ret = qcom_battmgr_host_pd_source();
++	if (ret == -EAGAIN) {
++		queue_delayed_work(system_wq, &battmgr->host_work, msecs_to_jiffies(250));
++		return 0;
++	}
++	if (ret <= 0) {
++		battmgr->host_pd_pending = false;
++		return 0;
++	}
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_USB_PROPERTY_GET, USB_VOLT_MAX);
++	if (!ret && !battmgr->usb.voltage_max) {
++		queue_delayed_work(system_wq, &battmgr->host_work, msecs_to_jiffies(250));
++		return 0;
++	}
++	battmgr->host_pd_pending = false;
++	if (ret || battmgr->usb.voltage_max != 5000000)
++		return ret;
++	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_HEALTH);
++	if (ret || battmgr->status.health != POWER_SUPPLY_HEALTH_GOOD)
++		return ret;
++
++	pm_wakeup_event(battmgr->dev, 6000);
++	deadline = jiffies + msecs_to_jiffies(2500);
++	/* Even a timed-out release may have reached firmware. Always send stop. */
++	battmgr->host_pd_restop = true;
++	ret = qcom_battmgr_host_set_rate(battmgr, false, epoch);
++	battmgr->host_pd_confirm_twice = !!ret;
++	while (!ret && time_before(jiffies, deadline)) {
++		ret = qcom_battmgr_host_get(battmgr, BATTMGR_USB_PROPERTY_GET, USB_ONLINE);
++		if (ret || !battmgr->usb.online || epoch != atomic_read(&battmgr->host_epoch) ||
++		    time_after_eq(jiffies, deadline))
++			break;
++		ret = qcom_battmgr_host_get(battmgr, BATTMGR_USB_PROPERTY_GET, USB_VOLT_NOW);
++		if (ret)
++			break;
++		if (battmgr->usb.voltage_now >= 8000000) {
++			if (++high_samples == 2)
++				break;
++		} else {
++			high_samples = 0;
++		}
++		msleep(100);
++	}
++	ret = qcom_battmgr_host_pd_reapply_stop(battmgr, epoch);
++	if (!ret)
++		dev_info(battmgr->dev, "USB-PD reconnect: %s; battery stop restored\n",
++			 high_samples == 2 ? "higher voltage observed" : "no higher voltage observed");
++	return ret;
++}
++
+ static void qcom_battmgr_host_worker(struct work_struct *work)
+ {
+-	struct qcom_battmgr *battmgr = container_of(work, struct qcom_battmgr, host_work);
++	struct qcom_battmgr *battmgr = container_of(to_delayed_work(work), struct qcom_battmgr,
++						  host_work);
+ 	bool inhibit, changed = false;
+ 	int epoch, ret;
+ 
+ 	mutex_lock(&battmgr->lock);
+ 	epoch = atomic_read(&battmgr->host_epoch);
++	if (battmgr->host_pd_restop) {
++		ret = qcom_battmgr_host_pd_reapply_stop(battmgr, epoch);
++		if (ret)
++			goto out;
++		changed = true;
++	}
+ 	ret = qcom_battmgr_host_prepare(battmgr, epoch);
+ 	if (ret)
+ 		goto out;
+@@ -871,6 +1032,7 @@ static void qcom_battmgr_host_worker(struct work_struct *work)
+ 	ret = qcom_battmgr_host_get(battmgr, BATTMGR_USB_PROPERTY_GET, USB_ONLINE);
+ 	if (ret)
+ 		goto out;
++	qcom_battmgr_host_pd_connection(battmgr, epoch);
+ 	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_CAPACITY);
+ 	if (ret)
+ 		goto out;
+@@ -896,6 +1058,10 @@ static void qcom_battmgr_host_worker(struct work_struct *work)
+ 	changed = true;
+ applied:
+ 	battmgr->host_threshold_changed = false;
++	if (inhibit)
++		ret = qcom_battmgr_host_pd_upgrade(battmgr, epoch);
++	else
++		battmgr->host_pd_pending = false;
+ out:
+ 	mutex_unlock(&battmgr->lock);
+ 	if (ret && ret != -EAGAIN)
+@@ -949,7 +1115,7 @@ static void qcom_battmgr_host_stop(void *data)
+ 
+ 	WRITE_ONCE(battmgr->host_stopping, true);
+ 	/* Also reject a late enqueue from an in-flight notification callback. */
+-	disable_work_sync(&battmgr->host_work);
++	disable_delayed_work_sync(&battmgr->host_work);
+ 	disable_work_sync(&battmgr->enable_work);
+ }
+ 
+@@ -971,6 +1137,10 @@ static void qcom_battmgr_host_shutdown(struct auxiliary_device *adev)
+ 	mutex_lock(&battmgr->lock);
+ 	if (!READ_ONCE(battmgr->service_up))
+ 		goto out;
++	if (battmgr->host_pd_restop) {
++		qcom_battmgr_host_set_rate(battmgr, true, atomic_read(&battmgr->host_epoch));
++		goto out;
++	}
+ 	ret = qcom_battmgr_host_get(battmgr, BATTMGR_BAT_PROPERTY_GET, BATT_HEALTH);
+ 	if (ret || battmgr->status.health != POWER_SUPPLY_HEALTH_GOOD)
+ 		goto out;
+@@ -2073,8 +2243,9 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 	battmgr->host_charge_limit = battmgr->variant == QCOM_BATTMGR_SM8550 &&
+ 		of_machine_is_compatible("konkr,pocket-fit-elite");
+ 	if (battmgr->host_charge_limit) {
+-		INIT_WORK(&battmgr->host_work, qcom_battmgr_host_worker);
++		INIT_DELAYED_WORK(&battmgr->host_work, qcom_battmgr_host_worker);
+ 		atomic_set(&battmgr->host_epoch, 0);
++		battmgr->host_pd_rate_error_epoch = -1;
+ 		ret = device_init_wakeup(dev, true);
+ 		if (ret)
+ 			return ret;
+@@ -2172,8 +2343,45 @@ static const struct auxiliary_device_id qcom_battmgr_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(auxiliary, qcom_battmgr_id_table);
+ 
++static int qcom_battmgr_pd_suspend_prepare(struct device *dev)
++{
++	struct qcom_battmgr *battmgr = dev_get_drvdata(dev);
++	int ret = 0;
++
++	if (!battmgr || !battmgr->host_charge_limit)
++		return 0;
++	mutex_lock(&battmgr->lock);
++	if (battmgr->host_pd_restop) {
++		ret = -EBUSY;
++	} else {
++		battmgr->host_pd_suspended = true;
++		battmgr->host_pd_pending = false;
++	}
++	mutex_unlock(&battmgr->lock);
++	return ret;
++}
++
++static void qcom_battmgr_pd_suspend_complete(struct device *dev)
++{
++	struct qcom_battmgr *battmgr = dev_get_drvdata(dev);
++
++	if (!battmgr || !battmgr->host_charge_limit)
++		return;
++	mutex_lock(&battmgr->lock);
++	/* An attachment whose timing is uncertain must not open a window. */
++	battmgr->host_pd_offline_seen = false;
++	battmgr->host_pd_suspended = false;
++	mutex_unlock(&battmgr->lock);
++}
++
++static const struct dev_pm_ops qcom_battmgr_pd_pm_ops = {
++	.prepare = qcom_battmgr_pd_suspend_prepare,
++	.complete = qcom_battmgr_pd_suspend_complete,
++};
++
+ static struct auxiliary_driver qcom_battmgr_driver = {
+ 	.name = "pmic_glink_power_supply",
++	.driver.pm = &qcom_battmgr_pd_pm_ops,
+ 	.probe = qcom_battmgr_probe,
+ 	.remove = qcom_battmgr_host_shutdown,
+ 	.shutdown = qcom_battmgr_host_shutdown,

@@ -1,6 +1,6 @@
 # Historical OEM bypass design
 
-RFC2 and RFC3 used OEM bypass (property `0x1d`). The firmware could re-enable charging after attachment while bypass was still active. The recovery sequence passed awake tests but failed during `s2idle` attachment. The final driver uses the firmware charge-rate command (`0x06`). [Current design](../experimental/charge-rate-policy/README.md) · [Why bypass failed](RECONNECTION_INVESTIGATION.md)
+RFC2 and RFC3 used OEM bypass (property `0x1d`). The firmware could re-enable charging after attachment while bypass was still active. The recovery sequence passed awake tests but failed during `s2idle` attachment. The base charge-limit patch switched to the firmware charge-rate command (`0x06`), which the USB-PD follow-up also uses. [Charge-limit design](../experimental/charge-rate-policy/README.md) · [USB-PD follow-up](../experimental/usb-pd-reconnect/README.md) · [Why bypass failed](RECONNECTION_INVESTIGATION.md)
 
 The RFC2 patch changed one file, `drivers/power/supply/qcom_battmgr.c`, with 409 additions and one deletion. It included the bounded reconnection recovery tested on one KPFE. RFC3 increased the frequency of hold checks.
 
